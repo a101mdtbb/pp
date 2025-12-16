@@ -6,9 +6,9 @@ nano ~/.bashrc
 
 abajo del todo pegar esto: 
 
-``if [ -f /home/USURIO/.bash_pp ]; then
+`if [ -f /home/USURIO/.bash_pp ]; then
     . /home/USURIO/.bash_pp
-fi``
+fi`
 
 (CAMBIAR ¨USUARIO" POR TU NOMBRE DE USUARIO)
 
