@@ -17,6 +17,6 @@ fi
 
 # PASO 2 
 
-pegar el archivo .bash_pp a tu carpeta /home
+pegar el archivo .bash_pp a tu carpeta de usuario /home/usuario
 
 
