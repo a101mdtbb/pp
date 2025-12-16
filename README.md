@@ -4,7 +4,7 @@ ir a:
 
 nano ~/.bashrc
 
-abajo del todo pegar esto: 
+abajo del todo en un espacio pega esto: 
 
 ```bash
 if [ -f ~/.bash_aliases ]; then
