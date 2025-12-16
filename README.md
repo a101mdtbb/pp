@@ -4,4 +4,4 @@
 ```pyhon3 pp.py```
 
 # REQUISITOS
-`python3` `bash`
+`python3` `bash` `git`
