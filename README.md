@@ -7,8 +7,8 @@ nano ~/.bashrc
 abajo del todo en un espacio pega esto: 
 
 ```
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+if [ -f /home/usuario/.bash_pp ]; then
+    . /home/usuario/.bash_pp
 fi
 ```
 
