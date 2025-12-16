@@ -6,9 +6,11 @@ nano ~/.bashrc
 
 abajo del todo pegar esto: 
 
+```bash
 if [ -f ~/.bash_aliases ]; then
     . ~/.bash_aliases
 fi
+```
 
 (CAMBIAR ¨USUARIO" POR TU NOMBRE DE USUARIO)
 
