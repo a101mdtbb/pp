@@ -5,3 +5,6 @@
 
 # REQUISITOS
 `python3` `bash` `git`
+
+# USO 
+`PP`
