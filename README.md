@@ -1,5 +1,5 @@
 # Personal Package (PP)
-![Preview](2025-12-20_04-58.png)
+![Preview]()
 
 # INSTALACION
 ```python3 pp.py```
