@@ -7,5 +7,5 @@
 # REQUISITOS
 `python3` `bash` `git` `python3-requests`
 
-# USO 
-`PP`
+# Actualizar
+`pp-update`
