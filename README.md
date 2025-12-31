@@ -4,7 +4,7 @@
 ```python3 pp.py```
 
 # REQUISITOS
-`python3` `bash` `git` `python3-requests` `fzf`
+`python3` `bash` `git` `python3-requests` `yad`
 
 # USO
 `pp` `pp-update`
