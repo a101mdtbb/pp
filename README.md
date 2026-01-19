@@ -1,30 +1,30 @@
 # PP Launcher v3.1
 
-PP Launcher es una herramienta de escritorio diseñada para sistemas basados en Debian, orientada a la gestión y centralización de accesos para la descarga de software. La aplicación funciona como un indexador dinámico que facilita la navegación y redirección hacia repositorios externos mediante una interfaz técnica optimizada.
+PP Launcher is a desktop tool designed for Debian-based systems, focused on managing and centralizing access points for software downloads. The application functions as a dynamic indexer that facilitates navigation and redirection to external repositories through an optimized technical interface.
 
-## Descripción General
+## General Description
 
-El proyecto centraliza un catálogo detallado de aplicaciones y videojuegos, permitiendo filtrar por categorías y especificaciones técnicas.
+The project centralizes a detailed catalog of applications and video games, allowing users to filter by category and technical specifications.
 
-## Características Técnicas
+## Technical Features
 
-* **Formato de Paquete:** Distribuido como `pp-launcher_1.0_all.deb`, garantizando compatibilidad universal en arquitecturas soportadas.
-* **Indexación Estructurada:** Organización por nombre, tipo de software y descripción técnica detallada.
-* **Motor de Búsqueda:** Filtrado eficiente de entradas para una localización rápida en el catálogo.
-* **Gestión de Redirección:** Sistema integrado para la apertura automatizada de enlaces en el navegador predeterminado.
-* **Interfaz de Usuario:** Diseño de bajo impacto visual y sistémico, orientado a la eficiencia operativa.
+* **Package Format:** Distributed as `pp-launcher_1.0_all.deb`, ensuring universal compatibility across supported architectures.
+* **Structured Indexing:** Organized by name, software type, and detailed technical description.
+* **Search Engine:** Efficient entry filtering for rapid catalog localization.
+* **Redirection Management:** Integrated system for the automated opening of links in the default web browser.
+* **User Interface:** Low visual and systemic impact design, focused on operational efficiency.
 
-## Requisitos del Sistema
+## System Requirements
 
-* **Sistema Operativo:** Distribuciones basadas en Debian (Ubuntu, Linux Mint, Kali Linux, etc.).
-* **Arquitectura:** Compatible con sistemas de 32 y 64 bits (arquitectura `all`).
-* **Conectividad:** Acceso a internet para la funcionalidad de redirección de enlaces externos.
+* **Operating System:** Debian-based distributions (Ubuntu, Linux Mint, Kali Linux, etc.).
+* **Architecture:** Compatible with 32-bit and 64-bit systems (`all` architecture).
+* **Connectivity:** Internet access required for external link redirection functionality.
 
-## Instalación y Uso
+## Installation and Usage
 
-### Instalación vía Terminal
+### Installation via Terminal
 
-Para realizar una instalación correcta gestionando automáticamente las dependencias, utilice el siguiente comando desde el directorio donde se encuentre el archivo:
+To ensure a correct installation while automatically managing dependencies, use the following command from the directory where the file is located:
 
 ```bash
 sudo apt install ./pp-launcher_1.0_all.deb
