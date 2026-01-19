@@ -4,7 +4,7 @@ PP Launcher es una herramienta de escritorio diseñada para sistemas basados en 
 
 ## Descripción General
 
-El proyecto centraliza un catálogo detallado de aplicaciones y videojuegos, permitiendo filtrar por categorías y especificaciones técnicas. Está enfocado en mejorar la accesibilidad a diferentes versiones de un mismo título, incluyendo optimizaciones para hardware con recursos limitados (versiones Lite y Super Lite).
+El proyecto centraliza un catálogo detallado de aplicaciones y videojuegos, permitiendo filtrar por categorías y especificaciones técnicas.
 
 ## Características Técnicas
 
