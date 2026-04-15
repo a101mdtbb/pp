@@ -27,4 +27,4 @@ The project centralizes a detailed catalog of applications and video games, allo
 To ensure a correct installation while automatically managing dependencies, use the following command from the directory where the file is located:
 
 ```bash
-sudo apt install ./pp-launcher_3.1.0_all.deb
+sudo apt install $(find $HOME -name "pp-launcher_3.1.0_all.deb" -print -quit)
