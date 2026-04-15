@@ -1,4 +1,4 @@
-# PP Launcher v3.1
+# PP Launcher v3.2.0
 
 PP Launcher is a desktop tool designed for Debian-based systems, focused on managing and centralizing access points for software downloads. The application functions as a dynamic indexer that facilitates navigation and redirection to external repositories through an optimized technical interface.
 
@@ -27,4 +27,4 @@ The project centralizes a detailed catalog of applications and video games, allo
 To ensure a correct installation while automatically managing dependencies, use the following command:
 
 ```bash
-sudo apt install $(find $HOME -name "pp-launcher_3.1.0_all.deb" -print -quit)
+sudo apt install $(find $HOME -name "pp-launcher_3.2.0_all.deb" -print -quit)
