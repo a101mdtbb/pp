@@ -528,7 +528,13 @@ class DownloadManager:
             with self._lock:
                 if self.active_downloads.get(game_id, {}).get("status") == "cancelled":
                     try:
-                        os.remove(dest)
+                        if os.path.exists(dest):
+                            os.remove(dest)
+                    except Exception:
+                        pass
+                    try:
+                        if os.path.isdir(game_dir) and not os.listdir(game_dir):
+                            os.rmdir(game_dir)
                     except Exception:
                         pass
                     return
