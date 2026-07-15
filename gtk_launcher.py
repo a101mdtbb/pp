@@ -200,6 +200,7 @@ DEFAULT_SETTINGS = {
     "animations": True,
     "font_scale": 1.0,
     "card_bg": "#00000000",
+    "zoom": 1.0,
 }
 
 
@@ -486,7 +487,7 @@ class PPLauncher(Gtk.Application):
         self.search_term = ""
         self.settings = load_settings()
         self.current_view = "tienda"
-        self.zoom = 1.0
+        self.zoom = max(0.5, min(2.0, float(self.settings.get("zoom", 1.0))))
         self.store_w, self.store_h = 160, 240
         self.dl_manager = DownloadManager()
         self.dl_widgets = {}
@@ -1039,7 +1040,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         zout.set_tooltip_text("Reducir tamaño")
         zout.connect("clicked", lambda b: self._change_zoom(0.85))
         zoom_box.append(zout)
-        self.zoom_lbl = Gtk.Label(label="100%")
+        self.zoom_lbl = Gtk.Label(label=f"{int(self.zoom * 100)}%")
         self.zoom_lbl.add_css_class("dim-label")
         self.zoom_lbl.set_xalign(0.5)
         self.zoom_lbl.set_size_request(44, -1)
@@ -1057,6 +1058,8 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
     def _change_zoom(self, factor):
         self.zoom = max(0.5, min(2.0, self.zoom * factor))
         self.zoom_lbl.set_text(f"{int(self.zoom * 100)}%")
+        self.settings["zoom"] = self.zoom
+        save_settings(self.settings)
         self._refresh_current_view()
 
     def _nav_button(self, label, count=None):
