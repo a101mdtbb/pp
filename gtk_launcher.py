@@ -201,10 +201,10 @@ button.destructive-action:active { transform: scale(0.97); }
 .slide-item .dim-label { color: white; }
 
 /* --- Tarjetas de juego modernas --- */
-.game-cell { margin: 0; border-radius: 16px; overflow: hidden; background: alpha(currentColor, 0.05); box-shadow: 0 2px 6px alpha(black, 0.30); transition: transform 220ms cubic-bezier(0.2,0.8,0.2,1), box-shadow 220ms ease; animation: fadeIn 300ms ease; }
+.game-cell { margin: 0; border-radius: 16px; background: alpha(currentColor, 0.05); box-shadow: 0 2px 6px alpha(black, 0.30); transition: transform 220ms cubic-bezier(0.2,0.8,0.2,1), box-shadow 220ms ease; animation: fadeIn 300ms ease; }
 .game-cell:hover { transform: translateY(-6px); box-shadow: 0 16px 32px alpha(black, 0.50); }
-.cover-box { border: 0; border-radius: 16px 16px 0 0; transition: all 200ms ease; }
-.cover-box picture { border-radius: 16px 16px 0 0; }
+.cover-box { border: 0; border-radius: 16px; overflow: hidden; transition: all 200ms ease; }
+.cover-box picture { border-radius: 16px; }
 .card-body { padding: 11px 12px 13px; }
 .game-title { font-size: 13.5px; font-weight: 800; letter-spacing: 0.2px; line-height: 1.25; }
 .game-sub { font-size: 10.5px; opacity: 0.7; }
@@ -222,9 +222,9 @@ button.destructive-action:active { transform: scale(0.97); }
 .game-cell:hover .cover-box picture { transform: scale(1.06); transition: transform 320ms cubic-bezier(0.2,0.8,0.2,1); }
 
 /* --- Vista de detalle --- */
-.hero { border-radius: 18px; background: linear-gradient(135deg, alpha(@accent_bg_color, 0.20), alpha(currentColor, 0.04)); box-shadow: inset 0 0 0 1px alpha(currentColor, 0.06); overflow: hidden; }
-.hero-bg { opacity: 0.32; }
-.hero-scrim { background: linear-gradient(to bottom, alpha(black, 0.40), alpha(black, 0.18)); }
+.hero { border-radius: 18px; background: linear-gradient(135deg, alpha(@accent_bg_color, 0.20), alpha(currentColor, 0.04)); box-shadow: inset 0 0 0 1px alpha(currentColor, 0.06); }
+.hero-bg { opacity: 0.32; border-radius: 18px; overflow: hidden; }
+.hero-scrim { border-radius: 18px; background: linear-gradient(to bottom, alpha(black, 0.40), alpha(black, 0.18)); }
 .detail-cover { min-height: 260px; min-width: 175px; border-radius: 14px; box-shadow: 0 10px 28px alpha(black, 0.45); animation: scaleIn 320ms ease; }
 .detail-title { font-size: 26px; font-weight: 800; letter-spacing: -0.3px; }
 .detail-action { border-radius: 12px; font-weight: 700; font-size: 14px; padding: 11px 22px; transition: all 180ms ease; }
