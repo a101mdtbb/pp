@@ -1358,28 +1358,24 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         vbox.append(intro)
 
         tools = [
-            ("1", "Heroic Games Launcher",
+            ("Heroic Games Launcher",
              "El más sencillo para Epic, GOG y Amazon. Instala, gestiona y lanza "
              "juegos con un clic usando Wine/Proton integrado.",
              "https://heroicgameslauncher.com"),
-            ("2", "Steam (Proton)",
+            ("Steam (Proton)",
              "El estándar de oro. Steam usa Proton para correr juegos de Windows "
              "casi sin configuración adicional.",
              "https://store.steampowered.com"),
-            ("3", "Lutris",
+            ("Lutris",
              "Gestor de scripts de instalación para cualquier tienda o emulador. "
              "Ideal para configuraciones personalizadas.",
              "https://lutris.net"),
         ]
-        for num, name, desc, url in tools:
+        for name, desc, url in tools:
             row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
             row.add_css_class("about-box")
             row.set_margin_top(4)
             row.set_margin_bottom(4)
-            badge = Gtk.Label(label=num)
-            badge.add_css_class("chip")
-            badge.add_css_class("accent")
-            row.append(badge)
             col = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
             col.set_hexpand(True)
             nm = Gtk.Label(label=name)
