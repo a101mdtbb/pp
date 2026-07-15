@@ -19,7 +19,6 @@ import shlex
 import unicodedata
 import subprocess
 import sys
-import tempfile
 import threading
 import time
 import urllib.request
@@ -30,7 +29,7 @@ from pathlib import Path
 # Asegura que el módulo download_manager (en el mismo directorio) sea importable
 # sin importar desde dónde se ejecute el script.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from download_manager import DownloadManager, DOWNLOADS_DIR, find_exe_in_dir, _sanitize_filename
+from download_manager import DownloadManager, DOWNLOADS_DIR, _sanitize_filename
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 # Catálogo de juegos (junto al launcher, con fallback a la ubicación empaquetada).
@@ -158,7 +157,6 @@ SGDB_NAME_MAP = {
     "Spider-Man (2018)": "Marvel's Spider-Man",
     "Tomb Raider (2013)": "Tomb Raider",
     "Rise of the Tomb Raider": "Rise of the Tomb Raider",
-    "Red Dead Redemption 2": "Red Dead Redemption 2",
     "Fallout 4": "Fallout 4",
     "Fallout: New Vegas": "Fallout New Vegas",
     "Far Cry 5": "Far Cry 5",
@@ -1937,7 +1935,6 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             actions.append(w)
 
         if item.get("url"):
-            url = item["url"]
             game_id = item.get("id", "")
             dl_status = self.dl_manager.get_status(game_id) if game_id else None
 

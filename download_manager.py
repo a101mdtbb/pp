@@ -5,14 +5,12 @@ import json
 import os
 import re
 import subprocess
-import sys
 import tempfile
 import threading
 import time
 import urllib.error
 import urllib.parse
 import urllib.request
-from pathlib import Path
 
 DOWNLOADS_DIR = os.path.expanduser("~/PP-Games")
 INSTALLED_FILE = os.path.expanduser("~/.pp-launcher/installed.json")

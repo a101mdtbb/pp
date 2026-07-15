@@ -1,0 +1,22 @@
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+# Enfocado en errores reales (no en estilo de largo de línea):
+#   F   -> pyflakes (imports sin usar, nombres indefinidos, etc.)
+#   E9  -> errores de sintaxis
+#   W   -> advertencias (secuencias de escape inválidas, etc.)
+#   I   -> orden de imports
+select = ["F", "E9", "W"]
+ignore = ["E402"]
+
+[tool.ruff.lint.per-file-ignores]
+# Las apps GTK llaman a gi.require_version() antes de importar gi.repository,
+# lo que produce E402 legítimo (import no al inicio del módulo).
+"gtk_launcher.py" = ["E402"]
+"download_manager.py" = ["E402"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
