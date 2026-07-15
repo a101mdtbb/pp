@@ -206,7 +206,7 @@ button.destructive-action:active { transform: scale(0.97); }
 .chip { border-radius: 999px; padding: 3px 10px; font-size: 10px; font-weight: 700; background: alpha(currentColor, 0.13); }
 .chip.accent { background: alpha(@accent_bg_color, 0.18); color: @accent_bg_color; }
 .chip-inv { background: alpha(white, 0.22); color: white; }
-.game-foot { background: linear-gradient(to top, alpha(black, 0.90) 8%, alpha(black, 0.0) 88%); padding: 16px 10px 12px; }
+.game-foot { background: none; padding: 16px 10px 12px; }
 .game-foot-title { color: white; font-size: 13px; font-weight: 800; letter-spacing: 0.2px; line-height: 1.2; text-shadow: 0 1px 3px alpha(black, 0.6); }
 .game-foot-sub { color: alpha(white, 0.82); font-size: 10px; text-shadow: 0 1px 2px alpha(black, 0.6); }
 
@@ -825,7 +825,6 @@ class PPLauncher(Gtk.Application):
 
 .nav-tab-active {{ background: @accent_bg_color; color: @accent_fg_color; }}
 .add-game-cell:hover {{ border-color: @accent_bg_color; background: alpha(@accent_bg_color, 0.07); }}
-.game-cell:hover .cover-box {{ box-shadow: inset 0 0 0 2px alpha(@accent_bg_color, 0.55); }}
 button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 0.35); }}
 .chip.accent {{ background: alpha(@accent_bg_color, 0.18); color: @accent_bg_color; }}
 """
