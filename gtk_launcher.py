@@ -542,87 +542,6 @@ def load_scaled_pixbuf(path, w, h):
         return None
 
 
-# Cache: las caratulas se traen del CDN de SGDB y se guardan en disco, pero
-# validadas por la URL de SGDB (en covers_meta.json). Si la caratula cambia,
-# se re-descarga sola; si no, se usa la local al instante. nombre -> url / pixbuf.
-_COVER_URL_CACHE = {}
-_COVER_PB_CACHE = {}
-_COVER_META_PATH = os.path.join(COVERS_DIR, "covers_meta.json")
-_COVER_META = {}
-
-
-def _load_cover_meta():
-    global _COVER_META
-    try:
-        with open(_COVER_META_PATH, encoding="utf-8") as f:
-            _COVER_META = json.load(f)
-    except Exception:
-        _COVER_META = {}
-
-
-def _save_cover_meta():
-    try:
-        os.makedirs(COVERS_DIR, exist_ok=True)
-        tmp = _COVER_META_PATH + ".tmp"
-        with open(tmp, "w", encoding="utf-8") as f:
-            json.dump(_COVER_META, f)
-        os.replace(tmp, _COVER_META_PATH)
-    except Exception:
-        pass
-
-
-_load_cover_meta()
-
-
-def resolve_cover_url(game_name, api_key):
-    """Resuelve la URL de la caratula en SGDB (sin descargar la imagen)."""
-    if game_name in _COVER_URL_CACHE:
-        return _COVER_URL_CACHE[game_name]
-    try:
-        game_id = search_sgdb(game_name, api_key)
-        if game_id:
-            url = fetch_sgdb_cover(game_id, api_key)
-            if url:
-                _COVER_URL_CACHE[game_name] = url
-                return url
-    except Exception:
-        pass
-    return None
-
-
-def load_cover_pixbuf_online(game_name, api_key, w, h):
-    """Carga la caratula desde el CDN de SGDB, con cache de disco validado por URL."""
-    if game_name in _COVER_PB_CACHE:
-        pb = _COVER_PB_CACHE[game_name]
-        return _scale_pixbuf_fill(pb, w, h) if pb else None
-    url = resolve_cover_url(game_name, api_key)
-    if not url:
-        return None
-    path = os.path.join(COVERS_DIR, _safe_cover_name(game_name) + ".jpg")
-    # Cache de disco validado: si la URL coincide y el archivo existe, usarlo.
-    if _COVER_META.get(game_name) == url and os.path.isfile(path) and os.path.getsize(path) > 0:
-        try:
-            full = GdkPixbuf.Pixbuf.new_from_file(path)
-            if full:
-                _COVER_PB_CACHE[game_name] = full
-                return _scale_pixbuf_fill(full, w, h)
-        except Exception:
-            pass
-    # Descargar desde el CDN y guardar en cache de disco.
-    saved = save_cover_from_url(game_name, url, api_key)
-    if saved:
-        _COVER_META[game_name] = url
-        _save_cover_meta()
-        try:
-            full = GdkPixbuf.Pixbuf.new_from_file(saved)
-            if full:
-                _COVER_PB_CACHE[game_name] = full
-                return _scale_pixbuf_fill(full, w, h)
-        except Exception:
-            pass
-    return None
-
-
 def download_cover(game_name, api_key):
     cached = get_cached_cover(game_name)
     if cached:
@@ -1582,58 +1501,6 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         fb.set_min_children_per_line(cols)
         fb.set_max_children_per_line(cols)
 
-    def _async_cover(self, overlay, name, w, h, c1):
-        api_key = self.settings.get("sgdb_api_key", "")
-        def work():
-            pb = load_cover_pixbuf_online(name, api_key, w, h)
-            GLib.idle_add(self._apply_cover, overlay, name, pb, w, h, c1)
-        threading.Thread(target=work, daemon=True).start()
-
-    def _apply_cover(self, overlay, name, pb, w, h, c1):
-        if overlay is None:
-            return False
-        if pb:
-            pic = Gtk.Picture()
-            pic.set_pixbuf(pb)
-            pic.set_content_fit(Gtk.ContentFit.COVER)
-            pic.set_can_shrink(True)
-            pic.set_halign(Gtk.Align.FILL)
-            pic.set_valign(Gtk.Align.FILL)
-            pic.set_size_request(w, h)
-            overlay.set_child(pic)
-        else:
-            ph = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-            ph.set_size_request(w, h)
-            ph.add_css_class(make_color_css(c1))
-            overlay.set_child(ph)
-        return False
-
-    def _async_cover_hero(self, top_row, picture, name, w, h, c1):
-        api_key = self.settings.get("sgdb_api_key", "")
-        def work():
-            pb = load_cover_pixbuf_online(name, api_key, w, h)
-            GLib.idle_add(self._apply_hero_cover, top_row, picture, name, pb, w, h, c1)
-        threading.Thread(target=work, daemon=True).start()
-
-    def _apply_hero_cover(self, top_row, picture, name, pb, w, h, c1):
-        if top_row is None or picture is None:
-            return False
-        if pb:
-            bg = Gtk.Picture()
-            bg.set_pixbuf(pb)
-            bg.set_content_fit(Gtk.ContentFit.COVER)
-            bg.set_can_shrink(True)
-            bg.add_css_class("hero-bg")
-            bg.set_size_request(w, h)
-            top_row.set_child(bg)
-            picture.set_pixbuf(pb)
-        else:
-            ph = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-            ph.set_size_request(w, h)
-            ph.add_css_class(make_color_css(c1))
-            top_row.set_child(ph)
-        return False
-
     def _make_game_card(self, item, cover_w=160, cover_h=240):
         c1, c2, emoji = get_cover(item.get("name", ""))
 
@@ -1651,16 +1518,26 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         cover_overlay.set_overflow(Gtk.Overflow.HIDDEN)
         cover_overlay.add_css_class("cover-box")
 
-        visual = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        visual.set_size_request(cover_w, cover_h)
-        visual.add_css_class(make_color_css(c1))
-        emoji_lbl = Gtk.Label(label=emoji)
-        emoji_lbl.set_markup(f'<span size="xx-large">{emoji}</span>')
-        emoji_lbl.set_valign(Gtk.Align.CENTER)
-        emoji_lbl.set_halign(Gtk.Align.CENTER)
-        visual.append(emoji_lbl)
+        cover_path = get_cached_cover(item.get("name", ""))
+        pb = load_scaled_pixbuf(cover_path, cover_w, cover_h) if cover_path else None
+        if pb:
+            visual = Gtk.Picture()
+            visual.set_pixbuf(pb)
+            visual.set_content_fit(Gtk.ContentFit.COVER)
+            visual.set_can_shrink(True)
+            visual.set_halign(Gtk.Align.FILL)
+            visual.set_valign(Gtk.Align.FILL)
+            visual.set_size_request(cover_w, cover_h)
+        else:
+            visual = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+            visual.set_size_request(cover_w, cover_h)
+            visual.add_css_class(make_color_css(c1))
+            emoji_lbl = Gtk.Label(label=emoji)
+            emoji_lbl.set_markup(f'<span size="xx-large">{emoji}</span>')
+            emoji_lbl.set_valign(Gtk.Align.CENTER)
+            emoji_lbl.set_halign(Gtk.Align.CENTER)
+            visual.append(emoji_lbl)
         cover_overlay.set_child(visual)
-        self._async_cover(cover_overlay, item.get("name", ""), cover_w, cover_h, c1)
 
         installed = item.get("id") and self.dl_manager.is_installed(item.get("id"))
         if installed:
@@ -1762,15 +1639,20 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         top_row.set_margin_bottom(14)
         self.detail_box.append(top_row)
 
-        ph = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        ph.set_size_request(170, 255)
-        ph.add_css_class(make_color_css(c1))
-        top_row.set_child(ph)
-        scrim = Gtk.Box()
-        scrim.set_halign(Gtk.Align.FILL)
-        scrim.set_valign(Gtk.Align.FILL)
-        scrim.add_css_class("hero-scrim")
-        top_row.add_overlay(scrim)
+        cover_path = get_cached_cover(item.get("name", ""))
+        pb = load_scaled_pixbuf(cover_path, 170, 255) if cover_path else None
+        if pb:
+            bg = Gtk.Picture()
+            bg.set_pixbuf(pb)
+            bg.set_content_fit(Gtk.ContentFit.COVER)
+            bg.set_can_shrink(True)
+            bg.add_css_class("hero-bg")
+            top_row.set_child(bg)
+            scrim = Gtk.Box()
+            scrim.set_halign(Gtk.Align.FILL)
+            scrim.set_valign(Gtk.Align.FILL)
+            scrim.add_css_class("hero-scrim")
+            top_row.add_overlay(scrim)
 
         inner = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
         inner.set_halign(Gtk.Align.FILL)
@@ -1781,15 +1663,30 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         inner.set_margin_bottom(18)
         top_row.add_overlay(inner)
 
-        picture = Gtk.Picture()
-        picture.set_size_request(170, 255)
-        picture.set_content_fit(Gtk.ContentFit.COVER)
-        picture.set_can_shrink(True)
-        picture.set_valign(Gtk.Align.START)
-        picture.set_halign(Gtk.Align.START)
-        picture.add_css_class("detail-cover")
-        inner.append(picture)
-        self._async_cover_hero(top_row, picture, item.get("name", ""), 170, 255, c1)
+        if pb:
+            picture = Gtk.Picture()
+            picture.set_pixbuf(pb)
+            picture.set_size_request(170, 255)
+            picture.set_content_fit(Gtk.ContentFit.COVER)
+            picture.set_can_shrink(True)
+            picture.set_valign(Gtk.Align.START)
+            picture.set_halign(Gtk.Align.START)
+            picture.add_css_class("detail-cover")
+            inner.append(picture)
+        else:
+            css_name = make_color_css(c1)
+            cover = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+            cover.set_size_request(170, 255)
+            cover.set_valign(Gtk.Align.START)
+            cover.set_halign(Gtk.Align.START)
+            cover.add_css_class(css_name)
+            cover.add_css_class("detail-cover")
+            emoji_lbl = Gtk.Label(label=emoji)
+            emoji_lbl.set_markup(f'<span size="xx-large">{emoji}</span>')
+            emoji_lbl.set_valign(Gtk.Align.CENTER)
+            emoji_lbl.set_halign(Gtk.Align.CENTER)
+            cover.append(emoji_lbl)
+            inner.append(cover)
 
         info_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
         info_box.set_vexpand(True)
@@ -2207,11 +2104,11 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             return
 
         all_names = [i.get("name", "") for i in self.catalog]
-        to_fetch = [n for n in all_names if n and n not in _COVER_URL_CACHE]
+        to_fetch = [n for n in all_names if n and not get_cached_cover(n)]
 
         if not to_fetch:
             if status_lbl:
-                GLib.idle_add(status_lbl.set_text, "")
+                GLib.idle_add(status_lbl.set_text, "Todas las carátulas ya están descargadas")
             return
 
         total = len(to_fetch)
@@ -2221,11 +2118,11 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             for name in to_fetch:
                 count += 1
                 if status_lbl:
-                    GLib.idle_add(status_lbl.set_text,
-                                  f"Preparando carátulas... {count}/{total}")
-                resolve_cover_url(name, api_key)
+                    GLib.idle_add(status_lbl.set_text, f"Descargando carátulas... {count}/{total}")
+                download_cover(name, api_key)
             if status_lbl:
-                GLib.idle_add(status_lbl.set_text, "")
+                GLib.idle_add(status_lbl.set_text, f"Descargadas {total} carátulas")
+            GLib.idle_add(self.render_view)
 
         threading.Thread(target=do_batch, daemon=True).start()
 
