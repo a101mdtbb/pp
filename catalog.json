@@ -151,6 +151,21 @@
       ]
     },
     {
+      "id": "god-of-war-ragnarok",
+      "name": "God of War Ragnar\u00f6k",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Acción y aventura. La saga n\u00f3rdica de Kratos y Atreus.",
+      "url": "https://ts.bzzhr.to/d/i3t0797hahst?v=OCw_IiWaWGOc91LTeN7rtb6gOzlC2bOrO3JfUB-B_Q_5BKGH1OQIR2TOdI0AofQ130GIgyJG04RhLPaR2sA4mqHLm50tckmffYdXD0st5eulFaPL2UwOM9qtRXjIkFzNytFf-e5PIdD1w3cPQi0LbWtwrg9E2mBP8EsoaBWJQ0OlRmGA9ch_G0Lt4Vvetd2GOdtgcHLJ4z0MOripItslXCRfYAzwxaw",
+      "icon": "sword",
+      "color": "#dc2626",
+      "tags": [
+        "aventura",
+        "accion",
+        "mundo-abierto"
+      ]
+    },
+    {
       "id": "gta-iv",
       "name": "GTA IV",
       "category": "Juego",
