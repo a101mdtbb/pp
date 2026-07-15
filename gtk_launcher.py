@@ -139,10 +139,14 @@ CSS = b"""
 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; } }
 @keyframes scaleIn { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-.nav-tab { border-radius: 999px; padding: 7px 16px; font-size: 13.5px; font-weight: 600; transition: background 180ms ease, color 180ms ease; }
+.nav-tab { border-radius: 999px; padding: 7px 16px; font-size: 13.5px; font-weight: 600; transition: background 180ms ease, color 180ms ease, transform 160ms ease; }
 .nav-tab:hover { background: alpha(currentColor, 0.08); }
 .nav-tab:active { transform: scale(0.98); }
-.nav-tab-active { font-weight: 700; }
+.nav-tab-active { font-weight: 700; background: alpha(@accent_bg_color, 0.18); color: @accent_bg_color; }
+
+.brand-icon { color: @accent_bg_color; -gtk-icon-size: 22px; }
+.brand-label { font-size: 17px; font-weight: 800; letter-spacing: -0.4px; }
+.search-pill { border-radius: 999px; padding: 5px 12px; background: alpha(currentColor, 0.06); box-shadow: inset 0 0 0 1px alpha(currentColor, 0.08); }
 
 .game-cell { margin: 0; border-radius: 12px; overflow: hidden; background: alpha(currentColor, 0.045); box-shadow: 0 1px 2px alpha(black, 0.30); transition: transform 200ms ease, box-shadow 200ms ease; animation: fadeIn 300ms ease; }
 .game-cell:hover { transform: translateY(-4px); box-shadow: 0 12px 26px alpha(black, 0.45); }
@@ -179,6 +183,7 @@ button.destructive-action:hover { transform: translateY(-1px); }
 button.destructive-action:active { transform: scale(0.97); }
 
 .dl-panel { padding: 8px 10px; animation: slideUp 300ms ease; }
+.toast-err { border-radius: 12px; padding: 8px 12px; background: alpha(#e01b24, 0.16); box-shadow: inset 0 0 0 1px alpha(#e01b24, 0.40); margin: 4px 6px; }
 .dl-pop-title { font-size: 15px; font-weight: 800; letter-spacing: 0.2px; margin: 2px 2px 4px; }
 .dl-badge { background: #e01b24; color: white; font-size: 9px; font-weight: 800; border-radius: 999px; padding: 0px 4px; margin-top: -3px; margin-right: -4px; min-width: 12px; }
 .dl-card { border-radius: 14px; padding: 13px 15px; margin: 3px 2px; background: alpha(currentColor, 0.06); box-shadow: 0 1px 4px alpha(black, 0.25); animation: fadeIn 250ms ease; }
@@ -210,9 +215,16 @@ button.destructive-action:active { transform: scale(0.97); }
 .badge-installed { border-radius: 999px; padding: 3px 9px; font-size: 9.5px; font-weight: 800; letter-spacing: 0.4px; background: #26a269; color: white; box-shadow: 0 1px 3px alpha(black, 0.4); }
 .chip { border-radius: 999px; padding: 3px 10px; font-size: 10px; font-weight: 700; background: alpha(currentColor, 0.13); }
 .chip.accent { background: alpha(@accent_bg_color, 0.18); color: @accent_bg_color; }
+.chip-inv { background: alpha(white, 0.22); color: white; }
+.game-foot { background: linear-gradient(to top, alpha(black, 0.90) 8%, alpha(black, 0.0) 88%); padding: 16px 10px 12px; }
+.game-foot-title { color: white; font-size: 13px; font-weight: 800; letter-spacing: 0.2px; line-height: 1.2; text-shadow: 0 1px 3px alpha(black, 0.6); }
+.game-foot-sub { color: alpha(white, 0.82); font-size: 10px; text-shadow: 0 1px 2px alpha(black, 0.6); }
+.game-cell:hover .cover-box picture { transform: scale(1.06); transition: transform 320ms cubic-bezier(0.2,0.8,0.2,1); }
 
 /* --- Vista de detalle --- */
-.hero { padding: 22px 24px; border-radius: 18px; background: linear-gradient(135deg, alpha(@accent_bg_color, 0.20), alpha(currentColor, 0.04)); box-shadow: inset 0 0 0 1px alpha(currentColor, 0.06); }
+.hero { border-radius: 18px; background: linear-gradient(135deg, alpha(@accent_bg_color, 0.20), alpha(currentColor, 0.04)); box-shadow: inset 0 0 0 1px alpha(currentColor, 0.06); overflow: hidden; }
+.hero-bg { opacity: 0.32; }
+.hero-scrim { background: linear-gradient(to bottom, alpha(black, 0.40), alpha(black, 0.18)); }
 .detail-cover { min-height: 260px; min-width: 175px; border-radius: 14px; box-shadow: 0 10px 28px alpha(black, 0.45); animation: scaleIn 320ms ease; }
 .detail-title { font-size: 26px; font-weight: 800; letter-spacing: -0.3px; }
 .detail-action { border-radius: 12px; font-weight: 700; font-size: 14px; padding: 11px 22px; transition: all 180ms ease; }
@@ -238,6 +250,17 @@ button.destructive-action:active { transform: scale(0.97); }
 .about-logo { font-size: 56px; }
 .about-title { font-size: 26px; font-weight: 800; letter-spacing: -0.3px; }
 .about-sub { font-size: 13px; opacity: 0.7; }
+
+/* --- Scrollbars finos y modernos --- */
+scrollbar { background: transparent; }
+scrollbar slider { background: alpha(currentColor, 0.26); border-radius: 999px; border: none; min-width: 9px; min-height: 9px; transition: background 160ms ease; }
+scrollbar slider:hover { background: alpha(currentColor, 0.42); }
+scrollbar.vertical slider { min-width: 9px; }
+scrollbar.horizontal slider { min-height: 9px; }
+
+/* --- Estado vacio --- */
+.empty-state { opacity: 0.9; }
+.empty-icon { opacity: 0.35; }
 """
 
 DEFAULT_SETTINGS = {
@@ -595,10 +618,21 @@ class PPLauncher(Gtk.Application):
         header = Gtk.HeaderBar()
         self.win.set_titlebar(header)
 
+        brand = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        brand.set_margin_start(6)
+        brand_img = Gtk.Image(icon_name="applications-games-symbolic")
+        brand_img.add_css_class("brand-icon")
+        brand.append(brand_img)
+        brand_lbl = Gtk.Label(label="PP Launcher")
+        brand_lbl.add_css_class("brand-label")
+        brand.append(brand_lbl)
+        header.pack_start(brand)
+
         self.search_entry = Gtk.SearchEntry()
         self.search_entry.set_placeholder_text("Buscar juegos...")
         self.search_entry.set_hexpand(True)
         self.search_entry.set_size_request(250, -1)
+        self.search_entry.add_css_class("search-pill")
         self.search_entry.connect("search-changed", self.on_search_changed)
         header.set_title_widget(self.search_entry)
 
@@ -888,16 +922,23 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         return True
 
     def _show_error_toast(self, game_name, error):
-        toast = Gtk.Label(label=f"Error descargando {game_name}: {error[:60]}")
-        toast.set_xalign(0)
-        toast.add_css_class("dim-label")
+        toast = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        toast.add_css_class("toast-err")
+        ic = Gtk.Image(icon_name="dialog-error-symbolic")
+        ic.set_pixel_size(16)
+        toast.append(ic)
+        lbl = Gtk.Label(label=f"Error descargando {game_name}: {error[:60]}")
+        lbl.set_xalign(0)
+        lbl.set_hexpand(True)
+        lbl.add_css_class("dim-label")
+        toast.append(lbl)
         self.dl_panel.append(toast)
         self.dl_panel.set_visible(True)
-        self.dl_scroll.set_visible(False)
         def remove():
             self.dl_panel.remove(toast)
             if not any(self.dl_list):
                 self.dl_panel.set_visible(False)
+            return False
         GLib.timeout_add(5000, remove)
 
     def _make_dl_widget(self, game_id, display_name):
@@ -1370,13 +1411,14 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
                      or self.search_term in i.get("description", "").lower()]
 
         if not items:
-            empty = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+            empty = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
+            empty.add_css_class("empty-state")
             empty.set_valign(Gtk.Align.CENTER)
             empty.set_halign(Gtk.Align.CENTER)
             empty.set_margin_top(60)
             ic = Gtk.Image.new_from_icon_name("edit-find-symbolic")
-            ic.set_pixel_size(48)
-            ic.set_opacity(0.3)
+            ic.set_pixel_size(56)
+            ic.add_css_class("empty-icon")
             empty.append(ic)
             t = Gtk.Label(label="Sin resultados")
             t.add_css_class("title-3")
@@ -1456,29 +1498,17 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             badge.add_css_class("badge-installed")
             badge.set_halign(Gtk.Align.END)
             badge.set_valign(Gtk.Align.START)
-            badge.set_margin_top(7)
-            badge.set_margin_end(7)
+            badge.set_margin_top(8)
+            badge.set_margin_end(8)
             cover_overlay.add_overlay(badge)
 
-        action_overlay = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        action_overlay.set_halign(Gtk.Align.FILL)
-        action_overlay.set_valign(Gtk.Align.END)
-        action_overlay.add_css_class("game-overlay")
-        play_btn = Gtk.Button(icon_name="media-playback-start-symbolic")
-        play_btn.add_css_class("game-play")
-        play_btn.set_has_frame(False)
-        play_btn.set_halign(Gtk.Align.CENTER)
-        play_btn.set_valign(Gtk.Align.END)
-        play_btn.set_margin_bottom(10)
-        play_btn.set_tooltip_text("Ver detalles")
-        play_btn.connect("clicked", lambda b: self.show_detail(item))
-        action_overlay.append(play_btn)
-        cover_overlay.add_overlay(action_overlay)
-
-        card.append(cover_overlay)
-
-        body = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
-        body.add_css_class("card-body")
+        foot = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
+        foot.set_halign(Gtk.Align.FILL)
+        foot.set_valign(Gtk.Align.END)
+        foot.add_css_class("game-foot")
+        foot.set_margin_start(10)
+        foot.set_margin_end(10)
+        foot.set_margin_bottom(10)
 
         if self.settings.get("show_title", True):
             name_lbl = Gtk.Label(label=item.get("name", ""))
@@ -1486,8 +1516,8 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             name_lbl.set_wrap(True)
             name_lbl.set_lines(2)
             name_lbl.set_ellipsize(Pango.EllipsizeMode.END)
-            name_lbl.add_css_class("game-title")
-            body.append(name_lbl)
+            name_lbl.add_css_class("game-foot-title")
+            foot.append(name_lbl)
 
         if self.settings.get("show_category", True):
             sub = item.get("subcategory", item.get("category", ""))
@@ -1495,16 +1525,35 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             sub_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
             sub_chip = Gtk.Label(label=sub)
             sub_chip.add_css_class("chip")
+            sub_chip.add_css_class("chip-inv")
             sub_row.append(sub_chip)
             if cat and cat != sub:
                 cat_lbl = Gtk.Label(label=cat)
                 cat_lbl.set_xalign(0)
                 cat_lbl.set_ellipsize(Pango.EllipsizeMode.END)
-                cat_lbl.add_css_class("game-sub")
+                cat_lbl.add_css_class("game-foot-sub")
                 sub_row.append(cat_lbl)
-            body.append(sub_row)
+            foot.append(sub_row)
 
-        card.append(body)
+        cover_overlay.add_overlay(foot)
+
+        action_overlay = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        action_overlay.set_halign(Gtk.Align.END)
+        action_overlay.set_valign(Gtk.Align.END)
+        action_overlay.add_css_class("game-overlay")
+        play_btn = Gtk.Button(icon_name="media-playback-start-symbolic")
+        play_btn.add_css_class("game-play")
+        play_btn.set_has_frame(False)
+        play_btn.set_halign(Gtk.Align.END)
+        play_btn.set_valign(Gtk.Align.END)
+        play_btn.set_margin_end(10)
+        play_btn.set_margin_bottom(10)
+        play_btn.set_tooltip_text("Ver detalles")
+        play_btn.connect("clicked", lambda b: self.show_detail(item))
+        action_overlay.append(play_btn)
+        cover_overlay.add_overlay(action_overlay)
+
+        card.append(cover_overlay)
 
         def on_open(*a):
             self.show_detail(item)
@@ -1535,16 +1584,38 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         nav_box.append(back_lbl)
         self.detail_box.append(nav_box)
 
-        top_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
-        top_row.set_margin_start(18)
-        top_row.set_margin_end(18)
-        top_row.set_margin_top(16)
-        top_row.set_margin_bottom(16)
+        top_row = Gtk.Overlay()
         top_row.add_css_class("hero")
+        top_row.set_margin_start(14)
+        top_row.set_margin_end(14)
+        top_row.set_margin_top(12)
+        top_row.set_margin_bottom(14)
         self.detail_box.append(top_row)
 
         cover_path = get_cached_cover(item.get("name", ""))
         pb = load_scaled_pixbuf(cover_path, 170, 255) if cover_path else None
+        if pb:
+            bg = Gtk.Picture()
+            bg.set_pixbuf(pb)
+            bg.set_content_fit(Gtk.ContentFit.COVER)
+            bg.set_can_shrink(True)
+            bg.add_css_class("hero-bg")
+            top_row.set_child(bg)
+            scrim = Gtk.Box()
+            scrim.set_halign(Gtk.Align.FILL)
+            scrim.set_valign(Gtk.Align.FILL)
+            scrim.add_css_class("hero-scrim")
+            top_row.add_overlay(scrim)
+
+        inner = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=20)
+        inner.set_halign(Gtk.Align.FILL)
+        inner.set_valign(Gtk.Align.FILL)
+        inner.set_margin_start(20)
+        inner.set_margin_end(20)
+        inner.set_margin_top(18)
+        inner.set_margin_bottom(18)
+        top_row.add_overlay(inner)
+
         if pb:
             picture = Gtk.Picture()
             picture.set_pixbuf(pb)
@@ -1554,7 +1625,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             picture.set_valign(Gtk.Align.START)
             picture.set_halign(Gtk.Align.START)
             picture.add_css_class("detail-cover")
-            top_row.append(picture)
+            inner.append(picture)
         else:
             css_name = make_color_css(c1)
             cover = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
@@ -1568,12 +1639,12 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             emoji_lbl.set_valign(Gtk.Align.CENTER)
             emoji_lbl.set_halign(Gtk.Align.CENTER)
             cover.append(emoji_lbl)
-            top_row.append(cover)
+            inner.append(cover)
 
         info_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
         info_box.set_vexpand(True)
         info_box.set_hexpand(True)
-        top_row.append(info_box)
+        inner.append(info_box)
 
         title = Gtk.Label(label=item.get("name", ""))
         title.set_xalign(0)
