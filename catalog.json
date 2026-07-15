@@ -1,0 +1,529 @@
+{
+  "apps": [
+    {
+      "id": "assassins-creed-2",
+      "name": "Assassin's Creed II",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Acción y aventura. Renacimiento italiano.",
+      "url": "https://madiashare.com/downloads?d=1layvgj15v5lh56eoqd",
+      "icon": "sword",
+      "color": "#7c3aed",
+      "tags": [
+        "aventura",
+        "accion",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "assassins-creed-4",
+      "name": "Assassin's Creed IV",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Acción naval y aventura. Piratería.",
+      "url": "https://gofile.io/d/gOLwyT",
+      "icon": "sword",
+      "color": "#7c3aed",
+      "tags": [
+        "aventura",
+        "accion",
+        "naval"
+      ]
+    },
+    {
+      "id": "balatro",
+      "name": "Balatro",
+      "category": "Juego",
+      "subcategory": "Cartas",
+      "description": "Juego de cartas tipo Roguelike.",
+      "url": "https://ts.bzzhr.to/d/92nyc3drwyd3?v=wYtf4Yk8Dp0XboNyT1gbH2neZFCcUMeo713wyxhTj-WckvW7NAv5jUZ3f1SSBmC9Wa0dgbXzWi4KSEpQXjS_JMjngxua49eOvEM-2V4_RAYaHYTuOSkdX-3ZRGKA8w1q2wrZJFXVzBOQ0MGmdiW52tUsyz6yo6v67OcsewMLw3IZQGyFN0wlANrsk5bVbXZMKMCPkfmKruCuerJCEQ",
+      "icon": "cards",
+      "color": "#10b981",
+      "tags": [
+        "cartas",
+        "roguelike",
+        "estrategia"
+      ]
+    },
+    {
+      "id": "bully",
+      "name": "Bully",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Aventura de mundo abierto escolar.",
+      "url": "https://buzzheavier.com/em6bjyg8dxwz",
+      "icon": "school",
+      "color": "#f59e0b",
+      "tags": [
+        "aventura",
+        "mundo-abierto",
+        "escolar"
+      ]
+    },
+    {
+      "id": "cuphead",
+      "name": "Cuphead",
+      "category": "Juego",
+      "subcategory": "Plataformas",
+      "description": "Plataformas estilo años 30.",
+      "url": "https://ts.bzzhr.to/d/n6odzuvudocs?v=OEnDH-Y-Y5_78RDf9xOAg6jeXrkoJI6-ZXxln6NGUQLn0j_epENuulsx549xzXSM0_34Yw6lM_Dz9mvuImsWslOGdGQvg8o2KGSSRsZXvZkv4A65-zbcd1RYDNQ70nb4vki-p8FbedCr-OVW8PrzaOCNivnQaDvl8KSxB_nUZK2MhopOvO3Egg6kaHqxqPOd2hX_wJeK_dtKLDMpsQ",
+      "icon": "platformer",
+      "color": "#ef4444",
+      "tags": [
+        "plataformas",
+        "retro",
+        "dificil"
+      ]
+    },
+    {
+      "id": "dragon-ball-impact",
+      "name": "Dragon Ball Impact",
+      "category": "Juego",
+      "subcategory": "Lucha",
+      "description": "Proyecto independiente DB.",
+      "url": "https://101mdtb.itch.io/dragon-ball-impact",
+      "icon": "fight",
+      "color": "#f97316",
+      "tags": [
+        "lucha",
+        "anime",
+        "independiente"
+      ]
+    },
+    {
+      "id": "dragon-ball-fighterz",
+      "name": "Dragon Ball FighterZ",
+      "category": "Juego",
+      "subcategory": "Lucha",
+      "description": "Lucha competitiva 2.5D.",
+      "url": "https://buzzheavier.com/9994kmnp4uyz",
+      "icon": "fight",
+      "color": "#f97316",
+      "tags": [
+        "lucha",
+        "anime",
+        "competitivo"
+      ]
+    },
+    {
+      "id": "far-cry-2",
+      "name": "Far Cry 2",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter supervivencia África.",
+      "url": "https://ts.bzzhr.to/d/ha614nrb42oi?v=l_Jjnj0BpKzQbaWmQsW3twkcYopLZw4P6eIbg7rQr6fzaQRgdqB01S_LdXX0awCM03F60u8K8iMTsyGF6ptSFRoW_SihAzAqNK9l0fLw_Q3NazC2Vm2rE068T7GaD3bWqHbNR33X4iAyAOTXtvyHVX7DFy1QNlrkx0wbPPqCt8jAposcpEsK06MP53M9TAlNq3IqgKw4Re8RpUrg1Ev6t_QHt2yIts5njoRaQ4ZMuiXaipkzzRVWjMghmNUphQwuCKpF",
+      "icon": "crosshair",
+      "color": "#dc2626",
+      "tags": [
+        "shooter",
+        "supervivencia",
+        "africa"
+      ]
+    },
+    {
+      "id": "far-cry-3",
+      "name": "Far Cry 3",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter supervivencia Tropical.",
+      "url": "https://www.mediafire.com/file/y44iuesi5lei3p7",
+      "icon": "crosshair",
+      "color": "#dc2626",
+      "tags": [
+        "shooter",
+        "supervivencia",
+        "tropical"
+      ]
+    },
+    {
+      "id": "geometry-dash",
+      "name": "Geometry Dash",
+      "category": "Juego",
+      "subcategory": "Plataformas",
+      "description": "Plataformas rítmico.",
+      "url": "https://buzzheavier.com/pzm4ncupaxrl",
+      "icon": "platformer",
+      "color": "#06b6d4",
+      "tags": [
+        "plataformas",
+        "ritmo",
+        "dificil"
+      ]
+    },
+    {
+      "id": "gta-iv",
+      "name": "GTA IV",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Sandbox de acción. Full Edition.",
+      "url": "https://ts.bzzhr.to/d/akft1ubwr2g1?v=KOWg10kvme9KedKDiUbF19TOSvNnRzTdsjt6FaqCI6tHjNGje0n5DPQuJtLyqNZtLP9qI20RXTd47TEWn-KA69n2WDvlQQ6VC0rzlyz5RlaRcm-8ngYAcJSHFxJJd0K4ibG5bCky198EuM4Qmn--hnIkbpw6q-IsSwV2YmpCgZP4FH8c9a5fI7dmf2-N070RYMgUkGsVI0v_",
+      "icon": "gamepad",
+      "color": "#7c3aed",
+      "tags": [
+        "accion",
+        "sandbox",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "gta-iv-lite",
+      "name": "GTA IV Lite",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Optimizado para bajos recursos.",
+      "url": "https://buzzheavier.com/2crh203if8e6",
+      "icon": "gamepad",
+      "color": "#7c3aed",
+      "tags": [
+        "accion",
+        "sandbox",
+        "lite"
+      ]
+    },
+    {
+      "id": "gta-san-andreas",
+      "name": "GTA San Andreas",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Clásico sandbox de acción.",
+      "url": "https://gofile.io/d/bLnb2N",
+      "icon": "gamepad",
+      "color": "#7c3aed",
+      "tags": [
+        "accion",
+        "sandbox",
+        "clasico"
+      ]
+    },
+    {
+      "id": "gta-v",
+      "name": "GTA V",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Sandbox de acción estándar.",
+      "url": "https://buzzheavier.com/ouvyovqmuez0",
+      "icon": "gamepad",
+      "color": "#7c3aed",
+      "tags": [
+        "accion",
+        "sandbox",
+        "popular"
+      ]
+    },
+    {
+      "id": "gta-v-lite",
+      "name": "GTA V Lite",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Versión optimizada rendimiento.",
+      "url": "https://www.mediafire.com/file/7jypn4pi0quc9bn",
+      "icon": "gamepad",
+      "color": "#7c3aed",
+      "tags": [
+        "accion",
+        "sandbox",
+        "lite"
+      ]
+    },
+    {
+      "id": "gta-v-super-lite",
+      "name": "GTA V Super Lite",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Máxima compresión.",
+      "url": "https://gofile.io/d/uJgXFD",
+      "icon": "gamepad",
+      "color": "#7c3aed",
+      "tags": [
+        "accion",
+        "sandbox",
+        "super-lite"
+      ]
+    },
+    {
+      "id": "gta-v-hyper-lite",
+      "name": "GTA V Hyper Lite 2 GB",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Mierdon no descargar.",
+      "url": "https://gofile.io/d/LKUWl6",
+      "icon": "gamepad",
+      "color": "#7c3aed",
+      "tags": [
+        "accion",
+        "sandbox",
+        "hyper-lite"
+      ]
+    },
+    {
+      "id": "hollow-knight",
+      "name": "Hollow Knight",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Metroidvania y exploración.",
+      "url": "https://gofile.io/d/4XiCAc",
+      "icon": "adventure",
+      "color": "#8b5cf6",
+      "tags": [
+        "metroidvania",
+        "exploracion",
+        "indie"
+      ]
+    },
+    {
+      "id": "jump-force",
+      "name": "Jump Force",
+      "category": "Juego",
+      "subcategory": "Lucha",
+      "description": "Crossover lucha Shonen.",
+      "url": "https://buzzheavier.com/1rv0xeou6ix2",
+      "icon": "fight",
+      "color": "#f97316",
+      "tags": [
+        "lucha",
+        "anime",
+        "crossover"
+      ]
+    },
+    {
+      "id": "naruto-storm-4",
+      "name": "Naruto Storm 4",
+      "category": "Juego",
+      "subcategory": "Lucha",
+      "description": "Lucha 3D Ninja.",
+      "url": "https://buzzheavier.com/gb4xhh25zw7q",
+      "icon": "fight",
+      "color": "#f97316",
+      "tags": [
+        "lucha",
+        "anime",
+        "ninja"
+      ]
+    },
+    {
+      "id": "nfs-most-wanted",
+      "name": "NFS Most Wanted",
+      "category": "Juego",
+      "subcategory": "Carreras",
+      "description": "Conducción arcade Black Ed.",
+      "url": "https://buzzheavier.com/mkl161mmd7qw",
+      "icon": "car",
+      "color": "#14b8a6",
+      "tags": [
+        "carreras",
+        "arcade",
+        "coches"
+      ]
+    },
+    {
+      "id": "mortal-kombat-xl",
+      "name": "Mortal Kombat XL",
+      "category": "Juego",
+      "subcategory": "Lucha",
+      "description": "Lucha (vía Torrent).",
+      "url": "https://archive.org/download/MK_XL_OPT/MK_XL_OPT_archive.torrent",
+      "icon": "fight",
+      "color": "#dc2626",
+      "tags": [
+        "lucha",
+        "violento",
+        "competitivo"
+      ]
+    },
+    {
+      "id": "outlast",
+      "name": "Outlast",
+      "category": "Juego",
+      "subcategory": "Terror",
+      "description": "Terror psicológico.",
+      "url": "https://gofile.io/d/o8N8Kw",
+      "icon": "horror",
+      "color": "#64748b",
+      "tags": [
+        "terror",
+        "psicologico",
+        "supervivencia"
+      ]
+    },
+    {
+      "id": "resident-evil-4",
+      "name": "Resident Evil 4",
+      "category": "Juego",
+      "subcategory": "Terror",
+      "description": "Survival Horror clásico.",
+      "url": "https://ts.bzzhr.to/d/kq1ghgkoedtq?v=A1b6XofoEt7EH4X8rVcng8WjfoDJ3Fcq-YIclPOgmD8L8fB_t7_xYxkromrU0hpE_dT2QrEYL4eujW1ZiXmApRihIi6o5SvqDSybbnlP9gMuwRNjopdeXAhunW9pkmUjQy83H1kKhmNFS6WmdKz_IsIrsr1RILYExrZS03NpTmdlxJDc3xcSSTjLVbnIEvEEjtJeYvK2UsXunFSv9jbsgkEfrWUY_MqAegCF80579LgncVZ4lJJYmYy-p2bCjVbVltp1AF4",
+      "icon": "horror",
+      "color": "#64748b",
+      "tags": [
+        "terror",
+        "survival",
+        "clasico"
+      ]
+    },
+    {
+      "id": "roblox",
+      "name": "Roblox",
+      "category": "Juego",
+      "subcategory": "Plataformas",
+      "description": "Instalación vía Flatpak/Sober.",
+      "command": "sudo flatpak install flathub org.vinegarhq.Sober",
+      "icon": "block-game",
+      "color": "#ef4444",
+      "tags": [
+        "plataformas",
+        "online",
+        "multijugador"
+      ]
+    },
+    {
+      "id": "red-dead-redemption",
+      "name": "Red Dead Redemption",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Acción en el Viejo Oeste.",
+      "url": "https://buzzheavier.com/zzym69t6kvul",
+      "icon": "cowboy",
+      "color": "#92400e",
+      "tags": [
+        "accion",
+        "oeste",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "sonic-3-air",
+      "name": "Sonic 3 AIR",
+      "category": "Juego",
+      "subcategory": "Plataformas",
+      "description": "Remasterización de Sonic 3.",
+      "url": "https://github.com/Eukaryot/sonic3air/releases/download/v24.02.02.0-stable/sonic3air_game.tar.gz",
+      "icon": "platformer",
+      "color": "#06b6d4",
+      "tags": [
+        "plataformas",
+        "retro",
+        "seg"
+      ]
+    },
+    {
+      "id": "sonic-mania",
+      "name": "Sonic Mania",
+      "category": "Juego",
+      "subcategory": "Plataformas",
+      "description": "Plataformas 2D retro.",
+      "url": "https://drive.google.com/file/d/183PmgIWra9O5QNSZvrPskMx-0yPbQLEj/view",
+      "icon": "platformer",
+      "color": "#06b6d4",
+      "tags": [
+        "plataformas",
+        "retro",
+        "2d"
+      ]
+    },
+    {
+      "id": "stardew-valley",
+      "name": "Stardew Valley",
+      "category": "Juego",
+      "subcategory": "Simulación",
+      "description": "Gestión de granja y rol.",
+      "url": "https://gofile.io/d/0CohW3",
+      "icon": "farm",
+      "color": "#22c55e",
+      "tags": [
+        "simulacion",
+        "granja",
+        "rol"
+      ]
+    },
+    {
+      "id": "minecraft-apk",
+      "name": "Minecraft APK X86",
+      "category": "Juego",
+      "subcategory": "Sandbox",
+      "description": "Versión para emuladores/PC.",
+      "url": "https://mcpelife.com/",
+      "icon": "cube",
+      "color": "#16a34a",
+      "tags": [
+        "sandbox",
+        "construccion",
+        "online"
+      ]
+    },
+    {
+      "id": "minecraft-bedrock",
+      "name": "Minecraft Bedrock",
+      "category": "Juego",
+      "subcategory": "Sandbox",
+      "description": "Launcher Bedrock.",
+      "url": "https://www.mediafire.com/file/7ng8hziyywsfya3/MCPELauncher.flatpak/file",
+      "icon": "cube",
+      "color": "#16a34a",
+      "tags": [
+        "sandbox",
+        "construccion",
+        "bedrock"
+      ]
+    },
+    {
+      "id": "the-forest",
+      "name": "The Forest",
+      "category": "Juego",
+      "subcategory": "Terror",
+      "description": "Supervivencia y terror.",
+      "url": "https://gofile.io/d/PcDLDW",
+      "icon": "horror",
+      "color": "#64748b",
+      "tags": [
+        "terror",
+        "supervivencia",
+        "bosque"
+      ]
+    },
+    {
+      "id": "terraria",
+      "name": "Terraria",
+      "category": "Juego",
+      "subcategory": "Sandbox",
+      "description": "Sandbox 2D exploración.",
+      "url": "https://pixeldrain.com/u/czcpunqK",
+      "icon": "cube",
+      "color": "#16a34a",
+      "tags": [
+        "sandbox",
+        "2d",
+        "exploracion"
+      ]
+    },
+    {
+      "id": "walking-dead-s1",
+      "name": "Walking Dead S1",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Aventura narrativa.",
+      "url": "https://gofile.io/d/1dBbUM",
+      "icon": "adventure",
+      "color": "#8b5cf6",
+      "tags": [
+        "aventura",
+        "narrativa",
+        "zombies"
+      ]
+    },
+    {
+      "id": "blasphemous",
+      "name": "Blasphemous",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Metroidvania de acción brutal en un mundo oscuro y religioso.",
+      "url": "https://www.mediafire.com/file/bovrung3lct5yf7",
+      "icon": "sword",
+      "color": "#dc2626",
+      "tags": [
+        "accion",
+        "metroidvania",
+        "plataformas"
+      ]
+    }
+  ]
+}

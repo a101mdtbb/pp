@@ -1,30 +1,68 @@
-# PP Launcher v3.2.0
+# PP Launcher v8.1
 
-PP Launcher is a desktop tool designed for Debian-based systems, focused on managing and centralizing access points for software downloads. The application functions as a dynamic indexer that facilitates navigation and redirection to external repositories through an optimized technical interface.
+**Tienda de Juegos y Herramientas Moderna para Linux**
 
-## General Description
+PP Launcher es una aplicación de escritorio moderna construida con GTK4 y Python, diseñada como una tienda de descargas de juegos profesional con interfaz tipo Steam/Lutris. Incluye gestor de descargas, carátulas desde SteamGridDB y vista previa de gameplay en YouTube.
 
-The project centralizes a detailed catalog of applications and video games, allowing users to filter by category and technical specifications.
+## Características
 
-## Technical Features
+- **Interfaz Moderna**: Diseño tipo tienda con tema oscuro y acentos configurables
+- **Búsqueda en Tiempo Real**: Filtra juegos y herramientas mientras escribes
+- **Catálogo Completo**: 35+ juegos y herramientas
+- **Gestor de Descargas**: Extrae enlaces directos y descarga con barra de progreso
+- **Carátulas**: Gradientes con emoji y descarga automática desde SteamGridDB
+- **Carátula manual**: Elige la imagen exacta desde SteamGridDB (como Heroic), con búsqueda y vista previa
+- **Preferencias**: Tema GTK, color de acento, zoom, orden y más
+- **Atajos**: Ctrl+Q (salir), Ctrl+F (buscar)
 
-* **Package Format:** Distributed as `pp-launcher_1.0_all.deb`, ensuring universal compatibility across supported architectures.
-* **Structured Indexing:** Organized by name, software type, and detailed technical description.
-* **Search Engine:** Efficient entry filtering for rapid catalog localization.
-* **Redirection Management:** Integrated system for the automated opening of links in the default web browser.
-* **User Interface:** Low visual and systemic impact design, focused on operational efficiency.
+## Requisitos
 
-## System Requirements
+- Python 3.9+
+- GTK4 y PyGObject
+- xdg-utils (para abrir URLs en el navegador)
 
-* **Operating System:** Debian-based distributions (Ubuntu, Linux Mint, Kali Linux, etc.).
-* **Architecture:** Compatible with 32-bit and 64-bit systems (`all` architecture).
-* **Connectivity:** Internet access required for external link redirection functionality.
+## Instalación
 
-## Installation and Usage
-
-### Installation via Terminal
-
-To ensure a correct installation while automatically managing dependencies, use the following command:
+### Dependencias (Ubuntu/Debian)
 
 ```bash
-sudo apt install $(find $HOME -name "pp-launcher_3.2.0_all.deb" -print -quit)
+sudo apt install python3-gi gir1.2-gtk-4.0 xdg-utils
+```
+
+### Dependencias (Arch / Manjaro)
+
+```bash
+sudo pacman -S gtk4 python-gobject xdg-utils
+```
+
+### Ejecutar
+
+```bash
+cd PP
+python3 gtk_launcher.py
+```
+
+## Estructura del Proyecto
+
+```
+PP/
+├── gtk_launcher.py        # Aplicación GTK4 principal (entry point)
+├── download_manager.py    # Gestor de descargas (extracción de enlaces y descarga)
+└── catalog.json           # Catálogo de juegos/herramientas
+```
+
+## Atajos de Teclado
+
+| Atajo | Acción |
+|-------|--------|
+| `Ctrl+Q` | Salir |
+| `Ctrl+F` | Buscar |
+| `Esc` | Limpiar búsqueda |
+
+## Licencia
+
+GPL-3.0-or-later
+
+## Autor
+
+- **a101mdtbb** - [GitHub](https://github.com/a101mdtbb)
