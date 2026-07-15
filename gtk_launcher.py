@@ -39,6 +39,40 @@ COVERS_DIR = os.path.join(Path.home(), ".pp-launcher", "covers")
 SGDB_BASE = "https://www.steamgriddb.com/api/v2"
 SGDB_UA = "PP-Launcher/8.1"
 
+# Repositorio remoto para actualizaciones (lista de juegos y programa)
+REPO_OWNER = "a101mdtbb"
+REPO_NAME = "pp"
+_repo_branch = None
+
+
+def get_repo_raw_base():
+    global _repo_branch
+    if _repo_branch is None:
+        branch = "main"
+        try:
+            req = urllib.request.Request(
+                f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}",
+                headers={"User-Agent": "PP-Launcher",
+                         "Accept": "application/vnd.github+json"})
+            with urllib.request.urlopen(req, timeout=10) as r:
+                branch = json.loads(r.read()).get("default_branch", "main")
+        except Exception:
+            branch = "main"
+        for cand in (branch, "master", "main"):
+            try:
+                req = urllib.request.Request(
+                    f"https://raw.githubusercontent.com/{REPO_OWNER}/{REPO_NAME}/{cand}/catalog.json",
+                    headers={"User-Agent": "PP-Launcher"})
+                with urllib.request.urlopen(req, timeout=10) as r:
+                    if r.status == 200:
+                        _repo_branch = cand
+                        break
+            except Exception:
+                continue
+        if _repo_branch is None:
+            _repo_branch = branch
+    return f"https://raw.githubusercontent.com/{REPO_OWNER}/{REPO_NAME}/{_repo_branch}"
+
 COVERS = {
     "Assassin's Creed II": ("#8b0000", "#4a0000", "\u2694\ufe0f"),
     "Assassin's Creed IV": ("#1a1a2e", "#0a0a15", "\u2694\ufe0f"),
@@ -499,6 +533,26 @@ class PPLauncher(Gtk.Application):
         menu_box.set_margin_top(4)
         menu_box.set_margin_bottom(4)
 
+        upd_list_item = Gtk.Button()
+        upd_list_item.set_has_frame(False)
+        _h0 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        _h0.append(Gtk.Image(icon_name="view-refresh-symbolic"))
+        _h0.append(Gtk.Label(label="Actualizar lista de juegos", xalign=0))
+        upd_list_item.set_child(_h0)
+        upd_list_item.connect("clicked", self.update_game_list)
+        menu_box.append(upd_list_item)
+
+        upd_prog_item = Gtk.Button()
+        upd_prog_item.set_has_frame(False)
+        _h0b = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
+        _h0b.append(Gtk.Image(icon_name="software-update-available-symbolic"))
+        _h0b.append(Gtk.Label(label="Actualizar programa", xalign=0))
+        upd_prog_item.set_child(_h0b)
+        upd_prog_item.connect("clicked", self.update_program)
+        menu_box.append(upd_prog_item)
+
+        menu_box.append(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL))
+
         pref_item = Gtk.Button()
         pref_item.set_has_frame(False)
         _h = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
@@ -889,6 +943,75 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
 
     def build_sidebar(self):
         self.build_nav_bar()
+
+    def _show_info(self, title, msg):
+        dlg = Gtk.AlertDialog()
+        dlg.set_message(title)
+        dlg.set_detail(msg)
+        dlg.set_modal(True)
+        dlg.show(self.win)
+        return False
+
+    def update_game_list(self, widget=None):
+        self._show_info("Actualizando lista de juegos...",
+                        "Descargando el catálogo desde el repositorio.")
+        threading.Thread(target=self._update_game_list_work, daemon=True).start()
+
+    def _update_game_list_work(self):
+        try:
+            url = f"{get_repo_raw_base()}/catalog.json"
+            req = urllib.request.Request(url, headers={"User-Agent": "PP-Launcher"})
+            with urllib.request.urlopen(req, timeout=30) as r:
+                data = r.read()
+            os.makedirs(os.path.dirname(CATALOG_PATH), exist_ok=True)
+            tmp = CATALOG_PATH + ".tmp"
+            with open(tmp, "wb") as f:
+                f.write(data)
+            os.replace(tmp, CATALOG_PATH)
+            GLib.idle_add(self._after_game_list_update, True, "")
+        except Exception as e:
+            GLib.idle_add(self._after_game_list_update, False, str(e))
+
+    def _after_game_list_update(self, ok, err):
+        if ok:
+            self.load_data()
+            self._show_info("Lista actualizada",
+                            "La lista de juegos se actualizó correctamente.")
+        else:
+            self._show_info("Error al actualizar",
+                            f"No se pudo descargar la lista:\n{err}")
+        return False
+
+    def update_program(self, widget=None):
+        self._show_info("Actualizando programa...",
+                        "Descargando la última versión desde el repositorio.")
+        threading.Thread(target=self._update_program_work, daemon=True).start()
+
+    def _update_program_work(self):
+        try:
+            base = get_repo_raw_base()
+            files = ["gtk_launcher.py", "download_manager.py",
+                     "catalog.json", "README.md"]
+            for fn in files:
+                url = f"{base}/{fn}"
+                req = urllib.request.Request(url, headers={"User-Agent": "PP-Launcher"})
+                with urllib.request.urlopen(req, timeout=60) as r:
+                    data = r.read()
+                dest = os.path.join(APP_DIR, fn)
+                tmp = dest + ".tmp"
+                with open(tmp, "wb") as f:
+                    f.write(data)
+                os.replace(tmp, dest)
+            GLib.idle_add(self._after_program_update)
+        except Exception as e:
+            GLib.idle_add(self._show_info, "Error al actualizar el programa",
+                          f"No se pudo actualizar:\n{str(e)}")
+
+    def _after_program_update(self):
+        self._show_info("Programa actualizado",
+                        "Se descargó la última versión. Reinicia el launcher "
+                        "para aplicar los cambios del código.")
+        return False
 
     def build_nav_bar(self):
         for child in list(self.nav_bar):
