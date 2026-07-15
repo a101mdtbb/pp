@@ -252,7 +252,8 @@ button.destructive-action:active { transform: scale(0.97); }
 .game-cell:hover { transform: translateY(-6px); }
 .cover-box { border: 0; border-radius: 16px; overflow: hidden; transition: all 200ms ease; }
 .cover-box picture { border-radius: 16px; }
-.cover-skeleton { background: alpha(currentColor, 0.07); border-radius: 16px; }
+.cover-skeleton { background: alpha(currentColor, 0.07); border-radius: 16px; animation: skPulse 1.2s ease-in-out infinite; }
+@keyframes skPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
 .update-banner { background: alpha(@accent_bg_color, 0.16); border-radius: 10px; padding: 8px 14px; margin: 10px 14px 0 14px; border: 1px solid alpha(@accent_bg_color, 0.35); }
 .card-body { padding: 11px 12px 13px; }
 .game-title { font-size: 13.5px; font-weight: 800; letter-spacing: 0.2px; line-height: 1.25; }
@@ -922,7 +923,7 @@ class PPLauncher(Gtk.Application):
         b_btn.add_css_class("suggested-action")
         b_btn.connect("clicked", self._restart_app)
         self.update_banner.append(b_btn)
-        main_vbox.insert_after(self.update_banner, header)
+        main_vbox.insert_after(self.update_banner, self.nav_bar)
 
         self.win.present()
         self.load_data()
