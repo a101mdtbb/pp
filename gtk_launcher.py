@@ -609,7 +609,7 @@ class PPLauncher(Gtk.Application):
         self.stack.set_visible_child_name("grid")
 
         self.flow_box = Gtk.FlowBox()
-        self.flow_box.set_homogeneous(False)
+        self.flow_box.set_homogeneous(True)
         _sp = int(self.settings.get("grid_spacing", 0))
         self.flow_box.set_column_spacing(_sp)
         self.flow_box.set_row_spacing(_sp)
@@ -1161,12 +1161,12 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         cover_overlay.add_css_class("cover-box")
 
         cover_path = get_cached_cover(item.get("name", ""))
-        if cover_path:
-            pb = load_scaled_pixbuf(cover_path, cover_w, cover_h)
-            visual = Gtk.Picture() if pb else Gtk.Picture.new_for_filename(cover_path)
-            if pb:
-                visual.set_pixbuf(pb)
+        pb = load_scaled_pixbuf(cover_path, cover_w, cover_h) if cover_path else None
+        if pb:
+            visual = Gtk.Picture()
+            visual.set_pixbuf(pb)
             visual.set_content_fit(Gtk.ContentFit.COVER)
+            visual.set_can_shrink(True)
             visual.set_halign(Gtk.Align.FILL)
             visual.set_valign(Gtk.Align.FILL)
             visual.set_size_request(cover_w, cover_h)
@@ -1260,13 +1260,13 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         self.detail_box.append(top_row)
 
         cover_path = get_cached_cover(item.get("name", ""))
-        if cover_path:
-            pb = load_scaled_pixbuf(cover_path, 170, 255)
-            picture = Gtk.Picture() if pb else Gtk.Picture.new_for_filename(cover_path)
-            if pb:
-                picture.set_pixbuf(pb)
+        pb = load_scaled_pixbuf(cover_path, 170, 255) if cover_path else None
+        if pb:
+            picture = Gtk.Picture()
+            picture.set_pixbuf(pb)
             picture.set_size_request(170, 255)
             picture.set_content_fit(Gtk.ContentFit.COVER)
+            picture.set_can_shrink(True)
             picture.set_valign(Gtk.Align.START)
             picture.set_halign(Gtk.Align.START)
             picture.add_css_class("detail-cover")
@@ -1730,10 +1730,16 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
 
     def show_preferences(self):
         win = Gtk.Window(title="Preferencias \u2014 PP Launcher", transient_for=self.win, modal=True)
-        win.set_default_size(750, 500)
+        win.set_default_size(750, 520)
+
+        snapshot = dict(self.settings)
+
+        root = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        win.set_child(root)
 
         main_hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-        win.set_child(main_hbox)
+        main_hbox.set_vexpand(True)
+        root.append(main_hbox)
 
         nav = Gtk.StackSidebar()
         nav.set_size_request(180, -1)
@@ -1748,6 +1754,41 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         self._build_interface_page(stack, win)
         self._build_appearance_page(stack)
         self._build_system_page(stack)
+
+        action_bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        action_bar.add_css_class("toolbar")
+        action_bar.set_margin_start(18)
+        action_bar.set_margin_end(18)
+        action_bar.set_margin_top(10)
+        action_bar.set_margin_bottom(12)
+
+        action_spacer = Gtk.Box()
+        action_spacer.set_hexpand(True)
+        action_bar.append(action_spacer)
+
+        cancel_btn = Gtk.Button(label="Cancelar")
+        cancel_btn.set_size_request(120, -1)
+
+        def on_cancel(_b):
+            self.settings.clear()
+            self.settings.update(snapshot)
+            save_settings(self.settings)
+            self._apply_appearance()
+            self._apply_theme()
+            self._refresh_current_view()
+            win.close()
+
+        cancel_btn.connect("clicked", on_cancel)
+        action_bar.append(cancel_btn)
+
+        save_btn = Gtk.Button(label="Guardar y cerrar")
+        save_btn.add_css_class("suggested-action")
+        save_btn.set_size_request(150, -1)
+        save_btn.connect("clicked", lambda b: (save_settings(self.settings), win.close()))
+        action_bar.append(save_btn)
+
+        root.append(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL))
+        root.append(action_bar)
 
         win.present()
 
@@ -1851,13 +1892,6 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         spacer = Gtk.Box()
         spacer.set_vexpand(True)
         page.append(spacer)
-
-        save_btn = Gtk.Button(label="Guardar preferencias")
-        save_btn.add_css_class("suggested-action")
-        save_btn.set_halign(Gtk.Align.END)
-        save_btn.set_size_request(160, -1)
-        save_btn.connect("clicked", lambda b: (save_settings(self.settings), pref_win.close()))
-        page.append(save_btn)
 
         scroll = Gtk.ScrolledWindow()
         scroll.set_child(page)
