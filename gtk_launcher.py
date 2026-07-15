@@ -179,15 +179,17 @@ button.destructive-action:hover { transform: translateY(-1px); }
 button.destructive-action:active { transform: scale(0.97); }
 
 .dl-panel { padding: 8px 10px; animation: slideUp 300ms ease; }
-.dl-card { border-radius: 12px; padding: 10px 12px; margin: 3px 2px; background: alpha(currentColor, 0.05); box-shadow: 0 1px 3px alpha(black, 0.25); animation: fadeIn 250ms ease; }
-.dl-card-name { font-size: 12.5px; font-weight: 800; letter-spacing: 0.2px; }
-.dl-pct { font-size: 12.5px; font-weight: 800; color: @accent_bg_color; }
-.dl-bar { min-height: 8px; }
-.dl-bar trough { min-height: 8px; border-radius: 999px; background: alpha(currentColor, 0.12); }
-.dl-bar progress { min-height: 8px; border-radius: 999px; background: @accent_bg_color; }
-.dl-meta { font-size: 10.5px; opacity: 0.75; }
-.dl-eta { font-size: 10.5px; font-weight: 700; opacity: 0.9; }
-.dl-iconbtn { border-radius: 999px; min-width: 28px; min-height: 28px; padding: 2px; transition: all 160ms ease; }
+.dl-pop-title { font-size: 15px; font-weight: 800; letter-spacing: 0.2px; margin: 2px 2px 4px; }
+.dl-badge { background: #e01b24; color: white; font-size: 9px; font-weight: 800; border-radius: 999px; padding: 0px 4px; margin-top: -3px; margin-right: -4px; min-width: 12px; }
+.dl-card { border-radius: 14px; padding: 13px 15px; margin: 3px 2px; background: alpha(currentColor, 0.06); box-shadow: 0 1px 4px alpha(black, 0.25); animation: fadeIn 250ms ease; }
+.dl-card-name { font-size: 14px; font-weight: 800; letter-spacing: 0.2px; }
+.dl-pct { font-size: 14px; font-weight: 800; color: @accent_bg_color; }
+.dl-bar { min-height: 10px; }
+.dl-bar trough { min-height: 10px; border-radius: 999px; background: alpha(currentColor, 0.12); }
+.dl-bar progress { min-height: 10px; border-radius: 999px; background: @accent_bg_color; }
+.dl-meta { font-size: 12px; opacity: 0.78; }
+.dl-eta { font-size: 12px; font-weight: 700; opacity: 0.95; }
+.dl-iconbtn { border-radius: 999px; min-width: 32px; min-height: 32px; padding: 3px; transition: all 160ms ease; }
 .dl-iconbtn:hover { background: alpha(currentColor, 0.12); }
 .slide-item { border-radius: 8px; min-height: 130px; min-width: 200px; background-color: #333; transition: all 200ms ease; animation: fadeIn 400ms ease; }
 .slide-item:hover { transform: scale(1.05); }
@@ -608,6 +610,53 @@ class PPLauncher(Gtk.Application):
         menu_btn.set_popover(popover)
         header.pack_end(menu_btn)
 
+        self.dl_list = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
+        self.dl_scroll = Gtk.ScrolledWindow()
+        self.dl_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        self.dl_scroll.set_min_content_width(400)
+        self.dl_scroll.set_max_content_height(440)
+        self.dl_scroll.set_propagate_natural_height(True)
+        self.dl_scroll.set_child(self.dl_list)
+
+        self.dl_empty = Gtk.Label(label="No hay descargas activas")
+        self.dl_empty.add_css_class("dim-label")
+        self.dl_empty.set_margin_top(28)
+        self.dl_empty.set_margin_bottom(28)
+
+        pop_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+        pop_box.set_margin_start(10)
+        pop_box.set_margin_end(10)
+        pop_box.set_margin_top(10)
+        pop_box.set_margin_bottom(10)
+        pop_box.set_size_request(430, -1)
+        dl_hdr = Gtk.Label(label="Descargas")
+        dl_hdr.set_xalign(0)
+        dl_hdr.add_css_class("dl-pop-title")
+        pop_box.append(dl_hdr)
+        pop_box.append(self.dl_empty)
+        pop_box.append(self.dl_scroll)
+
+        self.dl_popover = Gtk.Popover()
+        self.dl_popover.set_child(pop_box)
+
+        badge_overlay = Gtk.Overlay()
+        dl_icon = Gtk.Image(icon_name="folder-download-symbolic")
+        dl_icon.set_pixel_size(20)
+        badge_overlay.set_child(dl_icon)
+        self.dl_badge = Gtk.Label(label="")
+        self.dl_badge.add_css_class("dl-badge")
+        self.dl_badge.set_halign(Gtk.Align.END)
+        self.dl_badge.set_valign(Gtk.Align.START)
+        self.dl_badge.set_visible(False)
+        badge_overlay.add_overlay(self.dl_badge)
+
+        self.dl_menu_button = Gtk.MenuButton()
+        self.dl_menu_button.set_child(badge_overlay)
+        self.dl_menu_button.set_always_show_arrow(False)
+        self.dl_menu_button.set_tooltip_text("Descargas")
+        self.dl_menu_button.set_popover(self.dl_popover)
+        header.pack_end(self.dl_menu_button)
+
         self.nav_bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         self.nav_bar.set_margin_start(8)
         self.nav_bar.set_margin_end(8)
@@ -663,15 +712,6 @@ class PPLauncher(Gtk.Application):
         self.dl_panel.add_css_class("dl-panel")
         self.dl_panel.set_visible(False)
         main_area.append(self.dl_panel)
-
-        self.dl_scroll = Gtk.ScrolledWindow()
-        self.dl_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        self.dl_scroll.set_max_content_height(220)
-        self.dl_scroll.set_vexpand(False)
-        self.dl_scroll.set_visible(False)
-        self.dl_list = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
-        self.dl_scroll.set_child(self.dl_list)
-        self.dl_panel.append(self.dl_scroll)
 
         footer = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         footer.set_margin_start(12)
@@ -785,8 +825,16 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             self._dl_game_names.pop(gid, None)
             self._dl_pending_refresh = True
 
-        self.dl_scroll.set_visible(bool(self.dl_widgets))
-        self.dl_panel.set_visible(bool(self.dl_widgets))
+        count = len(self.dl_widgets)
+        if count:
+            self.dl_badge.set_text(str(count))
+            self.dl_badge.set_visible(True)
+            self.dl_empty.set_visible(False)
+            self.dl_scroll.set_visible(True)
+        else:
+            self.dl_badge.set_visible(False)
+            self.dl_empty.set_visible(True)
+            self.dl_scroll.set_visible(False)
 
         if self._dl_pending_refresh and not self.dl_widgets:
             self._dl_pending_refresh = False
@@ -935,6 +983,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         self.dl_manager.download(game_id, game_name, url,
                                  progress_callback=lambda *a: None,
                                  done_callback=self._on_download_done)
+        GLib.idle_add(self.dl_popover.popup)
 
     def _on_download_done(self, gid, gname, path):
         self.dl_manager.mark_installed(gid, gname, path)
