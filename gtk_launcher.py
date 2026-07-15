@@ -199,7 +199,14 @@ CSS = b"""
 .nav-tab { border-radius: 999px; padding: 7px 16px; font-size: 13.5px; font-weight: 600; transition: background 180ms ease, color 180ms ease, transform 160ms ease; }
 .nav-tab:hover { background: alpha(currentColor, 0.08); }
 .nav-tab:active { transform: scale(0.98); }
-.nav-tab-active { font-weight: 700; background: alpha(@accent_bg_color, 0.18); color: @accent_bg_color; }
+ .nav-tab-active { font-weight: 700; background: alpha(@accent_bg_color, 0.18); color: @accent_bg_color; }
+
+ .cat-panel { background: alpha(currentColor, 0.03); border-right: 1px solid alpha(currentColor, 0.08); }
+ .cat-header { font-size: 11px; font-weight: 800; letter-spacing: 0.6px; text-transform: uppercase; color: alpha(currentColor, 0.55); margin-top: 12px; margin-bottom: 2px; margin-start: 8px; }
+ .cat-btn { border-radius: 8px; padding: 7px 10px; font-size: 13px; font-weight: 500; transition: background 160ms ease, color 160ms ease; }
+ .cat-btn:hover { background: alpha(currentColor, 0.07); }
+ .cat-btn-active { background: alpha(@accent_bg_color, 0.16); color: @accent_bg_color; font-weight: 700; }
+ .cat-count { font-size: 10.5px; color: alpha(currentColor, 0.5); margin-start: 6px; }
 
 .brand-icon { color: @accent_bg_color; -gtk-icon-size: 22px; }
 .brand-label { font-size: 17px; font-weight: 800; letter-spacing: -0.4px; }
@@ -694,6 +701,8 @@ class PPLauncher(Gtk.Application):
         self.search_term = ""
         self.settings = load_settings()
         self.current_view = "tienda"
+        self.current_category = None
+        self.current_subcategory = None
         self.zoom = max(0.5, min(2.0, float(self.settings.get("zoom", 1.0))))
         self.store_w, self.store_h = 160, 240
         self.dl_manager = DownloadManager()
@@ -859,11 +868,27 @@ class PPLauncher(Gtk.Application):
         main_area.set_vexpand(True)
         main_vbox.append(main_area)
 
+        content_hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        content_hbox.set_hexpand(True)
+        content_hbox.set_vexpand(True)
+        main_area.append(content_hbox)
+
+        self.category_panel = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
+        self.category_panel.set_margin_start(10)
+        self.category_panel.set_margin_top(8)
+        self.category_panel.set_margin_bottom(10)
+        self.category_panel.add_css_class("cat-panel")
+        cat_scroll = Gtk.ScrolledWindow()
+        cat_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        cat_scroll.set_size_request(220, -1)
+        cat_scroll.set_child(self.category_panel)
+        content_hbox.append(cat_scroll)
+
         self.stack = Gtk.Stack()
         self.stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE)
         self.stack.set_transition_duration(150)
         self.stack.set_vexpand(True)
-        main_area.append(self.stack)
+        content_hbox.append(self.stack)
 
         self.grid_scroll = Gtk.ScrolledWindow()
         self.grid_scroll.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
@@ -1278,12 +1303,78 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
     def load_data(self):
         self.catalog = load_catalog()
         self.build_sidebar()
+        self.build_category_panel()
         self.render_view()
         if self.settings.get("auto_fetch_covers") and self.settings.get("sgdb_api_key"):
             threading.Thread(target=self._batch_fetch_covers, args=(self.status_lbl,), daemon=True).start()
 
     def build_sidebar(self):
         self.build_nav_bar()
+
+    def build_category_panel(self):
+        for child in list(self.category_panel):
+            self.category_panel.remove(child)
+        self.cat_buttons = []
+
+        total = len(self.catalog)
+        all_btn = self._cat_button("Todos", total, lambda: self._select_category(None, None))
+        self.category_panel.append(all_btn)
+        self.cat_buttons.append(("all", all_btn))
+
+        # Agrupar por categoría -> subcategoría -> cantidad
+        cats = {}
+        for i in self.catalog:
+            c = i.get("category", "") or "Sin categoría"
+            s = i.get("subcategory", "") or "Sin subcategoría"
+            cats.setdefault(c, {})
+            cats[c][s] = cats[c].get(s, 0) + 1
+
+        for c in sorted(cats):
+            header = Gtk.Label(label=c)
+            header.add_css_class("cat-header")
+            header.set_xalign(0)
+            self.category_panel.append(header)
+            for s in sorted(cats[c], key=lambda k: (-cats[c][k], k)):
+                btn = self._cat_button(
+                    s, cats[c][s],
+                    lambda cc=c, ss=s: self._select_category(cc, ss))
+                self.category_panel.append(btn)
+                self.cat_buttons.append(((c, s), btn))
+
+        self._update_cat_active()
+
+    def _cat_button(self, label, count, on_click):
+        hbox = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=0)
+        hbox.set_halign(Gtk.Align.START)
+        lbl = Gtk.Label(label=label)
+        lbl.set_xalign(0)
+        lbl.set_hexpand(True)
+        hbox.append(lbl)
+        cnt = Gtk.Label(label=str(count))
+        cnt.add_css_class("cat-count")
+        hbox.append(cnt)
+        btn = Gtk.Button(child=hbox)
+        btn.set_has_frame(False)
+        btn.add_css_class("cat-btn")
+        btn.connect("clicked", lambda b: on_click())
+        return btn
+
+    def _select_category(self, category, subcategory):
+        self.current_category = category
+        self.current_subcategory = subcategory
+        self._update_cat_active()
+        self.render_view()
+
+    def _update_cat_active(self):
+        if not getattr(self, "cat_buttons", None):
+            return
+        for key, btn in self.cat_buttons:
+            btn.remove_css_class("cat-btn-active")
+            if key == "all" and self.current_subcategory is None:
+                btn.add_css_class("cat-btn-active")
+            elif (isinstance(key, tuple) and key[0] == self.current_category
+                  and key[1] == self.current_subcategory):
+                btn.add_css_class("cat-btn-active")
 
     def _show_info(self, title, msg):
         dlg = Gtk.AlertDialog()
@@ -1662,6 +1753,13 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         if self.search_term:
             items = [i for i in items if self.search_term in i.get("name", "").lower()
                      or self.search_term in i.get("description", "").lower()]
+
+        if self.current_subcategory:
+            items = [i for i in items
+                     if (i.get("subcategory", "") or "Sin subcategoría") == self.current_subcategory]
+        elif self.current_category:
+            items = [i for i in items
+                     if (i.get("category", "") or "Sin categoría") == self.current_category]
 
         if not items:
             empty = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=10)
