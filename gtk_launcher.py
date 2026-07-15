@@ -191,8 +191,8 @@ button.destructive-action:active { transform: scale(0.97); }
 .slide-item .dim-label { color: white; }
 
 /* --- Tarjetas de juego modernas --- */
-.game-cell { margin: 0; border-radius: 16px; background: transparent; box-shadow: 0 6px 18px alpha(black, 0.40); transition: transform 220ms cubic-bezier(0.2,0.8,0.2,1), box-shadow 220ms ease; animation: fadeIn 300ms ease; }
-.game-cell:hover { transform: translateY(-6px); box-shadow: 0 22px 46px alpha(black, 0.58); }
+.game-cell { margin: 0; border-radius: 16px; background: transparent; transition: transform 220ms cubic-bezier(0.2,0.8,0.2,1); animation: fadeIn 300ms ease; }
+.game-cell:hover { transform: translateY(-6px); }
 .cover-box { border: 0; border-radius: 16px; overflow: hidden; transition: all 200ms ease; }
 .cover-box picture { border-radius: 16px; }
 .card-body { padding: 11px 12px 13px; }
@@ -821,8 +821,7 @@ class PPLauncher(Gtk.Application):
 .game-sub {{ font-size: {10 * font_scale}px; }}
 .cover-box {{ border-radius: {radius}px; }}
 .cover-box picture {{ border-radius: {radius}px; }}
-.game-cell {{ background: {card_bg}; border-radius: {radius}px; box-shadow: 0 6px 18px alpha(black, 0.40); }}
-.game-cell:hover {{ box-shadow: 0 22px 46px alpha(black, 0.58); }}
+.game-cell {{ background: {card_bg}; border-radius: {radius}px; }}
 
 .nav-tab-active {{ background: @accent_bg_color; color: @accent_fg_color; }}
 .add-game-cell:hover {{ border-color: @accent_bg_color; background: alpha(@accent_bg_color, 0.07); }}
