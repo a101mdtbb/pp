@@ -178,7 +178,17 @@ button.destructive-action { border-radius: 10px; font-weight: 700; padding: 9px 
 button.destructive-action:hover { transform: translateY(-1px); }
 button.destructive-action:active { transform: scale(0.97); }
 
-.dl-panel { padding: 6px 10px; animation: slideUp 300ms ease; }
+.dl-panel { padding: 8px 10px; animation: slideUp 300ms ease; }
+.dl-card { border-radius: 12px; padding: 10px 12px; margin: 3px 2px; background: alpha(currentColor, 0.05); box-shadow: 0 1px 3px alpha(black, 0.25); animation: fadeIn 250ms ease; }
+.dl-card-name { font-size: 12.5px; font-weight: 800; letter-spacing: 0.2px; }
+.dl-pct { font-size: 12.5px; font-weight: 800; color: @accent_bg_color; }
+.dl-bar { min-height: 8px; }
+.dl-bar trough { min-height: 8px; border-radius: 999px; background: alpha(currentColor, 0.12); }
+.dl-bar progress { min-height: 8px; border-radius: 999px; background: @accent_bg_color; }
+.dl-meta { font-size: 10.5px; opacity: 0.75; }
+.dl-eta { font-size: 10.5px; font-weight: 700; opacity: 0.9; }
+.dl-iconbtn { border-radius: 999px; min-width: 28px; min-height: 28px; padding: 2px; transition: all 160ms ease; }
+.dl-iconbtn:hover { background: alpha(currentColor, 0.12); }
 .slide-item { border-radius: 8px; min-height: 130px; min-width: 200px; background-color: #333; transition: all 200ms ease; animation: fadeIn 400ms ease; }
 .slide-item:hover { transform: scale(1.05); }
 .slide-item .dim-label { color: white; }
@@ -254,6 +264,18 @@ def _fmt_size(num_bytes):
     if mb >= 1000:
         return f"{mb / 1024:.2f} GB"
     return f"{mb:.0f} MB"
+
+
+def _fmt_eta(secs):
+    secs = int(secs)
+    h = secs // 3600
+    m = (secs % 3600) // 60
+    s = secs % 60
+    if h:
+        return f"{h}h {m}m"
+    if m:
+        return f"{m}m {s:02d}s"
+    return f"{s}s"
 
 
 def find_terminal():
@@ -644,7 +666,7 @@ class PPLauncher(Gtk.Application):
 
         self.dl_scroll = Gtk.ScrolledWindow()
         self.dl_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        self.dl_scroll.set_max_content_height(120)
+        self.dl_scroll.set_max_content_height(220)
         self.dl_scroll.set_vexpand(False)
         self.dl_scroll.set_visible(False)
         self.dl_list = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
@@ -787,75 +809,126 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         GLib.timeout_add(5000, remove)
 
     def _make_dl_widget(self, game_id, display_name):
-        row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
-        row.set_margin_start(8)
-        row.set_margin_end(4)
-        row.set_margin_top(3)
-        row.set_margin_bottom(3)
+        card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=7)
+        card.add_css_class("dl-card")
 
+        top = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         name_lbl = Gtk.Label(label=display_name)
         name_lbl.set_xalign(0)
+        name_lbl.set_hexpand(True)
         name_lbl.set_ellipsize(Pango.EllipsizeMode.END)
-        name_lbl.set_size_request(140, -1)
-        name_lbl.add_css_class("caption")
-        name_lbl.add_css_class("bold")
-        row.append(name_lbl)
+        name_lbl.add_css_class("dl-card-name")
+        top.append(name_lbl)
+
+        pct_lbl = Gtk.Label(label="0%")
+        pct_lbl.add_css_class("dl-pct")
+        top.append(pct_lbl)
+        card.append(top)
 
         bar = Gtk.ProgressBar()
         bar.set_hexpand(True)
-        bar.set_show_text(True)
-        bar.set_size_request(-1, 16)
-        row.append(bar)
+        bar.set_show_text(False)
+        bar.add_css_class("dl-bar")
+        card.append(bar)
 
-        info_lbl = Gtk.Label(label="")
-        info_lbl.set_xalign(1)
-        info_lbl.set_size_request(200, -1)
-        info_lbl.add_css_class("caption")
-        info_lbl.add_css_class("dim-label")
-        row.append(info_lbl)
+        bottom = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        meta_lbl = Gtk.Label(label="")
+        meta_lbl.set_xalign(0)
+        meta_lbl.set_hexpand(True)
+        meta_lbl.set_ellipsize(Pango.EllipsizeMode.END)
+        meta_lbl.add_css_class("dl-meta")
+        bottom.append(meta_lbl)
+
+        eta_lbl = Gtk.Label(label="")
+        eta_lbl.set_xalign(1)
+        eta_lbl.add_css_class("dl-eta")
+        bottom.append(eta_lbl)
+
+        pause_btn = Gtk.Button()
+        pause_btn.set_icon_name("media-playback-pause-symbolic")
+        pause_btn.set_has_frame(False)
+        pause_btn.add_css_class("dl-iconbtn")
+        pause_btn.set_tooltip_text("Pausar")
+        pause_btn.connect("clicked", lambda b, gid=game_id: self._toggle_pause(gid))
+        bottom.append(pause_btn)
 
         cancel_btn = Gtk.Button()
-        cancel_btn.set_icon_name("process-stop-symbolic")
+        cancel_btn.set_icon_name("window-close-symbolic")
         cancel_btn.set_has_frame(False)
+        cancel_btn.add_css_class("dl-iconbtn")
         cancel_btn.set_tooltip_text("Cancelar")
         cancel_btn.connect("clicked", lambda b, gid=game_id: self.dl_manager.cancel(gid))
-        row.append(cancel_btn)
+        bottom.append(cancel_btn)
 
-        row._bar = bar
-        row._info_lbl = info_lbl
-        row._name_lbl = name_lbl
-        return row
+        card.append(bottom)
+
+        card._bar = bar
+        card._meta_lbl = meta_lbl
+        card._eta_lbl = eta_lbl
+        card._pct_lbl = pct_lbl
+        card._name_lbl = name_lbl
+        card._pause_btn = pause_btn
+        return card
+
+    def _toggle_pause(self, game_id):
+        status = self.dl_manager.get_status(game_id) or {}
+        if status.get("status") == "paused":
+            self.dl_manager.resume(game_id)
+        else:
+            self.dl_manager.pause(game_id)
 
     def _update_dl_widget(self, w, status):
         st = status["status"]
-        w._bar.set_fraction(status.get("progress", 0) / 100.0)
+        pct = status.get("progress", 0)
+        w._bar.set_fraction(pct / 100.0)
 
         if st == "extracting_link":
-            w._info_lbl.set_text("Obteniendo enlace...")
+            w._pct_lbl.set_text("")
+            w._meta_lbl.set_text("Obteniendo enlace...")
+            w._eta_lbl.set_text("")
             w._bar.set_pulse_step(0.1)
             w._bar.pulse()
-        elif st == "downloading":
+            w._pause_btn.set_sensitive(False)
+        elif st in ("downloading", "paused"):
+            w._pause_btn.set_sensitive(True)
+            w._pct_lbl.set_text(f"{pct}%")
             speed = status.get("speed", 0)
             downloaded = status.get("downloaded", 0)
             total = status.get("total", 0)
             eta = status.get("eta", 0)
-            speed_s = f"{speed / 1024 / 1024:.1f} MB/s" if speed > 1024 else f"{speed / 1024:.0f} KB/s"
             if total > 0:
-                dl_s = f"{_fmt_size(downloaded)}/{_fmt_size(total)}"
+                dl_s = f"{_fmt_size(downloaded)} / {_fmt_size(total)}"
             else:
                 dl_s = _fmt_size(downloaded)
-            eta_s = ""
-            if eta > 0 and eta < 86400:
-                eta_s = f"  {int(eta // 60)}:{int(eta % 60):02d}"
-            w._info_lbl.set_text(f"{dl_s}  {speed_s}{eta_s}")
+            if st == "paused":
+                w._pause_btn.set_icon_name("media-playback-start-symbolic")
+                w._pause_btn.set_tooltip_text("Reanudar")
+                w._meta_lbl.set_text(f"{dl_s}  \u00b7  En pausa")
+                w._eta_lbl.set_text("")
+            else:
+                w._pause_btn.set_icon_name("media-playback-pause-symbolic")
+                w._pause_btn.set_tooltip_text("Pausar")
+                speed_s = f"{speed / 1024 / 1024:.1f} MB/s" if speed > 1024 else f"{speed / 1024:.0f} KB/s"
+                w._meta_lbl.set_text(f"{dl_s}  \u00b7  {speed_s}")
+                if eta > 0 and eta < 86400:
+                    w._eta_lbl.set_text(f"\u23f1 quedan {_fmt_eta(eta)}")
+                else:
+                    w._eta_lbl.set_text("")
         elif st == "extracting":
-            w._info_lbl.set_text("Extrayendo archivo...")
+            w._pct_lbl.set_text("")
+            w._meta_lbl.set_text("Extrayendo archivo...")
+            w._eta_lbl.set_text("")
+            w._pause_btn.set_sensitive(False)
         elif st == "needs_browser":
-            w._info_lbl.set_text("Descarga manual")
+            w._meta_lbl.set_text("Descarga manual")
+            w._eta_lbl.set_text("")
         elif st == "cancelled":
-            w._info_lbl.set_text("Cancelado")
+            w._meta_lbl.set_text("Cancelado")
+            w._eta_lbl.set_text("")
         elif st == "error":
-            w._info_lbl.set_text(f"Error: {status.get('error', '?')[:40]}")
+            w._pct_lbl.set_text("")
+            w._meta_lbl.set_text(f"Error: {status.get('error', '?')[:40]}")
+            w._eta_lbl.set_text("")
 
     def start_download(self, game_id, game_name, url):
         self._dl_game_names[game_id] = game_name
