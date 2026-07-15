@@ -174,6 +174,8 @@ SGDB_NAME_MAP = {
     "Horizon Zero Dawn": "Horizon Zero Dawn",
     "Detroit: Become Human": "Detroit Become Human",
     "The Last of Us": "The Last of Us",
+    "EA FC 24": "EA Sports FC 24",
+    "DOOM (2016)": "DOOM",
 }
 
 CSS = b"""
@@ -542,17 +544,37 @@ def load_scaled_pixbuf(path, w, h):
         return None
 
 
-def download_cover(game_name, api_key):
+def download_cover(game_name, api_key, retries=3):
     cached = get_cached_cover(game_name)
     if cached:
         return cached
-    game_id = search_sgdb(game_name, api_key)
-    if not game_id:
-        return None
-    url = fetch_sgdb_cover(game_id, api_key)
-    if not url:
-        return None
-    return save_cover_from_url(game_name, url, api_key)
+    for attempt in range(retries):
+        try:
+            game_id = search_sgdb(game_name, api_key)
+            if not game_id:
+                if attempt < retries - 1:
+                    time.sleep(1.0)
+                    continue
+                return None
+            url = fetch_sgdb_cover(game_id, api_key)
+            if not url:
+                if attempt < retries - 1:
+                    time.sleep(1.0)
+                    continue
+                return None
+            saved = save_cover_from_url(game_name, url, api_key)
+            if saved:
+                return saved
+            if attempt < retries - 1:
+                time.sleep(1.0)
+                continue
+            return None
+        except Exception:
+            if attempt < retries - 1:
+                time.sleep(1.0)
+                continue
+            return None
+    return None
 
 
 def search_sgdb_results(game_name, api_key):
@@ -2120,8 +2142,22 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
                 if status_lbl:
                     GLib.idle_add(status_lbl.set_text, f"Descargando carátulas... {count}/{total}")
                 download_cover(name, api_key)
+                time.sleep(0.1)
+            # Reintentar las que fallaron (errores transitorios / limite de SGDB)
+            missing = [n for n in to_fetch if not get_cached_cover(n)]
+            for _ in range(2):
+                if not missing:
+                    break
+                retry = []
+                for name in missing:
+                    download_cover(name, api_key)
+                    time.sleep(0.2)
+                    if not get_cached_cover(name):
+                        retry.append(name)
+                missing = retry
+            ok = sum(1 for n in to_fetch if get_cached_cover(n))
             if status_lbl:
-                GLib.idle_add(status_lbl.set_text, f"Descargadas {total} carátulas")
+                GLib.idle_add(status_lbl.set_text, f"Carátulas: {ok}/{total}")
             GLib.idle_add(self.render_view)
 
         threading.Thread(target=do_batch, daemon=True).start()
