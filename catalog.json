@@ -526,6 +526,21 @@
       ]
     },
     {
+      "id": "walking-dead-final-season",
+      "name": "The Walking Dead: The Final Season",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Aventura narrativa. El cierre de la historia de Clementine.",
+      "url": "https://ts.bzzhr.to/d/usghd6058bty?v=BfI5MkV-C5SqDorUcbhqCe5nXLwUe8Dvz3_ymVGTpcdQEIEyRzYyjbBQdamweHiyVFwBME8esrUJG4Zo8__97f_Wpk1CvUE0jVj8r88hf8L--G32z4tACItlc6Laj5UVv0JRziGlpr6VXHWrcumnNpICPjAJG19M-ilq0uNECUgSxRcyCDrp-0YLGrd1u5z9Ku6YrVNaU9rUZITwEwApSg_1qYP763idwHAVsoPNC7Pw-5XlIcyn",
+      "icon": "adventure",
+      "color": "#8b5cf6",
+      "tags": [
+        "aventura",
+        "narrativa",
+        "zombies"
+      ]
+    },
+    {
       "id": "blasphemous",
       "name": "Blasphemous",
       "category": "Juego",
