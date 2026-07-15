@@ -343,6 +343,7 @@ def extract_direct_link(url):
 class DownloadManager:
     def __init__(self):
         self.active_downloads = {}
+        self._meta = {}
         self._lock = threading.Lock()
         os.makedirs(DOWNLOADS_DIR, exist_ok=True)
         os.makedirs(TEMP_DIR, exist_ok=True)
