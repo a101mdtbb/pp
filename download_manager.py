@@ -385,12 +385,32 @@ class DownloadManager:
 
     def download(self, game_id, game_name, url, progress_callback=None, done_callback=None):
         with self._lock:
-            if game_id in self.active_downloads:
+            st = self.active_downloads.get(game_id, {})
+            if st.get("status") in ("extracting_link", "downloading", "extracting", "paused"):
                 return False
             self.active_downloads[game_id] = {"status": "extracting_link", "progress": 0}
+        self._meta[game_id] = {
+            "game_name": game_name,
+            "url": url,
+            "progress_callback": progress_callback,
+            "done_callback": done_callback,
+        }
+        threading.Thread(target=self._worker, args=(game_id, False), daemon=True).start()
+        return True
 
-        def _worker():
-            try:
+    def _worker(self, game_id, resume):
+        meta = self._meta.get(game_id, {})
+        game_name = meta.get("game_name", game_id)
+        url = meta.get("url", "")
+        progress_callback = meta.get("progress_callback")
+        done_callback = meta.get("done_callback")
+        try:
+            if resume and meta.get("direct_url"):
+                direct_url = meta["direct_url"]
+                filename = meta["filename"]
+                dest = meta["dest"]
+                game_dir = meta["game_dir"]
+            else:
                 link_info = extract_direct_link(url)
                 direct_url = link_info.get("url", url)
                 filename = link_info.get("filename")
@@ -421,96 +441,135 @@ class DownloadManager:
                         os.remove(dest)
                     except Exception:
                         pass
+                meta.update({"direct_url": direct_url, "filename": filename,
+                             "dest": dest, "game_dir": game_dir})
 
-                with self._lock:
-                    self.active_downloads[game_id] = {"status": "downloading", "progress": 0, "filename": filename}
+            headers = {
+                "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36",
+                "Referer": url,
+            }
+            downloaded = 0
+            file_mode = "wb"
+            if resume and os.path.exists(dest):
+                downloaded = os.path.getsize(dest)
+                headers["Range"] = f"bytes={downloaded}-"
+                file_mode = "ab"
 
-                req = urllib.request.Request(direct_url, headers={
-                    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36",
-                    "Referer": url,
-                })
+            req = urllib.request.Request(direct_url, headers=headers)
+            resp = urllib.request.urlopen(req, timeout=600)
 
-                resp = urllib.request.urlopen(req, timeout=600)
-                total = int(resp.headers.get("Content-Length", 0) or 0)
+            if resp.status == 200 and file_mode == "ab":
                 downloaded = 0
-                start_time = time.time()
-                chunk_size = 256 * 1024
+                file_mode = "wb"
+            remaining = int(resp.headers.get("Content-Length", 0) or 0)
+            total = meta.get("total") or (downloaded + remaining)
+            meta["total"] = total
 
-                try:
-                    with open(dest, "wb") as f:
-                        while True:
-                            with self._lock:
-                                if self.active_downloads.get(game_id, {}).get("status") == "cancelled":
-                                    break
-                            chunk = resp.read(chunk_size)
-                            if not chunk:
-                                break
-                            f.write(chunk)
-                            downloaded += len(chunk)
+            with self._lock:
+                self.active_downloads[game_id] = {"status": "downloading", "progress": 0, "filename": filename}
 
-                            if total > 0:
-                                pct = int(downloaded * 100 / total)
-                            else:
-                                pct = 0
+            start_time = time.time()
+            start_bytes = downloaded
+            chunk_size = 256 * 1024
+            paused = False
 
-                            elapsed = time.time() - start_time
-                            speed = downloaded / elapsed if elapsed > 0 else 0
-                            if total > 0 and speed > 0:
-                                eta = (total - downloaded) / speed
-                            else:
-                                eta = 0
+            try:
+                with open(dest, file_mode) as f:
+                    while True:
+                        with self._lock:
+                            state = self.active_downloads.get(game_id, {}).get("status")
+                        if state == "cancelled":
+                            break
+                        if state == "pausing":
+                            paused = True
+                            break
+                        chunk = resp.read(chunk_size)
+                        if not chunk:
+                            break
+                        f.write(chunk)
+                        downloaded += len(chunk)
 
-                            with self._lock:
-                                if self.active_downloads.get(game_id, {}).get("status") == "cancelled":
-                                    break
-                                self.active_downloads[game_id] = {
-                                    "status": "downloading",
-                                    "progress": pct,
-                                    "downloaded": downloaded,
-                                    "total": total,
-                                    "speed": speed,
-                                    "eta": eta,
-                                    "filename": filename,
-                                }
+                        pct = int(downloaded * 100 / total) if total > 0 else 0
+                        elapsed = time.time() - start_time
+                        speed = (downloaded - start_bytes) / elapsed if elapsed > 0 else 0
+                        eta = (total - downloaded) / speed if (total > 0 and speed > 0) else 0
 
-                            if progress_callback:
-                                progress_callback(game_id, "downloading", pct, "")
-                finally:
-                    resp.close()
+                        with self._lock:
+                            if self.active_downloads.get(game_id, {}).get("status") in ("cancelled", "pausing"):
+                                continue
+                            self.active_downloads[game_id] = {
+                                "status": "downloading",
+                                "progress": pct,
+                                "downloaded": downloaded,
+                                "total": total,
+                                "speed": speed,
+                                "eta": eta,
+                                "filename": filename,
+                            }
 
+                        if progress_callback:
+                            progress_callback(game_id, "downloading", pct, "")
+            finally:
+                resp.close()
+
+            if paused:
+                pct = int(downloaded * 100 / total) if total > 0 else 0
                 with self._lock:
-                    if self.active_downloads.get(game_id, {}).get("status") == "cancelled":
-                        try:
-                            os.remove(dest)
-                        except Exception:
-                            pass
-                        return
-
-                with self._lock:
-                    self.active_downloads[game_id] = {"status": "extracting", "progress": 100}
-
+                    self.active_downloads[game_id] = {
+                        "status": "paused", "progress": pct,
+                        "downloaded": downloaded, "total": total,
+                        "filename": filename,
+                    }
                 if progress_callback:
-                    progress_callback(game_id, "extracting", 100, filename)
+                    progress_callback(game_id, "paused", pct, "")
+                return
 
-                extracted_path = _extract_archive(dest, game_dir, game_name)
+            with self._lock:
+                if self.active_downloads.get(game_id, {}).get("status") == "cancelled":
+                    try:
+                        os.remove(dest)
+                    except Exception:
+                        pass
+                    return
 
-                with self._lock:
-                    self.active_downloads[game_id] = {"status": "complete", "progress": 100}
+            with self._lock:
+                self.active_downloads[game_id] = {"status": "extracting", "progress": 100}
 
-                if progress_callback:
-                    progress_callback(game_id, "complete", 100, "")
+            if progress_callback:
+                progress_callback(game_id, "extracting", 100, filename)
 
-                if done_callback:
-                    done_callback(game_id, game_name, extracted_path or game_dir)
+            extracted_path = _extract_archive(dest, game_dir, game_name)
 
-            except Exception as e:
-                with self._lock:
-                    self.active_downloads[game_id] = {"status": "error", "progress": 0, "error": str(e)}
-                if progress_callback:
-                    progress_callback(game_id, "error", 0, str(e))
+            with self._lock:
+                self.active_downloads[game_id] = {"status": "complete", "progress": 100}
 
-        thread = threading.Thread(target=_worker, daemon=True)
-        thread.start()
+            if progress_callback:
+                progress_callback(game_id, "complete", 100, "")
+
+            if done_callback:
+                done_callback(game_id, game_name, extracted_path or game_dir)
+
+        except Exception as e:
+            with self._lock:
+                self.active_downloads[game_id] = {"status": "error", "progress": 0, "error": str(e)}
+            if progress_callback:
+                progress_callback(game_id, "error", 0, str(e))
+
+    def pause(self, game_id):
+        with self._lock:
+            st = self.active_downloads.get(game_id)
+            if st and st.get("status") == "downloading":
+                self.active_downloads[game_id]["status"] = "pausing"
+                return True
+        return False
+
+    def resume(self, game_id):
+        with self._lock:
+            st = self.active_downloads.get(game_id)
+            if not (st and st.get("status") == "paused"):
+                return False
+            self.active_downloads[game_id]["status"] = "downloading"
+        threading.Thread(target=self._worker, args=(game_id, True), daemon=True).start()
         return True
 
     def cancel(self, game_id):
