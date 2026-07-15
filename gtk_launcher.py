@@ -1331,6 +1331,96 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             pass
         sys.exit(0)
 
+    def _show_how_to_play(self, item):
+        win = Gtk.Window(title="Cómo jugar", transient_for=self.win, modal=True)
+        win.set_default_size(580, 520)
+        win.set_resizable(True)
+
+        sc = Gtk.ScrolledWindow()
+        win.set_child(sc)
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=14)
+        vbox.set_margin_start(22)
+        vbox.set_margin_end(22)
+        vbox.set_margin_top(22)
+        vbox.set_margin_bottom(22)
+        sc.set_child(vbox)
+
+        t = Gtk.Label(label=f"¿Cómo jugar «{item.get('name', '')}» en Linux?")
+        t.add_css_class("title-2")
+        t.set_xalign(0)
+        t.set_wrap(True)
+        vbox.append(t)
+
+        intro = Gtk.Label(
+            label="Estos juegos son para Windows. En Linux se ejecutan mediante una "
+                  "capa de compatibilidad (Wine / Proton). Elige el método que mejor "
+                  "se adapte a tu caso:")
+        intro.set_xalign(0)
+        intro.set_wrap(True)
+        intro.add_css_class("dim-label")
+        vbox.append(intro)
+
+        tools = [
+            ("1", "Heroic Games Launcher",
+             "El más sencillo para Epic, GOG y Amazon. Instala, gestiona y lanza "
+             "juegos con un clic usando Wine/Proton integrado.",
+             "https://heroicgameslauncher.com"),
+            ("2", "Steam (Proton)",
+             "El estándar de oro. Steam usa Proton para correr juegos de Windows "
+             "casi sin configuración adicional.",
+             "https://store.steampowered.com"),
+            ("3", "Lutris",
+             "Gestor de scripts de instalación para cualquier tienda o emulador. "
+             "Ideal para configuraciones personalizadas.",
+             "https://lutris.net"),
+        ]
+        for num, name, desc, url in tools:
+            row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
+            row.add_css_class("about-box")
+            row.set_margin_top(4)
+            row.set_margin_bottom(4)
+            badge = Gtk.Label(label=num)
+            badge.add_css_class("chip")
+            badge.add_css_class("accent")
+            row.append(badge)
+            col = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
+            col.set_hexpand(True)
+            nm = Gtk.Label(label=name)
+            nm.add_css_class("game-foot-title")
+            nm.set_xalign(0)
+            ds = Gtk.Label(label=desc)
+            ds.set_xalign(0)
+            ds.set_wrap(True)
+            ds.add_css_class("dim-label")
+            col.append(nm)
+            col.append(ds)
+            row.append(col)
+            link = Gtk.Button(label="Sitio web")
+            link.add_css_class("suggested-action")
+            link.set_valign(Gtk.Align.CENTER)
+            link.connect("clicked", lambda b, u=url: subprocess.Popen(
+                ["xdg-open", u], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL))
+            row.append(link)
+            vbox.append(row)
+
+        note = Gtk.Label(
+            label="Consejo: muchos de estos juegos ya vienen preparados; solo "
+                  "descárgalos y ábrelos con alguno de los métodos anteriores. Si "
+                  "el juego requiere Wine/Proton, el propio lanzador lo configura "
+                  "por ti.")
+        note.set_xalign(0)
+        note.set_wrap(True)
+        note.add_css_class("dim-label")
+        vbox.append(note)
+
+        close = Gtk.Button(label="Entendido")
+        close.add_css_class("suggested-action")
+        close.set_halign(Gtk.Align.END)
+        close.connect("clicked", lambda b: win.close())
+        vbox.append(close)
+
+        win.present()
+
     def _set_status(self, text):
         if getattr(self, "status_lbl", None):
             self.status_lbl.set_text(text)
@@ -1646,8 +1736,8 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         play_btn.set_valign(Gtk.Align.END)
         play_btn.set_margin_end(10)
         play_btn.set_margin_bottom(10)
-        play_btn.set_tooltip_text("Ver detalles")
-        play_btn.connect("clicked", lambda b: self.show_detail(item))
+        play_btn.set_tooltip_text("Cómo jugar")
+        play_btn.connect("clicked", lambda b: self._show_how_to_play(item))
         action_overlay.append(play_btn)
         cover_overlay.add_overlay(action_overlay)
 
@@ -1809,6 +1899,10 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             game_id = item.get("id", "")
             dl_status = self.dl_manager.get_status(game_id) if game_id else None
             installed = self.dl_manager.is_installed(game_id) if game_id else False
+
+            how_btn = Gtk.Button(label="❓  Cómo jugar")
+            how_btn.connect("clicked", lambda b: self._show_how_to_play(item))
+            add_action(how_btn)
 
             if installed:
                 play_btn = Gtk.Button(label="\u25b6  Jugar")
