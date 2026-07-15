@@ -191,7 +191,7 @@ button.destructive-action:active { transform: scale(0.97); }
 .slide-item .dim-label { color: white; }
 
 /* --- Tarjetas de juego modernas --- */
-.game-cell { margin: 0; border-radius: 16px; background: transparent; transition: transform 220ms cubic-bezier(0.2,0.8,0.2,1); animation: fadeIn 300ms ease; }
+.game-cell { margin: 0; border-radius: 16px; background: transparent; transition: transform 220ms cubic-bezier(0.2,0.8,0.2,1); }
 .game-cell:hover { transform: translateY(-6px); }
 .cover-box { border: 0; border-radius: 16px; overflow: hidden; transition: all 200ms ease; }
 .cover-box picture { border-radius: 16px; }
@@ -214,7 +214,7 @@ button.destructive-action:active { transform: scale(0.97); }
 .hero { border-radius: 18px; background: linear-gradient(135deg, alpha(@accent_bg_color, 0.20), alpha(currentColor, 0.04)); box-shadow: inset 0 0 0 1px alpha(currentColor, 0.06); }
 .hero-bg { opacity: 0.32; border-radius: 18px; overflow: hidden; }
 .hero-scrim { border-radius: 18px; background: linear-gradient(to bottom, alpha(black, 0.40), alpha(black, 0.18)); }
-.detail-cover { min-height: 260px; min-width: 175px; border-radius: 14px; box-shadow: 0 10px 28px alpha(black, 0.45); animation: scaleIn 320ms ease; }
+.detail-cover { min-height: 260px; min-width: 175px; border-radius: 14px; box-shadow: 0 10px 28px alpha(black, 0.45); }
 .detail-title { font-size: 26px; font-weight: 800; letter-spacing: -0.3px; }
 .detail-action { border-radius: 12px; font-weight: 700; font-size: 14px; padding: 11px 22px; transition: all 180ms ease; }
 .detail-action.suggested-action:hover { transform: translateY(-2px); box-shadow: 0 8px 18px alpha(@accent_bg_color, 0.4); }
