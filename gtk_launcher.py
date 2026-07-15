@@ -193,7 +193,7 @@ DEFAULT_SETTINGS = {
     "accent_color": "#3584e4",
     "accent_hue": 211,
     "cover_radius": 10,
-    "grid_spacing": 16,
+    "grid_spacing": 12,
     "show_title": True,
     "show_category": True,
     "show_cover_border": True,
@@ -611,16 +611,21 @@ class PPLauncher(Gtk.Application):
         self.stack.set_visible_child_name("grid")
 
         self.flow_box = Gtk.FlowBox()
-        self.flow_box.set_homogeneous(True)
-        _sp = int(self.settings.get("grid_spacing", 16))
+        self.flow_box.set_homogeneous(False)
+        _sp = int(self.settings.get("grid_spacing", 12))
         self.flow_box.set_column_spacing(_sp)
         self.flow_box.set_row_spacing(_sp)
         self.flow_box.set_margin_start(12)
         self.flow_box.set_margin_end(12)
         self.flow_box.set_margin_top(12)
         self.flow_box.set_margin_bottom(12)
+        self.flow_box.set_halign(Gtk.Align.CENTER)
+        self.flow_box.set_valign(Gtk.Align.START)
+        self.flow_box.set_hexpand(False)
         self.flow_box.set_selection_mode(Gtk.SelectionMode.NONE)
         self.grid_scroll.set_child(self.flow_box)
+        self.grid_scroll.get_hadjustment().connect(
+            "notify::page-size", lambda a, p: self._update_grid_columns())
 
         self.detail_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.detail_scroll.set_child(self.detail_box)
@@ -1216,6 +1221,23 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
                 int(self.store_w * self.zoom), int(self.store_h * self.zoom)))
 
         self.status_lbl.set_text(f"{len(items)} juegos")
+        self._update_grid_columns()
+
+    def _update_grid_columns(self):
+        fb = getattr(self, "flow_box", None)
+        if not fb:
+            return
+        avail = int(self.grid_scroll.get_hadjustment().get_page_size())
+        if avail <= 1:
+            avail = self.grid_scroll.get_width()
+        if avail <= 1:
+            return
+        spacing = int(self.settings.get("grid_spacing", 12))
+        card_w = int(self.store_w * self.zoom)
+        usable = avail - 24
+        cols = max(1, int((usable + spacing) / (card_w + spacing)))
+        fb.set_min_children_per_line(cols)
+        fb.set_max_children_per_line(cols)
 
     def _make_game_card(self, item, cover_w=160, cover_h=240):
         c1, c2, emoji = get_cover(item.get("name", ""))
