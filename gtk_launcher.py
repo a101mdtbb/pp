@@ -819,9 +819,10 @@ class PPLauncher(Gtk.Application):
 
 .game-title {{ font-size: {15 * font_scale}px; }}
 .game-sub {{ font-size: {10 * font_scale}px; }}
-.cover-box {{ border-radius: {radius}px {radius}px 0 0; }}
-.cover-box picture {{ border-radius: {radius}px {radius}px 0 0; }}
-.game-cell {{ background: {card_bg}; border-radius: {radius}px; padding-bottom: 4px; }}
+.cover-box {{ border-radius: {radius}px; }}
+.cover-box picture {{ border-radius: {radius}px; }}
+.game-cell {{ background: {card_bg}; border-radius: {radius}px; box-shadow: 0 6px 18px alpha(black, 0.40); }}
+.game-cell:hover {{ box-shadow: 0 22px 46px alpha(black, 0.58); }}
 
 .nav-tab-active {{ background: @accent_bg_color; color: @accent_fg_color; }}
 .add-game-cell:hover {{ border-color: @accent_bg_color; background: alpha(@accent_bg_color, 0.07); }}
