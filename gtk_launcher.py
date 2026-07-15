@@ -28,7 +28,7 @@ from pathlib import Path
 # Asegura que el módulo download_manager (en el mismo directorio) sea importable
 # sin importar desde dónde se ejecute el script.
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from download_manager import DownloadManager, DOWNLOADS_DIR, find_exe_in_dir
+from download_manager import DownloadManager, DOWNLOADS_DIR, find_exe_in_dir, _sanitize_filename
 
 APP_DIR = os.path.dirname(os.path.abspath(__file__))
 # Catálogo de juegos (junto al launcher, con fallback a la ubicación empaquetada).
@@ -1087,7 +1087,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
 
         vbox.append(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL))
 
-        dest_dir = os.path.join(DOWNLOADS_DIR, game_name)
+        dest_dir = os.path.join(DOWNLOADS_DIR, _sanitize_filename(game_name))
         dir_lbl = Gtk.Label(label=f"Guarda el archivo en:\n<tt>{dest_dir}</tt>")
         dir_lbl.set_use_markup(True)
         dir_lbl.set_xalign(0.5)

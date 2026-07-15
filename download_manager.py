@@ -606,7 +606,7 @@ def _guess_filename(url, game_name):
 
 def _sanitize_filename(name):
     name = re.sub(r'[<>:"/\\|?*]', '_', name)
-    name = re.sub(r'\s+', ' ', name).strip()
+    name = re.sub(r'\s+', '_', name).strip()
     name = name.strip('.')
     return name[:200] if name else "download"
 
