@@ -148,16 +148,6 @@ CSS = b"""
 .brand-label { font-size: 17px; font-weight: 800; letter-spacing: -0.4px; }
 .search-pill { border-radius: 999px; padding: 5px 12px; background: alpha(currentColor, 0.06); box-shadow: inset 0 0 0 1px alpha(currentColor, 0.08); }
 
-.game-cell { margin: 0; border-radius: 12px; overflow: hidden; background: alpha(currentColor, 0.045); box-shadow: 0 1px 2px alpha(black, 0.30); transition: transform 200ms ease, box-shadow 200ms ease; animation: fadeIn 300ms ease; }
-.game-cell:hover { transform: translateY(-4px); box-shadow: 0 12px 26px alpha(black, 0.45); }
-
-.cover-box { border: 0; border-radius: 12px 12px 0 0; transition: all 200ms ease; }
-.cover-box picture { border-radius: 12px 12px 0 0; }
-
-.card-body { padding: 9px 10px 11px; }
-.game-title { font-size: 13.5px; font-weight: 800; letter-spacing: 0.2px; }
-.game-sub { font-size: 10.5px; opacity: 0.7; }
-
 .chip { border-radius: 999px; padding: 2px 9px; font-size: 10px; font-weight: 700; background: alpha(currentColor, 0.13); }
 .badge-installed { border-radius: 999px; padding: 2px 8px; font-size: 9.5px; font-weight: 700; background: #26a269; color: white; }
 
@@ -201,8 +191,8 @@ button.destructive-action:active { transform: scale(0.97); }
 .slide-item .dim-label { color: white; }
 
 /* --- Tarjetas de juego modernas --- */
-.game-cell { margin: 0; border-radius: 16px; background: alpha(currentColor, 0.05); box-shadow: 0 2px 6px alpha(black, 0.30); transition: transform 220ms cubic-bezier(0.2,0.8,0.2,1), box-shadow 220ms ease; animation: fadeIn 300ms ease; }
-.game-cell:hover { transform: translateY(-6px); box-shadow: 0 16px 32px alpha(black, 0.50); }
+.game-cell { margin: 0; border-radius: 16px; background: transparent; box-shadow: 0 6px 18px alpha(black, 0.40); transition: transform 220ms cubic-bezier(0.2,0.8,0.2,1), box-shadow 220ms ease; animation: fadeIn 300ms ease; }
+.game-cell:hover { transform: translateY(-6px); box-shadow: 0 22px 46px alpha(black, 0.58); }
 .cover-box { border: 0; border-radius: 16px; overflow: hidden; transition: all 200ms ease; }
 .cover-box picture { border-radius: 16px; }
 .card-body { padding: 11px 12px 13px; }
@@ -219,7 +209,6 @@ button.destructive-action:active { transform: scale(0.97); }
 .game-foot { background: linear-gradient(to top, alpha(black, 0.90) 8%, alpha(black, 0.0) 88%); padding: 16px 10px 12px; }
 .game-foot-title { color: white; font-size: 13px; font-weight: 800; letter-spacing: 0.2px; line-height: 1.2; text-shadow: 0 1px 3px alpha(black, 0.6); }
 .game-foot-sub { color: alpha(white, 0.82); font-size: 10px; text-shadow: 0 1px 2px alpha(black, 0.6); }
-.game-cell:hover .cover-box picture { transform: scale(1.06); transition: transform 320ms cubic-bezier(0.2,0.8,0.2,1); }
 
 /* --- Vista de detalle --- */
 .hero { border-radius: 18px; background: linear-gradient(135deg, alpha(@accent_bg_color, 0.20), alpha(currentColor, 0.04)); box-shadow: inset 0 0 0 1px alpha(currentColor, 0.06); }
@@ -771,10 +760,10 @@ class PPLauncher(Gtk.Application):
         _sp = int(self.settings.get("grid_spacing", 12))
         self.flow_box.set_column_spacing(_sp)
         self.flow_box.set_row_spacing(_sp)
-        self.flow_box.set_margin_start(12)
-        self.flow_box.set_margin_end(12)
-        self.flow_box.set_margin_top(12)
-        self.flow_box.set_margin_bottom(12)
+        self.flow_box.set_margin_start(18)
+        self.flow_box.set_margin_end(18)
+        self.flow_box.set_margin_top(20)
+        self.flow_box.set_margin_bottom(20)
         self.flow_box.set_halign(Gtk.Align.CENTER)
         self.flow_box.set_valign(Gtk.Align.START)
         self.flow_box.set_hexpand(False)
