@@ -1158,7 +1158,34 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         GLib.idle_add(self.dl_popover.popup)
 
     def _on_download_done(self, gid, gname, path):
-        self.dl_manager.mark_installed(gid, gname, path)
+        pass
+
+    def _confirm_download(self, item):
+        game_name = item.get("name", "")
+        game_dir = os.path.join(DOWNLOADS_DIR, _sanitize_filename(game_name))
+        has_files = os.path.isdir(game_dir) and any(
+            os.path.isfile(os.path.join(game_dir, f)) for f in os.listdir(game_dir))
+        if has_files:
+            dlg = Gtk.AlertDialog()
+            dlg.set_message("El juego ya está en la carpeta")
+            dlg.set_detail(
+                f"{game_name} ya se encuentra en:\n{game_dir}\n\n"
+                "¿Deseas descargarlo de nuevo?")
+            dlg.set_buttons(["Cancelar", "Descargar de nuevo"])
+            dlg.set_default_button(1)
+            dlg.set_cancel_button(0)
+            dlg.choose(self.win, None,
+                       lambda src, res: self._on_confirm_download(src, res, item))
+        else:
+            self.start_download(item.get("id", ""), game_name, item.get("url", ""))
+
+    def _on_confirm_download(self, src, res, item):
+        try:
+            btn = src.choose_finish(res)
+        except Exception:
+            return
+        if btn == 1:
+            self.start_download(item.get("id", ""), item.get("name", ""), item.get("url", ""))
 
     def _show_browser_dialog(self, game_id, game_name, url):
         win = Gtk.Window(title=f"Descargar {game_name}", transient_for=self.win, modal=True)
@@ -1203,16 +1230,6 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             ["xdg-open", url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL))
         btn_row.append(open_btn)
 
-        mark_btn = Gtk.Button(label="Marcar como instalado")
-        mark_btn.add_css_class("suggested-action")
-        def on_mark(b):
-            os.makedirs(dest_dir, exist_ok=True)
-            self.dl_manager.mark_installed(game_id, game_name, dest_dir)
-            win.close()
-            GLib.idle_add(self.render_view)
-        mark_btn.connect("clicked", on_mark)
-        btn_row.append(mark_btn)
-
         cancel_btn = Gtk.Button(label="Cancelar")
         cancel_btn.connect("clicked", lambda b: win.close())
         btn_row.append(cancel_btn)
@@ -1222,26 +1239,6 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
 
     def _open_in_browser(self, url):
         subprocess.Popen(["xdg-open", url], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
-    def _launch_exe(self, exe_path):
-        try:
-            subprocess.Popen(
-                ["xdg-open", exe_path],
-                stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-            )
-        except Exception:
-            pass
-
-    def _uninstall_game(self, game_id):
-        import shutil
-        path = self.dl_manager.get_install_path(game_id)
-        if path and os.path.isdir(path):
-            try:
-                shutil.rmtree(path)
-            except Exception:
-                pass
-        self.dl_manager.mark_uninstalled(game_id)
-        self.render_view()
 
     def load_data(self):
         self.catalog = load_catalog()
@@ -1680,16 +1677,6 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
                 "name": item.get("name", ""), "c1": c1, "emoji": emoji,
             }
 
-        installed = item.get("id") and self.dl_manager.is_installed(item.get("id"))
-        if installed:
-            badge = Gtk.Label(label="INSTALADO")
-            badge.add_css_class("badge-installed")
-            badge.set_halign(Gtk.Align.END)
-            badge.set_valign(Gtk.Align.START)
-            badge.set_margin_top(8)
-            badge.set_margin_end(8)
-            cover_overlay.add_overlay(badge)
-
         foot = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
         foot.set_halign(Gtk.Align.FILL)
         foot.set_valign(Gtk.Align.END)
@@ -1724,22 +1711,6 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             foot.append(sub_row)
 
         cover_overlay.add_overlay(foot)
-
-        action_overlay = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-        action_overlay.set_halign(Gtk.Align.END)
-        action_overlay.set_valign(Gtk.Align.END)
-        action_overlay.add_css_class("game-overlay")
-        play_btn = Gtk.Button(icon_name="media-playback-start-symbolic")
-        play_btn.add_css_class("game-play")
-        play_btn.set_has_frame(False)
-        play_btn.set_halign(Gtk.Align.END)
-        play_btn.set_valign(Gtk.Align.END)
-        play_btn.set_margin_end(10)
-        play_btn.set_margin_bottom(10)
-        play_btn.set_tooltip_text("Cómo jugar")
-        play_btn.connect("clicked", lambda b: self._show_how_to_play(item))
-        action_overlay.append(play_btn)
-        cover_overlay.add_overlay(action_overlay)
 
         card.append(cover_overlay)
 
@@ -1898,24 +1869,12 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             url = item["url"]
             game_id = item.get("id", "")
             dl_status = self.dl_manager.get_status(game_id) if game_id else None
-            installed = self.dl_manager.is_installed(game_id) if game_id else False
 
             how_btn = Gtk.Button(label="❓  Cómo jugar")
             how_btn.connect("clicked", lambda b: self._show_how_to_play(item))
             add_action(how_btn)
 
-            if installed:
-                play_btn = Gtk.Button(label="\u25b6  Jugar")
-                play_btn.add_css_class("suggested-action")
-                play_btn.connect("clicked", lambda b: self._show_how_to_play(item))
-                add_action(play_btn)
-
-                del_btn = Gtk.Button(label="  Desinstalar")
-                del_btn.add_css_class("destructive-action")
-                del_btn.connect("clicked", lambda b, gid=game_id: self._uninstall_game(gid))
-                add_action(del_btn)
-
-            elif dl_status and dl_status["status"] in ("downloading", "extracting", "extracting_link"):
+            if dl_status and dl_status["status"] in ("downloading", "extracting", "extracting_link"):
                 prog_bar = Gtk.ProgressBar()
                 prog_bar.set_fraction(dl_status.get("progress", 0) / 100.0)
                 prog_bar.set_show_text(True)
@@ -1941,15 +1900,13 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
 
                 dl_btn = Gtk.Button(label="  Descargar desde navegador")
                 dl_btn.add_css_class("suggested-action")
-                dl_btn.connect("clicked", lambda b, it=item: self.start_download(
-                    it.get("id", ""), it.get("name", ""), it.get("url", "")))
+                dl_btn.connect("clicked", lambda b, it=item: self._confirm_download(it))
                 add_action(dl_btn)
 
             else:
                 dl_btn = Gtk.Button(label="  Descargar")
                 dl_btn.add_css_class("suggested-action")
-                dl_btn.connect("clicked", lambda b, it=item: self.start_download(
-                    it.get("id", ""), it.get("name", ""), it.get("url", "")))
+                dl_btn.connect("clicked", lambda b, it=item: self._confirm_download(it))
                 add_action(dl_btn)
 
         if item.get("command"):
