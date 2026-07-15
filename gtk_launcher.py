@@ -194,6 +194,50 @@ button.destructive-action:active { transform: scale(0.97); }
 .slide-item { border-radius: 8px; min-height: 130px; min-width: 200px; background-color: #333; transition: all 200ms ease; animation: fadeIn 400ms ease; }
 .slide-item:hover { transform: scale(1.05); }
 .slide-item .dim-label { color: white; }
+
+/* --- Tarjetas de juego modernas --- */
+.game-cell { margin: 0; border-radius: 16px; overflow: hidden; background: alpha(currentColor, 0.05); box-shadow: 0 2px 6px alpha(black, 0.30); transition: transform 220ms cubic-bezier(0.2,0.8,0.2,1), box-shadow 220ms ease; animation: fadeIn 300ms ease; }
+.game-cell:hover { transform: translateY(-6px); box-shadow: 0 16px 32px alpha(black, 0.50); }
+.cover-box { border: 0; border-radius: 16px 16px 0 0; transition: all 200ms ease; }
+.cover-box picture { border-radius: 16px 16px 0 0; }
+.card-body { padding: 11px 12px 13px; }
+.game-title { font-size: 13.5px; font-weight: 800; letter-spacing: 0.2px; line-height: 1.25; }
+.game-sub { font-size: 10.5px; opacity: 0.7; }
+.game-overlay { background: linear-gradient(to top, alpha(black, 0.78) 10%, alpha(black, 0.0) 70%); opacity: 0; transition: opacity 200ms ease; }
+.game-cell:hover .game-overlay { opacity: 1; }
+.game-play { border-radius: 999px; min-width: 38px; min-height: 38px; padding: 4px; background: alpha(white, 0.14); color: white; transition: transform 160ms ease, background 160ms ease; }
+.game-play:hover { background: @accent_bg_color; transform: scale(1.08); }
+.badge-installed { border-radius: 999px; padding: 3px 9px; font-size: 9.5px; font-weight: 800; letter-spacing: 0.4px; background: #26a269; color: white; box-shadow: 0 1px 3px alpha(black, 0.4); }
+.chip { border-radius: 999px; padding: 3px 10px; font-size: 10px; font-weight: 700; background: alpha(currentColor, 0.13); }
+.chip.accent { background: alpha(@accent_bg_color, 0.18); color: @accent_bg_color; }
+
+/* --- Vista de detalle --- */
+.hero { padding: 22px 24px; border-radius: 18px; background: linear-gradient(135deg, alpha(@accent_bg_color, 0.20), alpha(currentColor, 0.04)); box-shadow: inset 0 0 0 1px alpha(currentColor, 0.06); }
+.detail-cover { min-height: 260px; min-width: 175px; border-radius: 14px; box-shadow: 0 10px 28px alpha(black, 0.45); animation: scaleIn 320ms ease; }
+.detail-title { font-size: 26px; font-weight: 800; letter-spacing: -0.3px; }
+.detail-action { border-radius: 12px; font-weight: 700; font-size: 14px; padding: 11px 22px; transition: all 180ms ease; }
+.detail-action.suggested-action:hover { transform: translateY(-2px); box-shadow: 0 8px 18px alpha(@accent_bg_color, 0.4); }
+.detail-action.destructive-action:hover { transform: translateY(-2px); }
+.detail-card { border-radius: 14px; padding: 14px 16px; background: alpha(currentColor, 0.045); box-shadow: inset 0 0 0 1px alpha(currentColor, 0.05); }
+.section-title { font-size: 11.5px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; opacity: 0.6; }
+.desc { font-size: 13.5px; line-height: 1.6; opacity: 0.92; }
+.kv { font-size: 12.5px; }
+.kv-key { opacity: 0.55; }
+
+/* --- Preferencias (grupos tipo libadwaita) --- */
+.pref-group { border-radius: 14px; background: alpha(currentColor, 0.045); padding: 4px 14px; box-shadow: inset 0 0 0 1px alpha(currentColor, 0.05); }
+.pref-group-title { font-size: 12px; font-weight: 800; letter-spacing: 0.4px; opacity: 0.65; margin: 12px 2px 6px; text-transform: uppercase; }
+.pref-row { padding: 8px 2px; }
+.pref-row + .pref-row { box-shadow: inset 0 1px 0 alpha(currentColor, 0.06); }
+.sidebar { background: transparent; padding-right: 4px; }
+.sidebar row { border-radius: 10px; padding: 4px 8px; }
+.sidebar row:selected { background: alpha(@accent_bg_color, 0.18); color: @accent_bg_color; }
+
+/* --- Acerca de --- */
+.about-box { border-radius: 18px; padding: 30px; background: linear-gradient(135deg, alpha(@accent_bg_color, 0.18), alpha(currentColor, 0.03)); box-shadow: inset 0 0 0 1px alpha(currentColor, 0.06); }
+.about-logo { font-size: 56px; }
+.about-title { font-size: 26px; font-weight: 800; letter-spacing: -0.3px; }
+.about-sub { font-size: 13px; opacity: 0.7; }
 """
 
 DEFAULT_SETTINGS = {
@@ -1416,6 +1460,21 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             badge.set_margin_end(7)
             cover_overlay.add_overlay(badge)
 
+        action_overlay = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+        action_overlay.set_halign(Gtk.Align.FILL)
+        action_overlay.set_valign(Gtk.Align.END)
+        action_overlay.add_css_class("game-overlay")
+        play_btn = Gtk.Button(icon_name="media-playback-start-symbolic")
+        play_btn.add_css_class("game-play")
+        play_btn.set_has_frame(False)
+        play_btn.set_halign(Gtk.Align.CENTER)
+        play_btn.set_valign(Gtk.Align.END)
+        play_btn.set_margin_bottom(10)
+        play_btn.set_tooltip_text("Ver detalles")
+        play_btn.connect("clicked", lambda b: self.show_detail(item))
+        action_overlay.append(play_btn)
+        cover_overlay.add_overlay(action_overlay)
+
         card.append(cover_overlay)
 
         body = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=5)
@@ -1518,7 +1577,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
 
         title = Gtk.Label(label=item.get("name", ""))
         title.set_xalign(0)
-        title.add_css_class("title-1")
+        title.add_css_class("detail-title")
         info_box.append(title)
 
         meta_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
@@ -1542,6 +1601,8 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         info_box.append(actions)
 
         def add_action(w):
+            if isinstance(w, Gtk.Button):
+                w.add_css_class("detail-action")
             actions.append(w)
 
         if item.get("url"):
@@ -1671,6 +1732,8 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             info_rows = [("Enlace", item.get("url", ""))]
         if info_rows:
             content.append(section_title("Información"))
+            info_card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=6)
+            info_card.add_css_class("detail-card")
             for k, v in info_rows:
                 row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
                 key = Gtk.Label(label=k)
@@ -1685,7 +1748,8 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
                 val.set_ellipsize(Pango.EllipsizeMode.END)
                 val.add_css_class("kv")
                 row.append(val)
-                content.append(row)
+                info_card.append(row)
+            content.append(info_card)
 
     def show_cover_picker(self, item):
         api_key = self.settings.get("sgdb_api_key", "")
@@ -1945,13 +2009,52 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         threading.Thread(target=do_batch, daemon=True).start()
 
     def _show_about(self):
-        about = Gtk.AboutDialog()
-        about.set_transient_for(self.win)
-        about.set_program_name("PP Launcher")
-        about.set_version("8.1")
-        about.set_comments("Lanzador de juegos estilo Lutris")
-        about.set_website("https://github.com/a101mdtbb/pp")
-        about.present()
+        win = Gtk.Window(title="Acerca de", transient_for=self.win, modal=True)
+        win.set_default_size(380, 320)
+        win.set_resizable(False)
+
+        vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        vbox.set_margin_start(16)
+        vbox.set_margin_end(16)
+        vbox.set_margin_top(16)
+        vbox.set_margin_bottom(16)
+        win.set_child(vbox)
+
+        card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
+        card.add_css_class("about-box")
+        card.set_halign(Gtk.Align.FILL)
+
+        logo = Gtk.Label(label="\U0001F3AE")
+        logo.add_css_class("about-logo")
+        logo.set_xalign(0.5)
+        card.append(logo)
+
+        title = Gtk.Label(label="PP Launcher")
+        title.add_css_class("about-title")
+        title.set_xalign(0.5)
+        card.append(title)
+
+        sub = Gtk.Label(label="v8.1  ·  Lanzador de juegos estilo Lutris")
+        sub.add_css_class("about-sub")
+        sub.set_xalign(0.5)
+        card.append(sub)
+
+        link = Gtk.Label()
+        link.set_markup('<a href="https://github.com/a101mdtbb/pp">github.com/a101mdtbb/pp</a>')
+        link.set_xalign(0.5)
+        card.append(link)
+
+        vbox.append(card)
+
+        close_btn = Gtk.Button(label="Cerrar")
+        close_btn.add_css_class("suggested-action")
+        close_btn.set_halign(Gtk.Align.CENTER)
+        close_btn.set_margin_top(14)
+        close_btn.set_size_request(160, -1)
+        close_btn.connect("clicked", lambda b: win.close())
+        vbox.append(close_btn)
+
+        win.present()
 
     def show_preferences(self):
         win = Gtk.Window(title="Preferencias \u2014 PP Launcher", transient_for=self.win, modal=True)
@@ -2017,8 +2120,22 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
 
         win.present()
 
+    def _pref_group(self, title, *widgets):
+        outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        t = Gtk.Label(label=title)
+        t.add_css_class("pref-group-title")
+        outer.append(t)
+        card = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        card.add_css_class("pref-group")
+        for w in widgets:
+            if isinstance(w, Gtk.Widget):
+                w.add_css_class("pref-row")
+                card.append(w)
+        outer.append(card)
+        return outer
+
     def _build_interface_page(self, stack, pref_win):
-        page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
+        page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=14)
         page.set_margin_start(18)
         page.set_margin_end(18)
         page.set_margin_top(12)
@@ -2038,7 +2155,6 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         minimize_sw.set_active(self.settings.get("minimize_on_launch", True))
         minimize_sw.connect("notify::active", lambda s, p: self._set_setting("minimize_on_launch", s.get_active()))
         minimize_row.append(minimize_sw)
-        page.append(minimize_row)
 
         badge_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         badge_lbl = Gtk.Label(label="Mostrar insignias en tarjetas")
@@ -2049,15 +2165,13 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         badge_sw.set_active(self.settings.get("show_badges", True))
         badge_sw.connect("notify::active", lambda s, p: self._set_setting("show_badges", s.get_active()))
         badge_row.append(badge_sw)
-        page.append(badge_row)
 
-        page.append(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL))
+        page.append(self._pref_group("Comportamiento", minimize_row, badge_row))
 
         theme_lbl = Gtk.Label(label="Tema GTK")
         theme_lbl.set_xalign(0)
         theme_lbl.add_css_class("caption")
         theme_lbl.add_css_class("dim-label")
-        page.append(theme_lbl)
 
         available_themes = detect_gtk_themes()
         theme_combo = Gtk.DropDown()
@@ -2079,21 +2193,16 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
                 theme_info.set_text("Actual: " + name)
 
         theme_combo.connect("notify::selected", on_theme_change)
-        page.append(theme_combo)
-        page.append(theme_info)
-
-        page.append(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL))
+        page.append(self._pref_group("Tema GTK", theme_lbl, theme_combo, theme_info))
 
         sgdb_lbl = Gtk.Label(label="SteamGridDB - Carátulas")
         sgdb_lbl.set_xalign(0)
         sgdb_lbl.add_css_class("title-2")
-        page.append(sgdb_lbl)
 
         key_lbl = Gtk.Label(label="API Key (steamgriddb.com/profile/preferences/api)")
         key_lbl.set_xalign(0)
         key_lbl.add_css_class("caption")
         key_lbl.add_css_class("dim-label")
-        page.append(key_lbl)
 
         key_entry = Gtk.Entry()
         key_entry.set_text(self.settings.get("sgdb_api_key", ""))
@@ -2101,7 +2210,6 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         key_entry.set_hexpand(True)
         key_entry.set_placeholder_text("Tu API key de SteamGridDB")
         key_entry.connect("changed", lambda e: self._set_setting("sgdb_api_key", e.get_text()))
-        page.append(key_entry)
 
         auto_row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=12)
         auto_lbl = Gtk.Label(label="Descargar carátulas automáticamente")
@@ -2112,7 +2220,8 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         auto_sw.set_active(self.settings.get("auto_fetch_covers", True))
         auto_sw.connect("notify::active", lambda s, p: self._set_setting("auto_fetch_covers", s.get_active()))
         auto_row.append(auto_sw)
-        page.append(auto_row)
+
+        page.append(self._pref_group("Carátulas", sgdb_lbl, key_lbl, key_entry, auto_row))
 
         spacer = Gtk.Box()
         spacer.set_vexpand(True)
@@ -2186,7 +2295,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         return box
 
     def _build_appearance_page(self, stack):
-        page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
+        page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=14)
         page.set_margin_start(18)
         page.set_margin_end(18)
         page.set_margin_top(12)
@@ -2226,32 +2335,24 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         asw.connect("notify::rgba", on_accent)
         ahead.append(asw)
         accent_box.append(ahead)
-        page.append(accent_box)
 
-        page.append(self._ap_slider_row(
-            "Radio de las carátulas", "cover_radius", 0, 24, 1,
-            lambda v: f"{int(v)} px"))
+        page.append(self._pref_group("Color", accent_box,
+            self._ap_slider_row("Radio de las carátulas", "cover_radius", 0, 24, 1,
+                                lambda v: f"{int(v)} px"),
+            self._ap_slider_row("Espaciado de la cuadrícula", "grid_spacing", 0, 28, 1,
+                                lambda v: f"{int(v)} px"),
+            self._ap_slider_row("Tamaño de fuente", "font_scale", 0.8, 1.5, 0.05,
+                                lambda v: f"{int(v * 100)}%")))
 
-        page.append(self._ap_slider_row(
-            "Espaciado de la cuadrícula", "grid_spacing", 0, 28, 1,
-            lambda v: f"{int(v)} px"))
+        page.append(self._pref_group("Visibilidad",
+            self._ap_switch_row("Mostrar nombre del juego", "show_title"),
+            self._ap_switch_row("Mostrar categoría", "show_category"),
+            self._ap_switch_row("Mostrar borde en carátulas", "show_cover_border"),
+            self._ap_switch_row("Animaciones", "animations")))
 
-        page.append(self._ap_slider_row(
-            "Tamaño de fuente", "font_scale", 0.8, 1.5, 0.05,
-            lambda v: f"{int(v * 100)}%"))
-
-        page.append(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL))
-
-        page.append(self._ap_switch_row("Mostrar nombre del juego", "show_title"))
-        page.append(self._ap_switch_row("Mostrar categoría", "show_category"))
-        page.append(self._ap_switch_row("Mostrar borde en carátulas", "show_cover_border"))
-        page.append(self._ap_switch_row("Animaciones", "animations"))
-
-        page.append(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL))
-
-        page.append(self._ap_choice_row(
-            "Ordenar juegos por", "sort_order",
-            [("Nombre", "name"), ("Categoría", "category"), ("Aleatorio", "random")]))
+        page.append(self._pref_group("Orden",
+            self._ap_choice_row("Ordenar juegos por", "sort_order",
+                [("Nombre", "name"), ("Categoría", "category"), ("Aleatorio", "random")])))
 
         spacer = Gtk.Box()
         spacer.set_vexpand(True)
@@ -2266,7 +2367,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         save_settings(self.settings)
 
     def _build_system_page(self, stack):
-        page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
+        page = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=14)
         page.set_margin_start(18)
         page.set_margin_end(18)
         page.set_margin_top(12)
@@ -2277,6 +2378,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         lbl.add_css_class("title-2")
         page.append(lbl)
 
+        rows = []
         for label, value in [
             ("Plataforma", sys.platform),
             ("Python", sys.version.split()[0]),
@@ -2295,8 +2397,9 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             lbl_val.set_selectable(True)
             lbl_val.set_ellipsize(Pango.EllipsizeMode.END)
             row.append(lbl_val)
-            page.append(row)
-            page.append(Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL))
+            rows.append(row)
+
+        page.append(self._pref_group("Información del sistema", *rows))
 
         spacer = Gtk.Box()
         spacer.set_vexpand(True)
