@@ -1035,22 +1035,6 @@
       ]
     },
     {
-      "id": "assassins-creed-odyssey",
-      "name": "Assassin's Creed Odyssey",
-      "category": "Juego",
-      "subcategory": "Acción",
-      "description": "Acción y aventura de mundo abierto.",
-      "url": "https://ts.bzzhr.to/d/9ijwpud2aubn?v=jIhmCK6bjr2935Q4i_6PUDu_k9lkNeqYW5PCjr85MjkPZkdVJCknXqxHWwoGGgPc3JBEbQ1DfAWv-7z2lKQ1Xj8MnVcbGq1mhNqsyEIquL1ajX5L_Uq5S8wf75_xx91fQHQWPeWcTk3XMJ4kKwMz4NeKRDO9A3GovxHiVLBL9eOdMTewP9pa205Q0c-iFfGZdworbhhKmGhmaIy26EHVYsZ6Xb2nhG7j_PQnllTFNLdJpcQv46tEvVPu2AE9",
-      "icon": "sword",
-      "color": "#1565c0",
-      "tags": [
-        "accion",
-        "aventura",
-        "mundo-abierto",
-        "rpg"
-      ]
-    },
-    {
       "id": "tomb-raider",
       "name": "Tomb Raider (2013)",
       "category": "Juego",
@@ -1131,7 +1115,7 @@
       "category": "Juego",
       "subcategory": "Accion",
       "description": "Mundo abierto griego.",
-      "url": "https://example.com/ac-odyssey",
+      "url": "https://ts.bzzhr.to/d/9ijwpud2aubn?v=jIhmCK6bjr2935Q4i_6PUDu_k9lkNeqYW5PCjr85MjkPZkdVJCknXqxHWwoGGgPc3JBEbQ1DfAWv-7z2lKQ1Xj8MnVcbGq1mhNqsyEIquL1ajX5L_Uq5S8wf75_xx91fQHQWPeWcTk3XMJ4kKwMz4NeKRDO9A3GovxHiVLBL9eOdMTewP9pa205Q0c-iFfGZdworbhhKmGhmaIy26EHVYsZ6Xb2nhG7j_PQnllTFNLdJpcQv46tEvVPu2AE9",
       "icon": "sword",
       "color": "#1565c0",
       "tags": [
