@@ -554,6 +554,36 @@
         "metroidvania",
         "plataformas"
       ]
+    },
+    {
+      "id": "hades-2",
+      "name": "Hades 2",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Roguelike de acción ambientado en la mitología griega.",
+      "url": "https://ts.bzzhr.to/d/lbu3xvv4rqry?v=QNX-yASRhkEl9evD0NiykF4F5eX5y_K7kTIjfiRaKBKkpB0YoyPMh_W8WBNMKlpy9goKkLAnt_544FN4qqoip8t--TiChvVDVXSxTIF2Px0JEgqSNlYAgl2F4v_D3R5eNHRCig9lKU2HzZv-Gc00Ojdcj8xzz4mBAHE31HUXq-D7VUIhiHgoIp2IQ443kMY9H-_8DA858TDOa48_RVh9",
+      "icon": "fire",
+      "color": "#7c3aed",
+      "tags": [
+        "accion",
+        "roguelike",
+        "mitologia"
+      ]
+    },
+    {
+      "id": "cod-world-at-war",
+      "name": "Call of Duty: World at War",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter bélico ambientado en la Segunda Guerra Mundial.",
+      "url": "https://ts.bzzhr.to/d/ywt9cge2aaj6?v=4l0NZEfVGB2RzdTTrL8b-W8l2aPfeLYiqsP0u-KHzd6t6o4Q-zN9-WVCX6-HUC1dJ9ToeqKJKGFr_IxpaYW-DWln1T1B2CpTuO9X1J6AFhNKJjV-gPfPnRkKMEu3SLqcBSSGbjuy4SRFdrXgVIBE3LfEPjN8BX4nqlfXWVRCaX4pBj11XpV83OpAsTbm1LvED1-W4KNhOQM2g5aMLl1tRFxK3BmlH8BkTF0BuwGXhdjV6tBlvc6ATAZvjldDIo05yQ",
+      "icon": "crosshair",
+      "color": "#4d7c0f",
+      "tags": [
+        "shooter",
+        "guerra",
+        "multijugador"
+      ]
     }
   ]
 }
