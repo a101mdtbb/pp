@@ -152,10 +152,10 @@
     },
     {
       "id": "god-of-war-ragnarok",
-      "name": "God of War Ragnar\u00f6k",
+      "name": "God of War Ragnarök",
       "category": "Juego",
       "subcategory": "Acción",
-      "description": "Acción y aventura. La saga n\u00f3rdica de Kratos y Atreus.",
+      "description": "Acción y aventura. La saga nórdica de Kratos y Atreus.",
       "url": "https://ts.bzzhr.to/d/i3t0797hahst?v=OCw_IiWaWGOc91LTeN7rtb6gOzlC2bOrO3JfUB-B_Q_5BKGH1OQIR2TOdI0AofQ130GIgyJG04RhLPaR2sA4mqHLm50tckmffYdXD0st5eulFaPL2UwOM9qtRXjIkFzNytFf-e5PIdD1w3cPQi0LbWtwrg9E2mBP8EsoaBWJQ0OlRmGA9ch_G0Lt4Vvetd2GOdtgcHLJ4z0MOripItslXCRfYAzwxaw",
       "icon": "sword",
       "color": "#dc2626",
@@ -583,6 +583,1099 @@
         "shooter",
         "guerra",
         "multijugador"
+      ]
+    },
+    {
+      "id": "zelda-botw",
+      "name": "The Legend of Zelda: Breath of the Wild",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Mundo abierto de accion y exploracion.",
+      "url": "https://example.com/zelda-botw",
+      "icon": "gamepad",
+      "color": "#2e7d32",
+      "tags": [
+        "aventura",
+        "mundo-abierto",
+        "nintendo"
+      ]
+    },
+    {
+      "id": "witcher-3",
+      "name": "The Witcher 3: Wild Hunt",
+      "category": "Juego",
+      "subcategory": "RPG",
+      "description": "RPG de mundo abierto.",
+      "url": "https://example.com/witcher-3",
+      "icon": "sword",
+      "color": "#b71c1c",
+      "tags": [
+        "rpg",
+        "mundo-abierto",
+        "fantasia"
+      ]
+    },
+    {
+      "id": "cyberpunk-2077",
+      "name": "Cyberpunk 2077",
+      "category": "Juego",
+      "subcategory": "RPG",
+      "description": "RPG de mundo abierto futurista.",
+      "url": "https://example.com/cyberpunk-2077",
+      "icon": "gamepad",
+      "color": "#ff9800",
+      "tags": [
+        "rpg",
+        "futurista",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "elden-ring",
+      "name": "Elden Ring",
+      "category": "Juego",
+      "subcategory": "Soulslike",
+      "description": "RPG de accion de mundo abierto.",
+      "url": "https://example.com/elden-ring",
+      "icon": "sword",
+      "color": "#c9a227",
+      "tags": [
+        "soulslike",
+        "fantasia",
+        "dificil"
+      ]
+    },
+    {
+      "id": "dark-souls-3",
+      "name": "Dark Souls III",
+      "category": "Juego",
+      "subcategory": "Soulslike",
+      "description": "Accion y rol desafiante.",
+      "url": "https://example.com/dark-souls-3",
+      "icon": "sword",
+      "color": "#555555",
+      "tags": [
+        "soulslike",
+        "fantasia",
+        "dificil"
+      ]
+    },
+    {
+      "id": "sekiro",
+      "name": "Sekiro: Shadows Die Twice",
+      "category": "Juego",
+      "subcategory": "Soulslike",
+      "description": "Accion con espadas en Japon feudal.",
+      "url": "https://example.com/sekiro",
+      "icon": "sword",
+      "color": "#37474f",
+      "tags": [
+        "soulslike",
+        "japon",
+        "accion"
+      ]
+    },
+    {
+      "id": "bloodborne",
+      "name": "Bloodborne",
+      "category": "Juego",
+      "subcategory": "Soulslike",
+      "description": "Accion gotica.",
+      "url": "https://example.com/bloodborne",
+      "icon": "horror",
+      "color": "#37474f",
+      "tags": [
+        "soulslike",
+        "horror",
+        "accion"
+      ]
+    },
+    {
+      "id": "god-of-war-2018",
+      "name": "God of War (2018)",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Accion mitologica nordica.",
+      "url": "https://example.com/god-of-war-2018",
+      "icon": "fire",
+      "color": "#1565c0",
+      "tags": [
+        "accion",
+        "mitologia",
+        "nordico"
+      ]
+    },
+    {
+      "id": "spiderman",
+      "name": "Marvel's Spider-Man",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Superheroe de mundo abierto.",
+      "url": "https://example.com/spiderman",
+      "icon": "gamepad",
+      "color": "#e53935",
+      "tags": [
+        "accion",
+        "superheroe",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "red-dead-redemption-2",
+      "name": "Red Dead Redemption 2",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Mundo abierto del oeste.",
+      "url": "https://example.com/red-dead-redemption-2",
+      "icon": "cowboy",
+      "color": "#6d4c41",
+      "tags": [
+        "aventura",
+        "oeste",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "horizon-zero-dawn",
+      "name": "Horizon Zero Dawn",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Mundo abierto con maquinas.",
+      "url": "https://example.com/horizon-zero-dawn",
+      "icon": "gamepad",
+      "color": "#fb8c00",
+      "tags": [
+        "aventura",
+        "mundo-abierto",
+        "maquinas"
+      ]
+    },
+    {
+      "id": "ghost-of-tsushima",
+      "name": "Ghost of Tsushima",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Accion samurai.",
+      "url": "https://example.com/ghost-of-tsushima",
+      "icon": "sword",
+      "color": "#212121",
+      "tags": [
+        "accion",
+        "samurai",
+        "japon"
+      ]
+    },
+    {
+      "id": "detroit-become-human",
+      "name": "Detroit: Become Human",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Thriller narrativo.",
+      "url": "https://example.com/detroit-become-human",
+      "icon": "gamepad",
+      "color": "#455a64",
+      "tags": [
+        "aventura",
+        "narrativo",
+        "decisiones"
+      ]
+    },
+    {
+      "id": "uncharted-4",
+      "name": "Uncharted 4",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Aventura y accion.",
+      "url": "https://example.com/uncharted-4",
+      "icon": "adventure",
+      "color": "#00897b",
+      "tags": [
+        "aventura",
+        "accion",
+        "tesoros"
+      ]
+    },
+    {
+      "id": "last-of-us",
+      "name": "The Last of Us",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Supervivencia narrativa.",
+      "url": "https://example.com/last-of-us",
+      "icon": "horror",
+      "color": "#558b2f",
+      "tags": [
+        "aventura",
+        "horror",
+        "supervivencia"
+      ]
+    },
+    {
+      "id": "ea-fc-24",
+      "name": "EA FC 24",
+      "category": "Juego",
+      "subcategory": "Deportes",
+      "description": "Futbol.",
+      "url": "https://example.com/ea-fc-24",
+      "icon": "car",
+      "color": "#00c853",
+      "tags": [
+        "deportes",
+        "futbol"
+      ]
+    },
+    {
+      "id": "efootball",
+      "name": "eFootball",
+      "category": "Juego",
+      "subcategory": "Deportes",
+      "description": "Futbol.",
+      "url": "https://example.com/efootball",
+      "icon": "car",
+      "color": "#00b0ff",
+      "tags": [
+        "deportes",
+        "futbol"
+      ]
+    },
+    {
+      "id": "fortnite",
+      "name": "Fortnite",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Battle royale.",
+      "url": "https://example.com/fortnite",
+      "icon": "crosshair",
+      "color": "#ff7043",
+      "tags": [
+        "shooter",
+        "battle-royale",
+        "multijugador"
+      ]
+    },
+    {
+      "id": "apex-legends",
+      "name": "Apex Legends",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Battle royale.",
+      "url": "https://example.com/apex-legends",
+      "icon": "crosshair",
+      "color": "#e53935",
+      "tags": [
+        "shooter",
+        "battle-royale",
+        "multijugador"
+      ]
+    },
+    {
+      "id": "valorant",
+      "name": "VALORANT",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter tactico.",
+      "url": "https://example.com/valorant",
+      "icon": "crosshair",
+      "color": "#ff4655",
+      "tags": [
+        "shooter",
+        "tactico",
+        "multijugador"
+      ]
+    },
+    {
+      "id": "cs2",
+      "name": "Counter-Strike 2",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter competitivo.",
+      "url": "https://example.com/cs2",
+      "icon": "crosshair",
+      "color": "#f57c00",
+      "tags": [
+        "shooter",
+        "competitivo",
+        "multijugador"
+      ]
+    },
+    {
+      "id": "overwatch-2",
+      "name": "Overwatch 2",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter por equipos.",
+      "url": "https://example.com/overwatch-2",
+      "icon": "crosshair",
+      "color": "#ffca28",
+      "tags": [
+        "shooter",
+        "equipos",
+        "multijugador"
+      ]
+    },
+    {
+      "id": "league-of-legends",
+      "name": "League of Legends",
+      "category": "Juego",
+      "subcategory": "MOBA",
+      "description": "MOBA.",
+      "url": "https://example.com/league-of-legends",
+      "icon": "gamepad",
+      "color": "#d4af37",
+      "tags": [
+        "moba",
+        "multijugador",
+        "estrategia"
+      ]
+    },
+    {
+      "id": "dota-2",
+      "name": "Dota 2",
+      "category": "Juego",
+      "subcategory": "MOBA",
+      "description": "MOBA.",
+      "url": "https://example.com/dota-2",
+      "icon": "gamepad",
+      "color": "#b71c1c",
+      "tags": [
+        "moba",
+        "multijugador",
+        "estrategia"
+      ]
+    },
+    {
+      "id": "pubg",
+      "name": "PUBG: Battlegrounds",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Battle royale.",
+      "url": "https://example.com/pubg",
+      "icon": "crosshair",
+      "color": "#c62828",
+      "tags": [
+        "shooter",
+        "battle-royale",
+        "multijugador"
+      ]
+    },
+    {
+      "id": "cod-modern-warfare",
+      "name": "Call of Duty: Modern Warfare",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter belico.",
+      "url": "https://example.com/cod-modern-warfare",
+      "icon": "crosshair",
+      "color": "#455a64",
+      "tags": [
+        "shooter",
+        "guerra",
+        "multijugador"
+      ]
+    },
+    {
+      "id": "cod-warzone",
+      "name": "Call of Duty: Warzone",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Battle royale.",
+      "url": "https://example.com/cod-warzone",
+      "icon": "crosshair",
+      "color": "#37474f",
+      "tags": [
+        "shooter",
+        "battle-royale",
+        "multijugador"
+      ]
+    },
+    {
+      "id": "battlefield-2042",
+      "name": "Battlefield 2042",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter belico.",
+      "url": "https://example.com/battlefield-2042",
+      "icon": "crosshair",
+      "color": "#283593",
+      "tags": [
+        "shooter",
+        "guerra",
+        "multijugador"
+      ]
+    },
+    {
+      "id": "halo-infinite",
+      "name": "Halo Infinite",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter de ciencia ficcion.",
+      "url": "https://example.com/halo-infinite",
+      "icon": "crosshair",
+      "color": "#00897b",
+      "tags": [
+        "shooter",
+        "sci-fi",
+        "multijugador"
+      ]
+    },
+    {
+      "id": "doom-eternal",
+      "name": "DOOM Eternal",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter frenetico.",
+      "url": "https://example.com/doom-eternal",
+      "icon": "fire",
+      "color": "#b71c1c",
+      "tags": [
+        "shooter",
+        "demonios",
+        "accion"
+      ]
+    },
+    {
+      "id": "doom-2016",
+      "name": "DOOM (2016)",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter demoniaco.",
+      "url": "https://example.com/doom-2016",
+      "icon": "fire",
+      "color": "#c62828",
+      "tags": [
+        "shooter",
+        "demonios",
+        "accion"
+      ]
+    },
+    {
+      "id": "wolfenstein-2",
+      "name": "Wolfenstein II",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter belico alternativo.",
+      "url": "https://example.com/wolfenstein-2",
+      "icon": "crosshair",
+      "color": "#455a64",
+      "tags": [
+        "shooter",
+        "guerra",
+        "alternativo"
+      ]
+    },
+    {
+      "id": "metro-exodus",
+      "name": "Metro Exodus",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter postapocaliptico.",
+      "url": "https://example.com/metro-exodus",
+      "icon": "horror",
+      "color": "#37474f",
+      "tags": [
+        "shooter",
+        "postapocalipsis",
+        "horror"
+      ]
+    },
+    {
+      "id": "fallout-4",
+      "name": "Fallout 4",
+      "category": "Juego",
+      "subcategory": "RPG",
+      "description": "RPG postapocaliptico.",
+      "url": "https://example.com/fallout-4",
+      "icon": "adventure",
+      "color": "#558b2f",
+      "tags": [
+        "rpg",
+        "postapocalipsis",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "fallout-new-vegas",
+      "name": "Fallout: New Vegas",
+      "category": "Juego",
+      "subcategory": "RPG",
+      "description": "RPG postapocaliptico.",
+      "url": "https://example.com/fallout-new-vegas",
+      "icon": "adventure",
+      "color": "#ef6c00",
+      "tags": [
+        "rpg",
+        "postapocalipsis",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "skyrim",
+      "name": "The Elder Scrolls V: Skyrim",
+      "category": "Juego",
+      "subcategory": "RPG",
+      "description": "RPG de fantasia.",
+      "url": "https://example.com/skyrim",
+      "icon": "sword",
+      "color": "#6d4c41",
+      "tags": [
+        "rpg",
+        "fantasia",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "oblivion",
+      "name": "The Elder Scrolls IV: Oblivion",
+      "category": "Juego",
+      "subcategory": "RPG",
+      "description": "RPG de fantasia.",
+      "url": "https://example.com/oblivion",
+      "icon": "sword",
+      "color": "#5d4037",
+      "tags": [
+        "rpg",
+        "fantasia",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "portal-2",
+      "name": "Portal 2",
+      "category": "Juego",
+      "subcategory": "Puzzle",
+      "description": "Puzzle de portales.",
+      "url": "https://example.com/portal-2",
+      "icon": "cube",
+      "color": "#ff9800",
+      "tags": [
+        "puzzle",
+        "portal",
+        "logica"
+      ]
+    },
+    {
+      "id": "half-life",
+      "name": "Half-Life",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter clasico.",
+      "url": "https://example.com/half-life",
+      "icon": "crosshair",
+      "color": "#b71c1c",
+      "tags": [
+        "shooter",
+        "sci-fi",
+        "clasico"
+      ]
+    },
+    {
+      "id": "left-4-dead-2",
+      "name": "Left 4 Dead 2",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter cooperativo zombie.",
+      "url": "https://example.com/left-4-dead-2",
+      "icon": "horror",
+      "color": "#558b2f",
+      "tags": [
+        "shooter",
+        "zombie",
+        "cooperativo"
+      ]
+    },
+    {
+      "id": "bioshock",
+      "name": "BioShock",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter de historia.",
+      "url": "https://example.com/bioshock",
+      "icon": "horror",
+      "color": "#1565c0",
+      "tags": [
+        "shooter",
+        "historia",
+        "sci-fi"
+      ]
+    },
+    {
+      "id": "tomb-raider",
+      "name": "Tomb Raider (2013)",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Aventura y accion.",
+      "url": "https://example.com/tomb-raider",
+      "icon": "adventure",
+      "color": "#00897b",
+      "tags": [
+        "aventura",
+        "accion",
+        "arqueologia"
+      ]
+    },
+    {
+      "id": "rise-tomb-raider",
+      "name": "Rise of the Tomb Raider",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Aventura y accion.",
+      "url": "https://example.com/rise-tomb-raider",
+      "icon": "adventure",
+      "color": "#00897b",
+      "tags": [
+        "aventura",
+        "accion",
+        "arqueologia"
+      ]
+    },
+    {
+      "id": "far-cry-5",
+      "name": "Far Cry 5",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter de mundo abierto.",
+      "url": "https://example.com/far-cry-5",
+      "icon": "crosshair",
+      "color": "#ef6c00",
+      "tags": [
+        "shooter",
+        "mundo-abierto",
+        "accion"
+      ]
+    },
+    {
+      "id": "far-cry-6",
+      "name": "Far Cry 6",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter de mundo abierto.",
+      "url": "https://example.com/far-cry-6",
+      "icon": "crosshair",
+      "color": "#c62828",
+      "tags": [
+        "shooter",
+        "mundo-abierto",
+        "accion"
+      ]
+    },
+    {
+      "id": "far-cry-primal",
+      "name": "Far Cry Primal",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter prehistorico.",
+      "url": "https://example.com/far-cry-primal",
+      "icon": "crosshair",
+      "color": "#4e342e",
+      "tags": [
+        "shooter",
+        "prehistorico",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "ac-odyssey",
+      "name": "Assassin's Creed Odyssey",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Mundo abierto griego.",
+      "url": "https://example.com/ac-odyssey",
+      "icon": "sword",
+      "color": "#1565c0",
+      "tags": [
+        "accion",
+        "mundo-abierto",
+        "grecia"
+      ]
+    },
+    {
+      "id": "ac-valhalla",
+      "name": "Assassin's Creed Valhalla",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Mundo abierto vikingo.",
+      "url": "https://example.com/ac-valhalla",
+      "icon": "sword",
+      "color": "#1565c0",
+      "tags": [
+        "accion",
+        "mundo-abierto",
+        "vikingos"
+      ]
+    },
+    {
+      "id": "ac-unity",
+      "name": "Assassin's Creed Unity",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Mundo abierto frances.",
+      "url": "https://example.com/ac-unity",
+      "icon": "sword",
+      "color": "#1565c0",
+      "tags": [
+        "accion",
+        "mundo-abierto",
+        "francia"
+      ]
+    },
+    {
+      "id": "ac-brotherhood",
+      "name": "Assassin's Creed Brotherhood",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Mundo abierto renacentista.",
+      "url": "https://example.com/ac-brotherhood",
+      "icon": "sword",
+      "color": "#1565c0",
+      "tags": [
+        "accion",
+        "mundo-abierto",
+        "italia"
+      ]
+    },
+    {
+      "id": "ac-origins",
+      "name": "Assassin's Creed Origins",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Mundo abierto egipcio.",
+      "url": "https://example.com/ac-origins",
+      "icon": "sword",
+      "color": "#1565c0",
+      "tags": [
+        "accion",
+        "mundo-abierto",
+        "egipto"
+      ]
+    },
+    {
+      "id": "prince-of-persia",
+      "name": "Prince of Persia",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Plataformas y accion.",
+      "url": "https://example.com/prince-of-persia",
+      "icon": "sword",
+      "color": "#f9a825",
+      "tags": [
+        "aventura",
+        "plataformas",
+        "accion"
+      ]
+    },
+    {
+      "id": "dishonored",
+      "name": "Dishonored",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Accion y sigilo.",
+      "url": "https://example.com/dishonored",
+      "icon": "sword",
+      "color": "#37474f",
+      "tags": [
+        "accion",
+        "sigilo",
+        "fantasia"
+      ]
+    },
+    {
+      "id": "hitman-3",
+      "name": "Hitman 3",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Infiltracion.",
+      "url": "https://example.com/hitman-3",
+      "icon": "crosshair",
+      "color": "#212121",
+      "tags": [
+        "accion",
+        "infiltracion",
+        "sigilo"
+      ]
+    },
+    {
+      "id": "watch-dogs",
+      "name": "Watch Dogs",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Mundo abierto hacker.",
+      "url": "https://example.com/watch-dogs",
+      "icon": "adventure",
+      "color": "#1565c0",
+      "tags": [
+        "aventura",
+        "mundo-abierto",
+        "hacking"
+      ]
+    },
+    {
+      "id": "sleeping-dogs",
+      "name": "Sleeping Dogs",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Accion en Hong Kong.",
+      "url": "https://example.com/sleeping-dogs",
+      "icon": "adventure",
+      "color": "#283593",
+      "tags": [
+        "accion",
+        "hong-kong",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "mafia-definitive",
+      "name": "Mafia: Definitive Edition",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Mafia anos 30.",
+      "url": "https://example.com/mafia-definitive",
+      "icon": "adventure",
+      "color": "#b71c1c",
+      "tags": [
+        "aventura",
+        "crimen",
+        "anos-30"
+      ]
+    },
+    {
+      "id": "just-cause-4",
+      "name": "Just Cause 4",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Mundo abierto caotico.",
+      "url": "https://example.com/just-cause-4",
+      "icon": "adventure",
+      "color": "#e53935",
+      "tags": [
+        "accion",
+        "mundo-abierto",
+        "sandbox"
+      ]
+    },
+    {
+      "id": "subnautica",
+      "name": "Subnautica",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Supervivencia submarina.",
+      "url": "https://example.com/subnautica",
+      "icon": "adventure",
+      "color": "#0277bd",
+      "tags": [
+        "aventura",
+        "supervivencia",
+        "submarino"
+      ]
+    },
+    {
+      "id": "no-mans-sky",
+      "name": "No Man's Sky",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Exploracion espacial.",
+      "url": "https://example.com/no-mans-sky",
+      "icon": "adventure",
+      "color": "#4527a0",
+      "tags": [
+        "aventura",
+        "espacio",
+        "exploracion"
+      ]
+    },
+    {
+      "id": "ark-survival",
+      "name": "Ark: Survival Evolved",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Supervivencia con dinosaurios.",
+      "url": "https://example.com/ark-survival",
+      "icon": "adventure",
+      "color": "#558b2f",
+      "tags": [
+        "aventura",
+        "supervivencia",
+        "dinosaurios"
+      ]
+    },
+    {
+      "id": "among-us",
+      "name": "Among Us",
+      "category": "Juego",
+      "subcategory": "Fiesta",
+      "description": "Multijugador social.",
+      "url": "https://example.com/among-us",
+      "icon": "gamepad",
+      "color": "#e53935",
+      "tags": [
+        "fiesta",
+        "multijugador",
+        "social"
+      ]
+    },
+    {
+      "id": "celeste",
+      "name": "Celeste",
+      "category": "Juego",
+      "subcategory": "Plataformas",
+      "description": "Plataformas dificil.",
+      "url": "https://example.com/celeste",
+      "icon": "platformer",
+      "color": "#5c6bc0",
+      "tags": [
+        "plataformas",
+        "dificil",
+        "indie"
+      ]
+    },
+    {
+      "id": "dead-cells",
+      "name": "Dead Cells",
+      "category": "Juego",
+      "subcategory": "Roguelike",
+      "description": "Roguelike de accion.",
+      "url": "https://example.com/dead-cells",
+      "icon": "sword",
+      "color": "#37474f",
+      "tags": [
+        "roguelike",
+        "accion",
+        "indie"
+      ]
+    },
+    {
+      "id": "hades",
+      "name": "Hades",
+      "category": "Juego",
+      "subcategory": "Roguelike",
+      "description": "Roguelike de accion.",
+      "url": "https://example.com/hades",
+      "icon": "fire",
+      "color": "#7c3aed",
+      "tags": [
+        "roguelike",
+        "accion",
+        "mitologia"
+      ]
+    },
+    {
+      "id": "ori-blind-forest",
+      "name": "Ori and the Blind Forest",
+      "category": "Juego",
+      "subcategory": "Plataformas",
+      "description": "Plataformas metroidvania.",
+      "url": "https://example.com/ori-blind-forest",
+      "icon": "platformer",
+      "color": "#00897b",
+      "tags": [
+        "plataformas",
+        "metroidvania",
+        "indie"
+      ]
+    },
+    {
+      "id": "undertale",
+      "name": "Undertale",
+      "category": "Juego",
+      "subcategory": "RPG",
+      "description": "RPG unico.",
+      "url": "https://example.com/undertale",
+      "icon": "gamepad",
+      "color": "#37474f",
+      "tags": [
+        "rpg",
+        "indie",
+        "unique"
+      ]
+    },
+    {
+      "id": "persona-5",
+      "name": "Persona 5",
+      "category": "Juego",
+      "subcategory": "RPG",
+      "description": "RPG de personas.",
+      "url": "https://example.com/persona-5",
+      "icon": "gamepad",
+      "color": "#e53935",
+      "tags": [
+        "rpg",
+        "colegio",
+        "turnos"
+      ]
+    },
+    {
+      "id": "yakuza-0",
+      "name": "Yakuza 0",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Accion y drama.",
+      "url": "https://example.com/yakuza-0",
+      "icon": "adventure",
+      "color": "#1565c0",
+      "tags": [
+        "accion",
+        "drama",
+        "japon"
+      ]
+    },
+    {
+      "id": "judgment",
+      "name": "Judgment",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Accion legal.",
+      "url": "https://example.com/judgment",
+      "icon": "adventure",
+      "color": "#37474f",
+      "tags": [
+        "accion",
+        "legal",
+        "japon"
+      ]
+    },
+    {
+      "id": "re-village",
+      "name": "Resident Evil Village",
+      "category": "Juego",
+      "subcategory": "Horror",
+      "description": "Supervivencia de horror.",
+      "url": "https://example.com/re-village",
+      "icon": "horror",
+      "color": "#b71c1c",
+      "tags": [
+        "horror",
+        "supervivencia",
+        "resident-evil"
+      ]
+    },
+    {
+      "id": "re2-remake",
+      "name": "Resident Evil 2 Remake",
+      "category": "Juego",
+      "subcategory": "Horror",
+      "description": "Supervivencia de horror.",
+      "url": "https://example.com/re2-remake",
+      "icon": "horror",
+      "color": "#b71c1c",
+      "tags": [
+        "horror",
+        "supervivencia",
+        "remake"
+      ]
+    },
+    {
+      "id": "re3-remake",
+      "name": "Resident Evil 3 Remake",
+      "category": "Juego",
+      "subcategory": "Horror",
+      "description": "Supervivencia de horror.",
+      "url": "https://example.com/re3-remake",
+      "icon": "horror",
+      "color": "#b71c1c",
+      "tags": [
+        "horror",
+        "supervivencia",
+        "remake"
       ]
     }
   ]
