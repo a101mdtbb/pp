@@ -198,9 +198,12 @@ def extract_buzzheavier(url):
                 cd = resp.headers.get("Content-Disposition", "")
                 fname_m = re.search(r'filename="?([^";]+)', cd)
                 size = int(resp.headers.get("Content-Length", 0) or 0)
-                return {"url": resp.url, "filename": fname_m.group(1) if fname_m else None, "size": size}
+                # Solo si de verdad es un archivo (no una página HTML)
+                if fname_m and size > 0:
+                    return {"url": resp.url, "filename": fname_m.group(1), "size": size}
         except Exception:
-            return {"url": url, "filename": None, "size": 0}
+            pass
+        # Si no es descarga directa, prueba el método de buzzheavier.com
 
     m = re.search(r'buzzheavier\.com/([a-zA-Z0-9]+)', url)
     if not m:
