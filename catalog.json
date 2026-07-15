@@ -376,21 +376,6 @@
       ]
     },
     {
-      "id": "roblox",
-      "name": "Roblox",
-      "category": "Juego",
-      "subcategory": "Plataformas",
-      "description": "Instalación vía Flatpak/Sober.",
-      "command": "sudo flatpak install flathub org.vinegarhq.Sober",
-      "icon": "block-game",
-      "color": "#ef4444",
-      "tags": [
-        "plataformas",
-        "online",
-        "multijugador"
-      ]
-    },
-    {
       "id": "red-dead-redemption",
       "name": "Red Dead Redemption",
       "category": "Juego",
@@ -1347,21 +1332,6 @@
         "aventura",
         "supervivencia",
         "dinosaurios"
-      ]
-    },
-    {
-      "id": "among-us",
-      "name": "Among Us",
-      "category": "Juego",
-      "subcategory": "Fiesta",
-      "description": "Multijugador social.",
-      "url": "https://example.com/among-us",
-      "icon": "gamepad",
-      "color": "#e53935",
-      "tags": [
-        "fiesta",
-        "multijugador",
-        "social"
       ]
     },
     {
