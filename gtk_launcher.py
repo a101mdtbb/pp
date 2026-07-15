@@ -19,6 +19,7 @@ import subprocess
 import sys
 import tempfile
 import threading
+import time
 import urllib.request
 import urllib.error
 import urllib.parse
@@ -652,6 +653,7 @@ class PPLauncher(Gtk.Application):
         self.win.present()
         self.load_data()
         GLib.timeout_add(500, self._update_dl_panel)
+        threading.Thread(target=self._auto_update_on_start, daemon=True).start()
 
     def _apply_theme(self):
         gtk_theme = self.settings.get("gtk_theme", "Adwaita")
@@ -953,6 +955,72 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         dlg.show(self.win)
         return False
 
+    def _fetch_repo_file(self, filename, timeout=30):
+        url = f"{get_repo_raw_base()}/{filename}?nocache={int(time.time())}"
+        req = urllib.request.Request(url, headers={
+            "User-Agent": "PP-Launcher",
+            "Cache-Control": "no-cache, no-store, max-age=0",
+            "Pragma": "no-cache"})
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            return r.read()
+
+    def _auto_update_on_start(self):
+        GLib.idle_add(self._set_status, "Buscando actualizaciones...")
+        catalog_changed = False
+        program_changed = False
+
+        try:
+            data = self._fetch_repo_file("catalog.json")
+            old = b""
+            if os.path.exists(CATALOG_PATH):
+                with open(CATALOG_PATH, "rb") as f:
+                    old = f.read()
+            json.loads(data.decode("utf-8"))
+            if data.strip() != old.strip():
+                os.makedirs(os.path.dirname(CATALOG_PATH), exist_ok=True)
+                tmp = CATALOG_PATH + ".tmp"
+                with open(tmp, "wb") as f:
+                    f.write(data)
+                os.replace(tmp, CATALOG_PATH)
+                catalog_changed = True
+        except Exception:
+            pass
+
+        for fn in ("gtk_launcher.py", "download_manager.py"):
+            try:
+                data = self._fetch_repo_file(fn, timeout=60)
+                dest = os.path.join(APP_DIR, fn)
+                old = b""
+                if os.path.exists(dest):
+                    with open(dest, "rb") as f:
+                        old = f.read()
+                if data and data != old:
+                    tmp = dest + ".tmp"
+                    with open(tmp, "wb") as f:
+                        f.write(data)
+                    os.replace(tmp, dest)
+                    program_changed = True
+            except Exception:
+                pass
+
+        GLib.idle_add(self._after_auto_update, catalog_changed, program_changed)
+
+    def _after_auto_update(self, catalog_changed, program_changed):
+        if catalog_changed:
+            self.load_data()
+        if program_changed:
+            self._set_status("Actualización del programa lista \u2014 reinicia para aplicarla.")
+        elif catalog_changed:
+            self._set_status("Lista de juegos actualizada.")
+        else:
+            self._set_status("")
+        return False
+
+    def _set_status(self, text):
+        if getattr(self, "status_lbl", None):
+            self.status_lbl.set_text(text)
+        return False
+
     def update_game_list(self, widget=None):
         self._show_info("Actualizando lista de juegos...",
                         "Descargando el catálogo desde el repositorio.")
@@ -960,8 +1028,11 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
 
     def _update_game_list_work(self):
         try:
-            url = f"{get_repo_raw_base()}/catalog.json"
-            req = urllib.request.Request(url, headers={"User-Agent": "PP-Launcher"})
+            url = f"{get_repo_raw_base()}/catalog.json?nocache={int(time.time())}"
+            req = urllib.request.Request(url, headers={
+                "User-Agent": "PP-Launcher",
+                "Cache-Control": "no-cache, no-store, max-age=0",
+                "Pragma": "no-cache"})
             with urllib.request.urlopen(req, timeout=30) as r:
                 data = r.read()
             os.makedirs(os.path.dirname(CATALOG_PATH), exist_ok=True)
