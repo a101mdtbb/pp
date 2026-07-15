@@ -922,7 +922,7 @@ class PPLauncher(Gtk.Application):
         b_btn.add_css_class("suggested-action")
         b_btn.connect("clicked", self._restart_app)
         self.update_banner.append(b_btn)
-        main_vbox.insert_after(self.update_banner, header)
+        main_vbox.insert_after(self.update_banner, self.nav_bar)
 
         self.win.present()
         self.load_data()
@@ -1694,17 +1694,24 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         fb = getattr(self, "flow_box", None)
         if not fb:
             return
-        avail = int(self.grid_scroll.get_hadjustment().get_page_size())
-        if avail <= 1:
-            avail = self.grid_scroll.get_width()
-        if avail <= 1:
+        if getattr(self, "_updating_cols", False):
             return
-        spacing = int(self.settings.get("grid_spacing", 12))
-        card_w = int(self.store_w * self.zoom)
-        usable = avail - 24
-        cols = max(1, int((usable + spacing) / (card_w + spacing)))
-        fb.set_min_children_per_line(cols)
-        fb.set_max_children_per_line(cols)
+        self._updating_cols = True
+        try:
+            avail = self.grid_scroll.get_width()
+            if avail <= 1:
+                return
+            spacing = int(self.settings.get("grid_spacing", 12))
+            card_w = int(self.store_w * self.zoom)
+            usable = avail - 24
+            cols = max(1, int((usable + spacing) / (card_w + spacing)))
+            if getattr(self, "_current_cols", None) == cols:
+                return
+            self._current_cols = cols
+            fb.set_min_children_per_line(cols)
+            fb.set_max_children_per_line(cols)
+        finally:
+            self._updating_cols = False
 
     def _make_game_card(self, item, cover_w=160, cover_h=240):
         c1, c2, emoji = get_cover(item.get("name", ""))
