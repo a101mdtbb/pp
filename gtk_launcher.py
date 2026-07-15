@@ -249,6 +249,13 @@ def save_settings(s):
         json.dump(s, f, indent=2)
 
 
+def _fmt_size(num_bytes):
+    mb = num_bytes / 1024 / 1024
+    if mb >= 1000:
+        return f"{mb / 1024:.2f} GB"
+    return f"{mb:.0f} MB"
+
+
 def find_terminal():
     for term in ["x-terminal-emulator", "gnome-terminal", "konsole",
                  "xfce4-terminal", "alacritty", "kitty", "xterm"]:
@@ -834,9 +841,9 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             eta = status.get("eta", 0)
             speed_s = f"{speed / 1024 / 1024:.1f} MB/s" if speed > 1024 else f"{speed / 1024:.0f} KB/s"
             if total > 0:
-                dl_s = f"{downloaded / 1024 / 1024:.0f}/{total / 1024 / 1024:.0f} MB"
+                dl_s = f"{_fmt_size(downloaded)}/{_fmt_size(total)}"
             else:
-                dl_s = f"{downloaded / 1024 / 1024:.0f} MB"
+                dl_s = _fmt_size(downloaded)
             eta_s = ""
             if eta > 0 and eta < 86400:
                 eta_s = f"  {int(eta // 60)}:{int(eta % 60):02d}"
