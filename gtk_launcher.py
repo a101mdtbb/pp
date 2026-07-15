@@ -542,10 +542,36 @@ def load_scaled_pixbuf(path, w, h):
         return None
 
 
-# Cache en memoria: las caratulas se cargan directo desde el CDN de SGDB
-# (online) y no se guardan archivos en disco. nombre -> url / nombre -> pixbuf.
+# Cache: las caratulas se traen del CDN de SGDB y se guardan en disco, pero
+# validadas por la URL de SGDB (en covers_meta.json). Si la caratula cambia,
+# se re-descarga sola; si no, se usa la local al instante. nombre -> url / pixbuf.
 _COVER_URL_CACHE = {}
 _COVER_PB_CACHE = {}
+_COVER_META_PATH = os.path.join(COVERS_DIR, "covers_meta.json")
+_COVER_META = {}
+
+
+def _load_cover_meta():
+    global _COVER_META
+    try:
+        with open(_COVER_META_PATH, encoding="utf-8") as f:
+            _COVER_META = json.load(f)
+    except Exception:
+        _COVER_META = {}
+
+
+def _save_cover_meta():
+    try:
+        os.makedirs(COVERS_DIR, exist_ok=True)
+        tmp = _COVER_META_PATH + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump(_COVER_META, f)
+        os.replace(tmp, _COVER_META_PATH)
+    except Exception:
+        pass
+
+
+_load_cover_meta()
 
 
 def resolve_cover_url(game_name, api_key):
@@ -565,28 +591,35 @@ def resolve_cover_url(game_name, api_key):
 
 
 def load_cover_pixbuf_online(game_name, api_key, w, h):
-    """Carga la caratula directo desde el CDN de SGDB a memoria (online)."""
+    """Carga la caratula desde el CDN de SGDB, con cache de disco validado por URL."""
     if game_name in _COVER_PB_CACHE:
         pb = _COVER_PB_CACHE[game_name]
         return _scale_pixbuf_fill(pb, w, h) if pb else None
     url = resolve_cover_url(game_name, api_key)
     if not url:
         return None
-    try:
-        req = urllib.request.Request(url, headers={
-            "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36",
-            "Referer": "https://www.steamgriddb.com/"})
-        with urllib.request.urlopen(req, timeout=20) as r:
-            raw = r.read()
-        loader = GdkPixbuf.PixbufLoader()
-        loader.write(raw)
-        loader.close()
-        pb = loader.get_pixbuf()
-        if pb:
-            _COVER_PB_CACHE[game_name] = pb
-            return _scale_pixbuf_fill(pb, w, h)
-    except Exception:
-        pass
+    path = os.path.join(COVERS_DIR, _safe_cover_name(game_name) + ".jpg")
+    # Cache de disco validado: si la URL coincide y el archivo existe, usarlo.
+    if _COVER_META.get(game_name) == url and os.path.isfile(path) and os.path.getsize(path) > 0:
+        try:
+            full = GdkPixbuf.Pixbuf.new_from_file(path)
+            if full:
+                _COVER_PB_CACHE[game_name] = full
+                return _scale_pixbuf_fill(full, w, h)
+        except Exception:
+            pass
+    # Descargar desde el CDN y guardar en cache de disco.
+    saved = save_cover_from_url(game_name, url, api_key)
+    if saved:
+        _COVER_META[game_name] = url
+        _save_cover_meta()
+        try:
+            full = GdkPixbuf.Pixbuf.new_from_file(saved)
+            if full:
+                _COVER_PB_CACHE[game_name] = full
+                return _scale_pixbuf_fill(full, w, h)
+        except Exception:
+            pass
     return None
 
 
