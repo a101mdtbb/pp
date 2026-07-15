@@ -1907,13 +1907,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             if installed:
                 play_btn = Gtk.Button(label="\u25b6  Jugar")
                 play_btn.add_css_class("suggested-action")
-                install_path = self.dl_manager.get_install_path(game_id)
-                if install_path:
-                    exe = find_exe_in_dir(install_path) if os.path.isdir(install_path) else None
-                    target = exe or install_path
-                    play_btn.connect("clicked", lambda b, t=target: (
-                        self._launch_exe(t) if os.path.isfile(t) else subprocess.Popen(
-                            ["xdg-open", t], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)))
+                play_btn.connect("clicked", lambda b: self._show_how_to_play(item))
                 add_action(play_btn)
 
                 del_btn = Gtk.Button(label="  Desinstalar")
