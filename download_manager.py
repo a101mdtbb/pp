@@ -539,6 +539,18 @@ class DownloadManager:
                         pass
                     return
 
+            # Validar que el archivo sea un juego real y no una página de error.
+            if not _is_valid_download(dest):
+                try:
+                    if os.path.exists(dest):
+                        os.remove(dest)
+                    if os.path.isdir(game_dir) and not os.listdir(game_dir):
+                        os.rmdir(game_dir)
+                except Exception:
+                    pass
+                raise ValueError(
+                    "Archivo descargado no válido (probablemente una página de error).")
+
             with self._lock:
                 self.active_downloads[game_id] = {"status": "extracting", "progress": 100}
 
@@ -609,6 +621,41 @@ def _sanitize_filename(name):
     name = re.sub(r'\s+', '_', name).strip()
     name = name.strip('.')
     return name[:200] if name else "download"
+
+
+def _is_valid_download(filepath):
+    """Comprueba que un archivo descargado sea un juego/instalador real y no
+    una página de error (HTML) ni un archivo corrupto/truncado."""
+    try:
+        size = os.path.getsize(filepath)
+    except Exception:
+        return False
+    if size < 1024:
+        return False
+    with open(filepath, "rb") as f:
+        head = f.read(32)
+    good_sigs = (
+        b"PK\x03\x04", b"PK\x05\x06", b"PK\x07\x08",   # zip
+        b"MZ",                                          # exe / dll
+        b"Rar!\x1a\x07",                                # rar
+        b"7z\xbc\xaf\x27\x1c",                          # 7z
+        b"\x1f\x8b",                                    # gzip
+        b"BZh",                                         # bzip2
+        b"CD001",                                       # iso 9660
+        b"ustar",                                       # tar
+        b"MSCF",                                        # cab
+        b"OggS",                                        # ogg
+        b"%PDF",                                        # pdf
+        b"\x89PNG", b"\xff\xd8\xff", b"GIF8",           # imágenes
+        b"fLaC", b"ID3", b"\x00\x00\x01\xba",           # multimedia
+    )
+    if any(head.startswith(sig) for sig in good_sigs):
+        return True
+    low = head.lstrip().lower()
+    if low.startswith(b"<!doctype") or low.startswith(b"<html") or low.startswith(b"<"):
+        return False
+    # Binario y grande pero de formato no listado: se asume válido.
+    return True
 
 
 def _extract_archive(filepath, dest_dir, game_name):

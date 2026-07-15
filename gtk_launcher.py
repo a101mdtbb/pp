@@ -6,6 +6,8 @@ if _os.path.isdir(_typelib):
     _old = _os.environ.get("GI_TYPELIB_PATH", "")
     _os.environ["GI_TYPELIB_PATH"] = _typelib + (":" + _old if _old else "")
 import gi
+import py_compile
+import shutil
 gi.require_version("Gtk", "4.0")
 gi.require_version("Gdk", "4.0")
 gi.require_version("GdkPixbuf", "2.0")
@@ -39,6 +41,19 @@ SETTINGS_FILE = os.path.join(Path.home(), ".pp-launcher", "settings.json")
 COVERS_DIR = os.path.join(Path.home(), ".pp-launcher", "covers")
 SGDB_BASE = "https://www.steamgriddb.com/api/v2"
 SGDB_UA = "PP-Launcher/8.1"
+
+# Versión del programa. Súbela en cada push para que el auto-update no haga
+# downgrade y para versionar los cambios.
+APP_VERSION = "8.1"
+
+
+def _version_tuple(v):
+    """Convierte '8.1.2' en (8, 1, 2) para comparar versiones."""
+    parts = []
+    for p in str(v).split("."):
+        m = re.findall(r"\d+", p)
+        parts.append(int(m[0]) if m else 0)
+    return tuple(parts)
 
 # Repositorio remoto para actualizaciones (lista de juegos y programa)
 REPO_OWNER = "a101mdtbb"
@@ -402,9 +417,16 @@ def _safe_cover_name(name):
 
 def get_cached_cover(name):
     path = os.path.join(COVERS_DIR, _safe_cover_name(name) + ".jpg")
-    if os.path.isfile(path) and os.path.getsize(path) > 0:
+    # Un archivo muy pequeño (< 1 KB) se considera carátula rota/truncada
+    # y se re-intenta descargar en lugar de usarlo.
+    if os.path.isfile(path) and os.path.getsize(path) >= 1024:
         return path
     return None
+
+
+def _cover_etag(url):
+    import hashlib
+    return hashlib.sha1((url or "").encode("utf-8")).hexdigest()
 
 
 def _norm_name(s):
@@ -515,6 +537,11 @@ def save_cover_from_url(game_name, url, api_key=None, max_width=600):
                 ns = int(pixbuf.get_height() * max_width / w)
                 pixbuf = pixbuf.scale_simple(max_width, ns, GdkPixbuf.InterpType.BILINEAR)
             pixbuf.savev(path, "jpeg", ["quality"], ["95"])
+            try:
+                with open(path + ".etag", "w") as ef:
+                    ef.write(_cover_etag(url))
+            except Exception:
+                pass
             return path
     except Exception:
         pass
@@ -565,6 +592,16 @@ def download_cover(game_name, api_key, retries=3):
                     time.sleep(1.0)
                     continue
                 return None
+            # Si la carátula en caché ya corresponde a esta misma imagen
+            # (mismo etag), no la volvemos a bajar.
+            etag = _cover_etag(url)
+            etag_path = os.path.join(COVERS_DIR, _safe_cover_name(game_name) + ".jpg.etag")
+            if os.path.isfile(etag_path):
+                try:
+                    if open(etag_path).read().strip() == etag and get_cached_cover(game_name):
+                        return get_cached_cover(game_name)
+                except Exception:
+                    pass
             saved = save_cover_from_url(game_name, url, api_key)
             if saved:
                 return saved
@@ -1271,6 +1308,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         GLib.idle_add(self._set_status, "Buscando actualizaciones...")
         catalog_changed = False
         program_changed = False
+        notes = []
 
         try:
             data = self._fetch_repo_file("catalog.json")
@@ -1289,6 +1327,14 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         except Exception:
             pass
 
+        # Versión remota para no hacer downgrade inadvertido
+        remote_version = None
+        try:
+            vdata = self._fetch_repo_file("version.txt", timeout=15)
+            remote_version = vdata.decode("utf-8").strip()
+        except Exception:
+            remote_version = None
+
         for fn in ("gtk_launcher.py", "download_manager.py"):
             try:
                 data = self._fetch_repo_file(fn, timeout=60)
@@ -1297,18 +1343,45 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
                 if os.path.exists(dest):
                     with open(dest, "rb") as f:
                         old = f.read()
-                if data and data != old:
-                    tmp = dest + ".tmp"
-                    with open(tmp, "wb") as f:
-                        f.write(data)
-                    os.replace(tmp, dest)
-                    program_changed = True
+                if not data or data == old:
+                    continue
+                # No hacer downgrade si la versión remota es menor
+                if remote_version:
+                    try:
+                        if _version_tuple(remote_version) < _version_tuple(APP_VERSION):
+                            notes.append(f"{fn}: sin cambios (versión remota anterior).")
+                            continue
+                    except Exception:
+                        pass
+                tmp = dest + ".tmp"
+                with open(tmp, "wb") as f:
+                    f.write(data)
+                # Red de seguridad: no aplicar un archivo que no compila
+                # (evita que un push roto deje el launcher inutilizable).
+                try:
+                    py_compile.compile(tmp, doraise=True)
+                except py_compile.PyCompileError:
+                    try:
+                        os.remove(tmp)
+                    except Exception:
+                        pass
+                    notes.append(f"{fn}: actualización omitida (el archivo remoto no compila).")
+                    continue
+                # Respaldo de la última versión buena antes de reemplazar
+                if old:
+                    try:
+                        shutil.copy2(dest, dest + ".bak")
+                    except Exception:
+                        pass
+                os.replace(tmp, dest)
+                program_changed = True
             except Exception:
                 pass
 
-        GLib.idle_add(self._after_auto_update, catalog_changed, program_changed)
+        GLib.idle_add(self._after_auto_update, catalog_changed, program_changed, notes)
 
-    def _after_auto_update(self, catalog_changed, program_changed):
+    def _after_auto_update(self, catalog_changed, program_changed, notes=None):
+        notes = notes or []
         if catalog_changed:
             self.load_data()
         if program_changed:
@@ -1317,6 +1390,8 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             self._set_status("Actualización del programa lista \u2014 reinicia para aplicarla.")
         elif catalog_changed:
             self._set_status("Lista de juegos actualizada.")
+        elif notes:
+            self._set_status("; ".join(notes))
         else:
             self._set_status("")
         return False
