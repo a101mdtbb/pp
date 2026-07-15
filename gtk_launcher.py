@@ -132,6 +132,47 @@ SGDB_NAME_MAP = {
     "Dragon Ball Impact": "Dragon Ball Z Budokai Tenkaichi",
     "Resident Evil 4": "Resident Evil 4",
     "Jump Force": "Jump Force",
+    "The Witcher 3: Wild Hunt": "The Witcher 3",
+    "Dark Souls III": "Dark Souls 3",
+    "Hades 2": "Hades II",
+    "Resident Evil 2 Remake": "Resident Evil 2 (2019)",
+    "Resident Evil 3 Remake": "Resident Evil 3 (2020)",
+    "Resident Evil Village": "Resident Evil Village",
+    "God of War (2018)": "God of War",
+    "Spider-Man (2018)": "Marvel's Spider-Man",
+    "Tomb Raider (2013)": "Tomb Raider",
+    "Rise of the Tomb Raider": "Rise of the Tomb Raider",
+    "Red Dead Redemption 2": "Red Dead Redemption 2",
+    "Fallout 4": "Fallout 4",
+    "Fallout: New Vegas": "Fallout New Vegas",
+    "Far Cry 5": "Far Cry 5",
+    "Far Cry 6": "Far Cry 6",
+    "Far Cry Primal": "Far Cry Primal",
+    "Left 4 Dead 2": "Left 4 Dead 2",
+    "Portal 2": "Portal 2",
+    "BioShock Infinite": "BioShock Infinite",
+    "Mafia: Definitive Edition": "Mafia Definitive Edition",
+    "Just Cause 4": "Just Cause 4",
+    "Halo Infinite": "Halo Infinite",
+    "Sonic Frontiers": "Sonic Frontiers",
+    "Persona 5": "Persona 5",
+    "Hitman 3": "Hitman 3",
+    "Yakuza 0": "Yakuza 0",
+    "Street Fighter 6": "Street Fighter 6",
+    "Tekken 8": "Tekken 8",
+    "Uncharted 4": "Uncharted 4",
+    "Watch Dogs": "Watch Dogs",
+    "Sleeping Dogs": "Sleeping Dogs",
+    "Assassin's Creed Odyssey": "Assassin's Creed Odyssey",
+    "Assassin's Creed Valhalla": "Assassin's Creed Valhalla",
+    "Assassin's Creed Unity": "Assassin's Creed Unity",
+    "Assassin's Creed Brotherhood": "Assassin's Creed Brotherhood",
+    "Assassin's Creed Origins": "Assassin's Creed Origins",
+    "Dishonored": "Dishonored",
+    "Ghost of Tsushima": "Ghost of Tsushima",
+    "Horizon Zero Dawn": "Horizon Zero Dawn",
+    "Detroit: Become Human": "Detroit Become Human",
+    "The Last of Us": "The Last of Us",
 }
 
 CSS = b"""
@@ -388,12 +429,24 @@ def search_sgdb(game_name, api_key):
             # 2) Si solo hay un resultado, es confiable
             if len(results) == 1:
                 return results[0].get("id")
-            # 3) Coincidencia parcial estricta (el término está contenido,
-            #    sin elegir el primer resultado ambiguo)
+            # 3) Coincidencia por prefijo con consistencia de numeros:
+            #    el resultado debe contener todos los numeros del termino
+            #    (evita confundir "Far Cry 5" con "Far Cry", "RE2 Remake"
+            #    con "RE2" clasico) y se elige el nombre mas especifico.
+            term_nums = set(re.findall(r"\d+", norm_term))
+            candidates = []
             for r in results:
                 rn = _norm_name(r.get("name", ""))
-                if norm_term in rn or rn in norm_term:
-                    return r.get("id")
+                if not rn:
+                    continue
+                rn_nums = set(re.findall(r"\d+", rn))
+                if term_nums and not term_nums.issubset(rn_nums):
+                    continue
+                if rn.startswith(norm_term) or norm_term.startswith(rn):
+                    candidates.append((len(rn), r.get("id")))
+            if candidates:
+                candidates.sort(reverse=True)
+                return candidates[0][1]
             # Sin coincidencia fiable: mejor ninguna que una equivocada
             return None
     except Exception:
