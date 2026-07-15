@@ -193,7 +193,7 @@ DEFAULT_SETTINGS = {
     "accent_color": "#3584e4",
     "accent_hue": 211,
     "cover_radius": 10,
-    "grid_spacing": 0,
+    "grid_spacing": 16,
     "show_title": True,
     "show_category": True,
     "show_cover_border": True,
@@ -612,13 +612,13 @@ class PPLauncher(Gtk.Application):
 
         self.flow_box = Gtk.FlowBox()
         self.flow_box.set_homogeneous(True)
-        _sp = int(self.settings.get("grid_spacing", 0))
+        _sp = int(self.settings.get("grid_spacing", 16))
         self.flow_box.set_column_spacing(_sp)
         self.flow_box.set_row_spacing(_sp)
-        self.flow_box.set_margin_start(4)
-        self.flow_box.set_margin_end(4)
-        self.flow_box.set_margin_top(4)
-        self.flow_box.set_margin_bottom(4)
+        self.flow_box.set_margin_start(12)
+        self.flow_box.set_margin_end(12)
+        self.flow_box.set_margin_top(12)
+        self.flow_box.set_margin_bottom(12)
         self.flow_box.set_selection_mode(Gtk.SelectionMode.NONE)
         self.grid_scroll.set_child(self.flow_box)
 
