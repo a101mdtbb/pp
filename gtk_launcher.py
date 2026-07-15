@@ -239,6 +239,9 @@ button.destructive-action:active { transform: scale(0.97); }
 .game-cell:hover { transform: translateY(-6px); }
 .cover-box { border: 0; border-radius: 16px; overflow: hidden; transition: all 200ms ease; }
 .cover-box picture { border-radius: 16px; }
+.cover-skeleton { background: alpha(currentColor, 0.07); border-radius: 16px; animation: skPulse 1.2s ease-in-out infinite; }
+@keyframes skPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.update-banner { background: alpha(@accent_bg_color, 0.16); border-radius: 10px; padding: 8px 14px; margin: 10px 14px 0 14px; border: 1px solid alpha(@accent_bg_color, 0.35); }
 .card-body { padding: 11px 12px 13px; }
 .game-title { font-size: 13.5px; font-weight: 800; letter-spacing: 0.2px; line-height: 1.25; }
 .game-sub { font-size: 10.5px; opacity: 0.7; }
@@ -872,6 +875,21 @@ class PPLauncher(Gtk.Application):
         footer.append(self.status_lbl)
         main_vbox.append(footer)
 
+        # Banner de actualizacion de programa (oculto por defecto)
+        self.update_banner = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+        self.update_banner.add_css_class("update-banner")
+        self.update_banner.set_visible(False)
+        b_lbl = Gtk.Label(label="Hay una actualización del programa disponible.")
+        b_lbl.set_hexpand(True)
+        b_lbl.set_xalign(0)
+        b_lbl.set_wrap(True)
+        self.update_banner.append(b_lbl)
+        b_btn = Gtk.Button(label="Reiniciar ahora")
+        b_btn.add_css_class("suggested-action")
+        b_btn.connect("clicked", self._restart_app)
+        self.update_banner.append(b_btn)
+        main_vbox.insert_after(self.update_banner, header)
+
         self.win.present()
         self.load_data()
         GLib.timeout_add(500, self._update_dl_panel)
@@ -1297,12 +1315,21 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         if catalog_changed:
             self.load_data()
         if program_changed:
+            if getattr(self, "update_banner", None):
+                self.update_banner.set_visible(True)
             self._set_status("Actualización del programa lista \u2014 reinicia para aplicarla.")
         elif catalog_changed:
             self._set_status("Lista de juegos actualizada.")
         else:
             self._set_status("")
         return False
+
+    def _restart_app(self, *a):
+        try:
+            subprocess.Popen([sys.executable, os.path.abspath(__file__)])
+        except Exception:
+            pass
+        sys.exit(0)
 
     def _set_status(self, text):
         if getattr(self, "status_lbl", None):
@@ -1473,6 +1500,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         return sorted(items, key=lambda i: i.get("name", "").lower())
 
     def _render_store(self):
+        self._cover_widgets = {}
         items = self._sorted_items(self.catalog)
 
         if self.search_term:
@@ -1550,16 +1578,17 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             visual.set_halign(Gtk.Align.FILL)
             visual.set_valign(Gtk.Align.FILL)
             visual.set_size_request(cover_w, cover_h)
+            cover_overlay.set_child(visual)
         else:
-            visual = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
-            visual.set_size_request(cover_w, cover_h)
-            visual.add_css_class(make_color_css(c1))
-            emoji_lbl = Gtk.Label(label=emoji)
-            emoji_lbl.set_markup(f'<span size="xx-large">{emoji}</span>')
-            emoji_lbl.set_valign(Gtk.Align.CENTER)
-            emoji_lbl.set_halign(Gtk.Align.CENTER)
-            visual.append(emoji_lbl)
-        cover_overlay.set_child(visual)
+            # Estado de carga: skeleton mientras se descarga la caratula
+            sk = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+            sk.set_size_request(cover_w, cover_h)
+            sk.add_css_class("cover-skeleton")
+            cover_overlay.set_child(sk)
+            self._cover_widgets[item.get("id")] = {
+                "overlay": cover_overlay, "w": cover_w, "h": cover_h,
+                "name": item.get("name", ""), "c1": c1, "emoji": emoji,
+            }
 
         installed = item.get("id") and self.dl_manager.is_installed(item.get("id"))
         if installed:
@@ -1631,6 +1660,36 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         card_event.connect("released", lambda g, n, x, y: on_open())
         card.add_controller(card_event)
         return card
+
+    def _apply_card_cover(self, game_id):
+        entry = self._cover_widgets.get(game_id)
+        if not entry:
+            return False
+        overlay = entry["overlay"]
+        name = entry["name"]
+        w, h = entry["w"], entry["h"]
+        cached = get_cached_cover(name)
+        pb = load_scaled_pixbuf(cached, w, h) if cached else None
+        if pb:
+            visual = Gtk.Picture()
+            visual.set_pixbuf(pb)
+            visual.set_content_fit(Gtk.ContentFit.COVER)
+            visual.set_can_shrink(True)
+            visual.set_halign(Gtk.Align.FILL)
+            visual.set_valign(Gtk.Align.FILL)
+            visual.set_size_request(w, h)
+        else:
+            visual = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
+            visual.set_size_request(w, h)
+            visual.add_css_class(make_color_css(entry["c1"]))
+            emoji_lbl = Gtk.Label(label=entry["emoji"])
+            emoji_lbl.set_markup(f'<span size="xx-large">{entry["emoji"]}</span>')
+            emoji_lbl.set_valign(Gtk.Align.CENTER)
+            emoji_lbl.set_halign(Gtk.Align.CENTER)
+            visual.append(emoji_lbl)
+        overlay.set_child(visual)
+        self._cover_widgets.pop(game_id, None)
+        return False
 
     def show_detail(self, item):
         self.stack.set_visible_child_name("detail")
@@ -2127,6 +2186,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
 
         all_names = [i.get("name", "") for i in self.catalog]
         to_fetch = [n for n in all_names if n and not get_cached_cover(n)]
+        name_to_id = {i.get("name", ""): i.get("id") for i in self.catalog}
 
         if not to_fetch:
             if status_lbl:
@@ -2142,6 +2202,9 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
                 if status_lbl:
                     GLib.idle_add(status_lbl.set_text, f"Descargando carátulas... {count}/{total}")
                 download_cover(name, api_key)
+                gid = name_to_id.get(name)
+                if gid:
+                    GLib.idle_add(self._apply_card_cover, gid)
                 time.sleep(0.1)
             # Reintentar las que fallaron (errores transitorios / limite de SGDB)
             missing = [n for n in to_fetch if not get_cached_cover(n)]
@@ -2151,6 +2214,9 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
                 retry = []
                 for name in missing:
                     download_cover(name, api_key)
+                    gid = name_to_id.get(name)
+                    if gid:
+                        GLib.idle_add(self._apply_card_cover, gid)
                     time.sleep(0.2)
                     if not get_cached_cover(name):
                         retry.append(name)
@@ -2158,7 +2224,6 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             ok = sum(1 for n in to_fetch if get_cached_cover(n))
             if status_lbl:
                 GLib.idle_add(status_lbl.set_text, f"Carátulas: {ok}/{total}")
-            GLib.idle_add(self.render_view)
 
         threading.Thread(target=do_batch, daemon=True).start()
 
