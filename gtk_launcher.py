@@ -234,15 +234,18 @@ class _DBusTrayIcon:
                 menu_node.lookup_interface("com.canonical.dbusmenu"),
                 self._menu_method, None, None),
             None, None)
-        try:
-            conn.call_sync("org.kde.StatusNotifierWatcher",
-                           "/StatusNotifierWatcher",
-                           "org.kde.StatusNotifierWatcher",
-                           "RegisterStatusNotifierItem",
-                           GLib.Variant("(s)", (f"org.kde.StatusNotifierItem-{os.getpid()}-1",)),
-                           None, Gio.DBusCallFlags.NONE, -1, None)
-        except Exception:
-            pass
+        def _register_with_watcher():
+            try:
+                conn.call_sync("org.kde.StatusNotifierWatcher",
+                               "/StatusNotifierWatcher",
+                               "org.kde.StatusNotifierWatcher",
+                               "RegisterStatusNotifierItem",
+                               GLib.Variant("(s)", (f"org.kde.StatusNotifierItem-{os.getpid()}-1",)),
+                               None, Gio.DBusCallFlags.NONE, -1, None)
+            except Exception:
+                pass
+            return False
+        GLib.timeout_add(200, _register_with_watcher)
 
     def _method_call(self, conn, sender, obj, iface, method, params, inv):
         GLib.idle_add(self._on_activate)
@@ -781,6 +784,11 @@ class PPLauncher(Gtk.Application):
         self._dl_pending_refresh = False
 
     def do_activate(self):
+        if hasattr(self, "win") and self.win is not None:
+            self.win.set_visible(True)
+            self.win.present()
+            return
+
         css_prov = Gtk.CssProvider()
         css_prov.load_from_data(CSS)
         Gtk.StyleContext.add_provider_for_display(
@@ -1070,6 +1078,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
 
     def _on_close(self, *args):
         self.win.set_visible(False)
+        self.hold()
         return True
 
     def _show_window(self):
@@ -1079,10 +1088,12 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
     def _quit_app(self):
         if hasattr(self, '_tray') and self._tray:
             self._tray.destroy()
+        self.release()
         self.win.get_application().quit()
 
     def _setup_tray(self):
-        self._tray = None
+        if getattr(self, "_tray", None) is not None:
+            return
         if _HAS_APPIND:
             try:
                 ind = _AppIndicator3.Indicator.new(
@@ -1106,6 +1117,9 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             self._tray = _DBusTrayIcon(self._show_window, self._quit_app)
         except Exception:
             pass
+
+    def _on_window_removed(self, *args):
+        pass
 
     def _update_dl_panel(self):
         all_status = self.dl_manager.get_all_status()
