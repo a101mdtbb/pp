@@ -208,10 +208,11 @@ class _DBusTrayIcon:
 
     _MENU_XML = "<node><interface name=\"com.canonical.dbusmenu\">"         '<method name="GetRevision"><arg name="revision" type="u" direction="out"/></method>'         '<method name="GetLayout"><arg name="parentId" type="i" direction="in"/><arg name="recursionDepth" type="i" direction="in"/><arg name="propertyNames" type="as" direction="in"/><arg name="timestamp" type="u" direction="in"/><arg name="revision" type="u" direction="out"/><arg name="layout" type="(u(ia{sv}av))" direction="out"/></method>'         '<method name="GetGroupProperties"><arg name="ids" type="ai" direction="in"/><arg name="propertyNames" type="as" direction="in"/><arg name="timestamp" type="u" direction="in"/><arg name="properties" type="a(ia{sv})" direction="out"/></method>'         '<method name="Event"><arg name="id" type="i" direction="in"/><arg name="eventType" type="s" direction="in"/><arg name="data" type="v" direction="in"/><arg name="timestamp" type="u" direction="in"/></method>'         '<method name="EventGroup"><arg name="events" type="a(isvvu)" direction="in"/><arg name="receiver" type="s" direction="out"/></method>'         '<method name="AboutToShow"><arg name="id" type="i" direction="in"/><arg name="needUpdate" type="b" direction="out"/></method>'         '<signal name="LayoutUpdated"><arg name="revision" type="u"/><arg name="parentId" type="i"/></signal>'         "</interface></node>"
 
-    def __init__(self, on_activate, on_quit, on_downloads=None):
+    def __init__(self, on_activate, on_quit, on_downloads=None, on_menu=None):
         self._on_activate = on_activate
         self._on_quit = on_quit
         self._on_downloads = on_downloads
+        self._on_menu = on_menu
         self._conn = None
         self._sni_bus_id = None
         self._menu_rev = 0
@@ -282,6 +283,9 @@ class _DBusTrayIcon:
     def _sni_method_call(self, conn, sender, obj, iface, method, params, inv):
         if method in ("Activate", "SecondaryActivate"):
             GLib.idle_add(self._on_activate)
+        elif method == "ContextMenu":
+            if self._on_menu:
+                GLib.idle_add(self._on_menu)
         try:
             inv.return_value(None)
         except Exception:
@@ -477,6 +481,9 @@ scrollbar.horizontal slider { min-height: 9px; }
 /* --- Estado vacio --- */
 .empty-state { opacity: 0.9; }
 .empty-icon { opacity: 0.35; }
+.tray-popup { background: @window_bg_color; border-radius: 14px; box-shadow: 0 6px 24px alpha(black, 0.45); border: 1px solid alpha(currentColor, 0.08); }
+.tray-popup button { border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; }
+.tray-popup button:hover { background: alpha(currentColor, 0.10); }
 """
 
 DEFAULT_SETTINGS = {
@@ -1211,9 +1218,80 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             except Exception:
                 pass
         try:
-            self._tray = _DBusTrayIcon(self._show_window, self._quit_app, self._show_downloads)
+            self._tray = _DBusTrayIcon(self._show_window, self._quit_app, self._show_downloads, on_menu=self._show_tray_menu)
         except Exception:
             pass
+
+    def _show_tray_menu(self):
+        if hasattr(self, '_tray_popup') and self._tray_popup:
+            self._tray_popup.destroy()
+            self._tray_popup = None
+            return
+
+        popup = Gtk.Window(
+            title="PP Launcher Menu",
+            window_type=Gtk.WindowType.POPUP,
+            decorated=False,
+            skip_taskbar_hint=True,
+            skip_pager_hint=True,
+            transient_for=self.win,
+            modal=False,
+        )
+        popup.add_css_class("tray-popup")
+
+        outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        outer.set_margin_top(6)
+        outer.set_margin_bottom(6)
+        outer.set_margin_start(6)
+        outer.set_margin_end(6)
+
+        btn_open = Gtk.Button(label="Abrir PP Launcher")
+        btn_open.set_has_frame(False)
+        btn_open.set_xalign(0)
+        btn_open.connect("clicked", lambda _: self._tray_popup_action(self._show_window))
+
+        btn_down = Gtk.Button(label="Ver descargas")
+        btn_down.set_has_frame(False)
+        btn_down.set_xalign(0)
+        btn_down.connect("clicked", lambda _: self._tray_popup_action(self._show_downloads))
+
+        sep = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
+
+        btn_quit = Gtk.Button(label="Salir")
+        btn_quit.set_has_frame(False)
+        btn_quit.set_xalign(0)
+        btn_quit.add_css_class("destructive-action")
+        btn_quit.connect("clicked", lambda _: self._tray_popup_action(self._quit_app))
+
+        outer.append(btn_open)
+        outer.append(btn_down)
+        outer.append(sep)
+        outer.append(btn_quit)
+
+        popup.set_child(outer)
+        popup.set_default_size(200, -1)
+        self._tray_popup = popup
+
+        def show():
+            try:
+                display = popup.get_display()
+                seat = display.get_default_seat()
+                pointer = seat.get_pointer()
+                _, px, py = pointer.get_position()
+                screen_w = display.get_width()
+                popup.move(max(10, screen_w - 220), max(10, py - 140))
+            except Exception:
+                pass
+            popup.present()
+            return False
+
+        GLib.idle_add(show)
+
+    def _tray_popup_action(self, callback):
+        if hasattr(self, '_tray_popup') and self._tray_popup:
+            self._tray_popup.destroy()
+            self._tray_popup = None
+        GLib.idle_add(callback)
 
     def _on_window_removed(self, *args):
         pass
