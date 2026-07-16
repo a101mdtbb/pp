@@ -313,26 +313,15 @@ class _DBusTrayIcon:
                 for mid, label, cb in self._menu_items:
                     if mid == 0:
                         continue
-                    props = {
+                    children.append(GLib.Variant("(ia{sv}av)", (mid, {
                         "label": GLib.Variant("s", label),
                         "visible": GLib.Variant("b", True),
                         "type": GLib.Variant("s", "standard"),
-                    }
-                    children.append(GLib.Variant("(ia{sv}av)", (mid, props, [])))
-                root = GLib.Variant("(ia{sv}av)", (0, {}, children))
-                inv.return_value(GLib.Variant("(u(ia{sv}av))", (self._menu_rev, root)))
+                    }, [])))
+                layout = (0, (0, {}, children))
+                inv.return_value(GLib.Variant("(u(u(ia{sv}av)))", (self._menu_rev, layout)))
             elif method == "GetGroupProperties":
-                props_out = []
-                for mid, label, cb in self._menu_items:
-                    if mid == 0:
-                        continue
-                    if params[0] and mid not in params[0]:
-                        continue
-                    props_out.append(GLib.Variant("(ia{sv})", (mid, {
-                        "label": GLib.Variant("s", label),
-                        "visible": GLib.Variant("b", True),
-                    })))
-                inv.return_value(GLib.Variant("(a(ia{sv}))", (props_out,)))
+                inv.return_value(GLib.Variant("(a(ia{sv}))", ([],)))
             elif method == "AboutToShow":
                 inv.return_value(GLib.Variant("(b)", (False,)))
             elif method == "Event":
