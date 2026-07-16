@@ -202,23 +202,22 @@ SGDB_NAME_MAP = {
 
 
 class _DBusTrayIcon:
-    """System tray via D-Bus StatusNotifierItem + D-BusMenu."""
+    """System tray via D-Bus StatusNotifierItem + D-BusMenu on the same bus."""
 
-    _SNI_XML = '<node><interface name="org.kde.StatusNotifierItem"><property name="Category" type="s" access="read"/><property name="Id" type="s" access="read"/><property name="Title" type="s" access="read"/><property name="Status" type="s" access="read"/><property name="IconName" type="s" access="read"/><property name="Menu" type="o" access="read"/><property name="ItemIsMenu" type="b" access="read"/><property name="ToolTip" type="(sasa{sv})" access="read"/><method name="Activate"><arg name="x" type="i" direction="in"/><arg name="y" type="i" direction="in"/></method><method name="SecondaryActivate"><arg name="x" type="i" direction="in"/><arg name="y" type="i" direction="in"/></method></interface></node>'
-    _MENU_XML = '<node><interface name="com.canonical.dbusmenu"><method name="GetLayout"><arg name="parentId" type="i" direction="in"/><arg name="recursionDepth" type="i" direction="in"/><arg name="propertyNames" type="as" direction="in"/><arg name="timestamp" type="u" direction="in"/><arg name="revision" type="u" direction="out"/><arg name="layout" type="(u(ia{sv}av))" direction="out"/></method><method name="Event"><arg name="id" type="i" direction="in"/><arg name="eventType" type="s" direction="in"/><arg name="data" type="v" direction="in"/><arg name="timestamp" type="u" direction="in"/></method><method name="EventGroup"><arg name="events" type="a(isvvu)" direction="in"/><arg name="receiver" type="s" direction="out"/></method><signal name="LayoutUpdated"><arg name="revision" type="u"/><arg name="parentId" type="i"/></signal></interface></node>'
+    _SNI_XML = "<node><interface name=\"org.kde.StatusNotifierItem\">"         '<property name="Category" type="s" access="read"/>'         '<property name="Id" type="s" access="read"/>'         '<property name="Title" type="s" access="read"/>'         '<property name="Status" type="s" access="read"/>'         '<property name="IconName" type="s" access="read"/>'         '<property name="Menu" type="o" access="read"/>'         '<property name="ItemIsMenu" type="b" access="read"/>'         '<property name="ToolTip" type="(sasa{sv})" access="read"/>'         '<method name="Activate"><arg name="x" type="i" direction="in"/><arg name="y" type="i" direction="in"/></method>'         '<method name="SecondaryActivate"><arg name="x" type="i" direction="in"/><arg name="y" type="i" direction="in"/></method>'         "</interface></node>"
+
+    _MENU_XML = "<node><interface name=\"com.canonical.dbusmenu\">"         '<method name="GetRevision"><arg name="revision" type="u" direction="out"/></method>'         '<method name="Event"><arg name="id" type="i" direction="in"/><arg name="eventType" type="s" direction="in"/><arg name="data" type="v" direction="in"/><arg name="timestamp" type="u" direction="in"/></method>'         '<method name="EventGroup"><arg name="events" type="a(isvvu)" direction="in"/><arg name="receiver" type="s" direction="out"/></method>'         '<signal name="LayoutUpdated"><arg name="revision" type="u"/><arg name="parentId" type="i"/></signal>'         "</interface></node>"
 
     def __init__(self, on_activate, on_quit, on_downloads=None):
         self._on_activate = on_activate
         self._on_quit = on_quit
         self._on_downloads = on_downloads
         self._conn = None
-        self._menu_bus_id = None
         self._sni_bus_id = None
         self._menu_rev = 0
         self._sni_path = "/StatusNotifierItem"
         self._menu_path = "/MenuBar"
         self._bus_name = f"org.kde.StatusNotifierItem-{os.getpid()}-1"
-        self._menu_bus_name = f"com.canonical.dbusmenu-{os.getpid()}"
 
         self._menu_items = [
             (1, "Abrir PP Launcher", on_activate),
@@ -230,11 +229,13 @@ class _DBusTrayIcon:
         self._sni_bus_id = Gio.bus_own_name(
             Gio.BusType.SESSION, self._bus_name,
             Gio.BusNameOwnerFlags.NONE,
-            self._on_sni_acquired, None, None)
+            self._on_bus_acquired, None, self._on_name_lost)
 
-    def _on_sni_acquired(self, conn, name):
+    def _on_bus_acquired(self, conn, name):
         self._conn = conn
+        self._register_objects(conn)
 
+    def _register_objects(self, conn):
         sni_node = Gio.DBusNodeInfo.new_for_xml(self._SNI_XML)
         conn.register_object(
             self._sni_path,
@@ -244,16 +245,24 @@ class _DBusTrayIcon:
             None)
 
         menu_node = Gio.DBusNodeInfo.new_for_xml(self._MENU_XML)
-        self._menu_bus_id = Gio.bus_own_name(
-            Gio.BusType.SESSION, self._menu_bus_name,
-            Gio.BusNameOwnerFlags.NONE,
-            lambda c, n: c.register_object(
-                self._menu_path,
-                menu_node.lookup_interface("com.canonical.dbusmenu"),
-                self._menu_method_call, None, None),
-            None, None)
+        conn.register_object(
+            self._menu_path,
+            menu_node.lookup_interface("com.canonical.dbusmenu"),
+            self._menu_method_call, None, None)
 
-        GLib.timeout_add(300, self._register_watcher)
+        GLib.timeout_add(200, self._register_watcher)
+
+    def _on_name_lost(self, conn, name):
+        GLib.timeout_add(1000, self._retry_registration)
+
+    def _retry_registration(self):
+        if self._sni_bus_id:
+            Gio.bus_unown_name(self._sni_bus_id)
+        self._sni_bus_id = Gio.bus_own_name(
+            Gio.BusType.SESSION, self._bus_name,
+            Gio.BusNameOwnerFlags.NONE,
+            self._on_bus_acquired, None, self._on_name_lost)
+        return False
 
     def _register_watcher(self):
         if not self._conn:
@@ -281,53 +290,56 @@ class _DBusTrayIcon:
             "Title": GLib.Variant("s", "PP Launcher"),
             "Status": GLib.Variant("s", "Active"),
             "IconName": GLib.Variant("s", "folder-games-symbolic"),
-            "Menu": GLib.Variant("o", self._menu_bus_name + self._menu_path),
+            "Menu": GLib.Variant("o", self._menu_path),
             "ItemIsMenu": GLib.Variant("b", False),
             "ToolTip": GLib.Variant("(sasa{sv})", ("PP Launcher", ["PP Launcher"], {})),
         }
         return props.get(prop, GLib.Variant("s", ""))
 
     def _menu_method_call(self, conn, sender, obj, iface, method, params, inv):
-        if method == "GetRevision":
-            inv.return_value(GLib.Variant("(u)", (self._menu_rev,)))
-        elif method == "GetLayout":
-            children = []
-            for mid, label, cb in self._menu_items:
-                if mid == 0:
-                    continue
-                props = {
-                    "label": GLib.Variant("s", label),
-                    "visible": GLib.Variant("b", True),
-                    "type": GLib.Variant("s", "standard"),
-                }
-                children.append(GLib.Variant("(ia{sv}av)", (mid, props, [])))
-            root = GLib.Variant("(ia{sv}av)", (0, {}, children))
-            inv.return_value(GLib.Variant("(u(ia{sv}av))", (self._menu_rev, root)))
-        elif method == "Event":
-            item_id = params[0]
-            for mid, label, cb in self._menu_items:
-                if mid == item_id and cb:
-                    GLib.idle_add(cb)
-                    break
-            inv.return_value(None)
-        elif method == "EventGroup":
-            for event in params[0]:
-                item_id = event[0]
+        try:
+            if method == "GetRevision":
+                inv.return_value(GLib.Variant("(u)", (self._menu_rev,)))
+            elif method == "GetLayout":
+                children = []
+                for mid, label, cb in self._menu_items:
+                    if mid == 0:
+                        continue
+                    props = {
+                        "label": GLib.Variant("s", label),
+                        "visible": GLib.Variant("b", True),
+                        "type": GLib.Variant("s", "standard"),
+                    }
+                    children.append(GLib.Variant("(ia{sv}av)", (mid, props, [])))
+                root = GLib.Variant("(ia{sv}av)", (0, {}, children))
+                inv.return_value(GLib.Variant("(u(ia{sv}av))", (self._menu_rev, root)))
+            elif method == "Event":
+                item_id = params[0]
                 for mid, label, cb in self._menu_items:
                     if mid == item_id and cb:
                         GLib.idle_add(cb)
                         break
-            inv.return_value(GLib.Variant("s", ""))
-        else:
-            inv.return_value(None)
+                inv.return_value(None)
+            elif method == "EventGroup":
+                for event in params[0]:
+                    item_id = event[0]
+                    for mid, label, cb in self._menu_items:
+                        if mid == item_id and cb:
+                            GLib.idle_add(cb)
+                            break
+                inv.return_value(GLib.Variant("s", ""))
+            else:
+                inv.return_value(None)
+        except Exception:
+            try:
+                inv.return_value(None)
+            except Exception:
+                pass
 
     def destroy(self):
         if self._sni_bus_id:
             Gio.bus_unown_name(self._sni_bus_id)
             self._sni_bus_id = None
-        if self._menu_bus_id:
-            Gio.bus_unown_name(self._menu_bus_id)
-            self._menu_bus_id = None
 
 CSS = b"""
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; } }
