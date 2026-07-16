@@ -1,1503 +1,1503 @@
 {
-      "apps": [
-            {
-                  "id": "assassins-creed-2",
-                  "name": "Assassin's Creed II",
-                  "category": "Juego",
-                  "subcategory": "Acción",
-                  "description": "Acción y aventura. Renacimiento italiano.",
-                  "url": "https://madiashare.com/downloads?d=1layvgj15v5lh56eoqd",
-                  "icon": "sword",
-                  "color": "#7c3aed",
-                  "tags": [
-                        "aventura",
-                        "accion",
-                        "mundo-abierto"
-                  ]
-            },
-            {
-                  "id": "assassins-creed-4",
-                  "name": "Assassin's Creed IV",
-                  "category": "Juego",
-                  "subcategory": "Acción",
-                  "description": "Acción naval y aventura. Piratería.",
-                  "url": "https://gofile.io/d/gOLwyT",
-                  "icon": "sword",
-                  "color": "#7c3aed",
-                  "tags": [
-                        "aventura",
-                        "accion",
-                        "naval"
-                  ]
-            },
-            {
-                  "id": "balatro",
-                  "name": "Balatro",
-                  "category": "Juego",
-                  "subcategory": "Cartas",
-                  "description": "Juego de cartas tipo Roguelike.",
-                  "url": "https://ts.bzzhr.to/d/92nyc3drwyd3?v=wYtf4Yk8Dp0XboNyT1gbH2neZFCcUMeo713wyxhTj-WckvW7NAv5jUZ3f1SSBmC9Wa0dgbXzWi4KSEpQXjS_JMjngxua49eOvEM-2V4_RAYaHYTuOSkdX-3ZRGKA8w1q2wrZJFXVzBOQ0MGmdiW52tUsyz6yo6v67OcsewMLw3IZQGyFN0wlANrsk5bVbXZMKMCPkfmKruCuerJCEQ",
-                  "icon": "cards",
-                  "color": "#10b981",
-                  "tags": [
-                        "cartas",
-                        "roguelike",
-                        "estrategia"
-                  ]
-            },
-            {
-                  "id": "bully",
-                  "name": "Bully",
-                  "category": "Juego",
-                  "subcategory": "Aventura",
-                  "description": "Aventura de mundo abierto escolar.",
-                  "url": "https://ts.bzzhr.to/d/em6bjyg8dxwz?v=5-bDE9zJFEFBoJm3Qd8adO3NkwBydjftHTQGUcBN0fiLnp7_5n48HR7imBf3ikpuZpHUwwxUFXAtWJcZgE5a31M_HThNPrFdbvxpTmSlAQ82Cn9ZM54gxezxAAjDElHTfYMoNrbm39aQzTHI6H2WkaOCvPT4-1bK-Nmq3t-9f1SWteiSOcS3-KjB-yG05q26frOylatHPgIl",
-                  "icon": "school",
-                  "color": "#f59e0b",
-                  "tags": [
-                        "aventura",
-                        "mundo-abierto",
-                        "escolar"
-                  ]
-            },
-            {
-                  "id": "cuphead",
-                  "name": "Cuphead",
-                  "category": "Juego",
-                  "subcategory": "Plataformas",
-                  "description": "Plataformas estilo años 30.",
-                  "url": "https://ts.bzzhr.to/d/n6odzuvudocs?v=OEnDH-Y-Y5_78RDf9xOAg6jeXrkoJI6-ZXxln6NGUQLn0j_epENuulsx549xzXSM0_34Yw6lM_Dz9mvuImsWslOGdGQvg8o2KGSSRsZXvZkv4A65-zbcd1RYDNQ70nb4vki-p8FbedCr-OVW8PrzaOCNivnQaDvl8KSxB_nUZK2MhopOvO3Egg6kaHqxqPOd2hX_wJeK_dtKLDMpsQ",
-                  "icon": "platformer",
-                  "color": "#ef4444",
-                  "tags": [
-                        "plataformas",
-                        "retro",
-                        "dificil"
-                  ]
-            },
-            {
-                  "id": "dragon-ball-impact",
-                  "name": "Dragon Ball Impact",
-                  "category": "Juego",
-                  "subcategory": "Lucha",
-                  "description": "Proyecto independiente DB.",
-                  "url": "https://101mdtb.itch.io/dragon-ball-impact",
-                  "icon": "fight",
-                  "color": "#f97316",
-                  "tags": [
-                        "lucha",
-                        "anime",
-                        "independiente"
-                  ]
-            },
-            {
-                  "id": "dragon-ball-fighterz",
-                  "name": "Dragon Ball FighterZ",
-                  "category": "Juego",
-                  "subcategory": "Lucha",
-                  "description": "Lucha competitiva 2.5D.",
-                  "url": "https://buzzheavier.com/9994kmnp4uyz",
-                  "icon": "fight",
-                  "color": "#f97316",
-                  "tags": [
-                        "lucha",
-                        "anime",
-                        "competitivo"
-                  ]
-            },
-            {
-                  "id": "far-cry-2",
-                  "name": "Far Cry 2",
-                  "category": "Juego",
-                  "subcategory": "Shooter",
-                  "description": "Shooter supervivencia África.",
-                  "url": "https://ts.bzzhr.to/d/ha614nrb42oi?v=l_Jjnj0BpKzQbaWmQsW3twkcYopLZw4P6eIbg7rQr6fzaQRgdqB01S_LdXX0awCM03F60u8K8iMTsyGF6ptSFRoW_SihAzAqNK9l0fLw_Q3NazC2Vm2rE068T7GaD3bWqHbNR33X4iAyAOTXtvyHVX7DFy1QNlrkx0wbPPqCt8jAposcpEsK06MP53M9TAlNq3IqgKw4Re8RpUrg1Ev6t_QHt2yIts5njoRaQ4ZMuiXaipkzzRVWjMghmNUphQwuCKpF",
-                  "icon": "crosshair",
-                  "color": "#dc2626",
-                  "tags": [
-                        "shooter",
-                        "supervivencia",
-                        "africa"
-                  ]
-            },
-            {
-                  "id": "far-cry-3",
-                  "name": "Far Cry 3",
-                  "category": "Juego",
-                  "subcategory": "Shooter",
-                  "description": "Shooter supervivencia Tropical.",
-                  "url": "https://ts.bzzhr.to/d/hnam4zxjo3k5?v=7TLgZmwlvLowpfCko4pAnEuvuVe-G2whqVy8iMcrZiibRt445ufsjomkgN3K5eRIDC9wyqEpZsWGKolVBWAZH7wcB8xm1rpz-4iA4Tnt9ivM6SaTBTtv_Yf4vammDawShU_PVbTsOY5SFEZEZV5wHSu0ZtRtDkbs-V6CtT3nnF_yoV7c8tiFLKp_9ge2WedFi6kbXsLn9mM4ZHwHRj-DZjE",
-                  "icon": "crosshair",
-                  "color": "#dc2626",
-                  "tags": [
-                        "shooter",
-                        "supervivencia",
-                        "tropical"
-                  ]
-            },
-            {
-                  "id": "geometry-dash",
-                  "name": "Geometry Dash",
-                  "category": "Juego",
-                  "subcategory": "Plataformas",
-                  "description": "Plataformas rítmico.",
-                  "url": "https://buzzheavier.com/pzm4ncupaxrl",
-                  "icon": "platformer",
-                  "color": "#06b6d4",
-                  "tags": [
-                        "plataformas",
-                        "ritmo",
-                        "dificil"
-                  ]
-            },
-            {
-                  "id": "god-of-war-ragnarok",
-                  "name": "God of War Ragnarök",
-                  "category": "Juego",
-                  "subcategory": "Acción",
-                  "description": "Acción y aventura. La saga nórdica de Kratos y Atreus.",
-                  "url": "https://ts.bzzhr.to/d/i3t0797hahst?v=OCw_IiWaWGOc91LTeN7rtb6gOzlC2bOrO3JfUB-B_Q_5BKGH1OQIR2TOdI0AofQ130GIgyJG04RhLPaR2sA4mqHLm50tckmffYdXD0st5eulFaPL2UwOM9qtRXjIkFzNytFf-e5PIdD1w3cPQi0LbWtwrg9E2mBP8EsoaBWJQ0OlRmGA9ch_G0Lt4Vvetd2GOdtgcHLJ4z0MOripItslXCRfYAzwxaw",
-                  "icon": "sword",
-                  "color": "#dc2626",
-                  "tags": [
-                        "aventura",
-                        "accion",
-                        "mundo-abierto"
-                  ]
-            },
-            {
-                  "id": "gta-iv",
-                  "name": "GTA IV",
-                  "category": "Juego",
-                  "subcategory": "Acción",
-                  "description": "Sandbox de acción. Full Edition.",
-                  "url": "https://ts.bzzhr.to/d/akft1ubwr2g1?v=KOWg10kvme9KedKDiUbF19TOSvNnRzTdsjt6FaqCI6tHjNGje0n5DPQuJtLyqNZtLP9qI20RXTd47TEWn-KA69n2WDvlQQ6VC0rzlyz5RlaRcm-8ngYAcJSHFxJJd0K4ibG5bCky198EuM4Qmn--hnIkbpw6q-IsSwV2YmpCgZP4FH8c9a5fI7dmf2-N070RYMgUkGsVI0v_",
-                  "icon": "gamepad",
-                  "color": "#7c3aed",
-                  "tags": [
-                        "accion",
-                        "sandbox",
-                        "mundo-abierto"
-                  ]
-            },
-            {
-                  "id": "gta-iv-lite",
-                  "name": "GTA IV Lite",
-                  "category": "Juego",
-                  "subcategory": "Acción",
-                  "description": "Optimizado para bajos recursos.",
-                  "url": "https://buzzheavier.com/2crh203if8e6",
-                  "icon": "gamepad",
-                  "color": "#7c3aed",
-                  "tags": [
-                        "accion",
-                        "sandbox",
-                        "lite"
-                  ]
-            },
-            {
-                  "id": "gta-san-andreas",
-                  "name": "GTA San Andreas",
-                  "category": "Juego",
-                  "subcategory": "Acción",
-                  "description": "Clásico sandbox de acción.",
-                  "url": "https://gofile.io/d/bLnb2N",
-                  "icon": "gamepad",
-                  "color": "#7c3aed",
-                  "tags": [
-                        "accion",
-                        "sandbox",
-                        "clasico"
-                  ]
-            },
-            {
-                  "id": "gta-v",
-                  "name": "GTA V",
-                  "category": "Juego",
-                  "subcategory": "Acción",
-                  "description": "Sandbox de acción estándar.",
-                  "url": "https://buzzheavier.com/ouvyovqmuez0",
-                  "icon": "gamepad",
-                  "color": "#7c3aed",
-                  "tags": [
-                        "accion",
-                        "sandbox",
-                        "popular"
-                  ]
-            },
-            {
-                  "id": "gta-v-lite",
-                  "name": "GTA V Lite",
-                  "category": "Juego",
-                  "subcategory": "Acción",
-                  "description": "Versión optimizada rendimiento.",
-                  "url": "https://www.mediafire.com/file/7jypn4pi0quc9bn",
-                  "icon": "gamepad",
-                  "color": "#7c3aed",
-                  "tags": [
-                        "accion",
-                        "sandbox",
-                        "lite"
-                  ]
-            },
-            {
-                  "id": "gta-v-super-lite",
-                  "name": "GTA V Super Lite",
-                  "category": "Juego",
-                  "subcategory": "Acción",
-                  "description": "Máxima compresión.",
-                  "url": "https://gofile.io/d/uJgXFD",
-                  "icon": "gamepad",
-                  "color": "#7c3aed",
-                  "tags": [
-                        "accion",
-                        "sandbox",
-                        "super-lite"
-                  ]
-            },
-            {
-                  "id": "gta-v-hyper-lite",
-                  "name": "GTA V Hyper Lite 2 GB",
-                  "category": "Juego",
-                  "subcategory": "Acción",
-                  "description": "Mierdon no descargar.",
-                  "url": "https://gofile.io/d/LKUWl6",
-                  "icon": "gamepad",
-                  "color": "#7c3aed",
-                  "tags": [
-                        "accion",
-                        "sandbox",
-                        "hyper-lite"
-                  ]
-            },
-            {
-                  "id": "hollow-knight",
-                  "name": "Hollow Knight",
-                  "category": "Juego",
-                  "subcategory": "Aventura",
-                  "description": "Metroidvania y exploración.",
-                  "url": "https://ts.bzzhr.to/d/h22jtc3h54d7?v=BLTKKf7ffqWAiuL0HaQLLQL-m7KPLShFt4J2cAKbuh1QOUs_CdUzPW4aLOOWIyI4ir7DLGeik8vAD4edN6AlVroE_iBhHMtviDfq8SQLeGpfbuJcWQfZcA4z7Esw8wbdiim7FQzCJRhvkKs6dRWXRxyEOvMT-818tj_cP_BXq-YCmlBm49OxxfSx8Gp2d45c7P286tTX8c11MsRBbge7tg3MCcKcxjzduw",
-                  "icon": "adventure",
-                  "color": "#8b5cf6",
-                  "tags": [
-                        "metroidvania",
-                        "exploracion",
-                        "indie"
-                  ]
-            },
-            {
-                  "id": "jump-force",
-                  "name": "Jump Force",
-                  "category": "Juego",
-                  "subcategory": "Lucha",
-                  "description": "Crossover lucha Shonen.",
-                  "url": "https://buzzheavier.com/1rv0xeou6ix2",
-                  "icon": "fight",
-                  "color": "#f97316",
-                  "tags": [
-                        "lucha",
-                        "anime",
-                        "crossover"
-                  ]
-            },
-            {
-                  "id": "naruto-storm-4",
-                  "name": "Naruto Storm 4",
-                  "category": "Juego",
-                  "subcategory": "Lucha",
-                  "description": "Lucha 3D Ninja.",
-                  "url": "https://buzzheavier.com/gb4xhh25zw7q",
-                  "icon": "fight",
-                  "color": "#f97316",
-                  "tags": [
-                        "lucha",
-                        "anime",
-                        "ninja"
-                  ]
-            },
-            {
-                  "id": "nfs-most-wanted",
-                  "name": "NFS Most Wanted",
-                  "category": "Juego",
-                  "subcategory": "Carreras",
-                  "description": "Conducción arcade Black Ed.",
-                  "url": "https://buzzheavier.com/mkl161mmd7qw",
-                  "icon": "car",
-                  "color": "#14b8a6",
-                  "tags": [
-                        "carreras",
-                        "arcade",
-                        "coches"
-                  ]
-            },
-            {
-                  "id": "mortal-kombat-xl",
-                  "name": "Mortal Kombat XL",
-                  "category": "Juego",
-                  "subcategory": "Lucha",
-                  "description": "Lucha (vía Torrent).",
-                  "url": "https://archive.org/download/MK_XL_OPT/MK_XL_OPT_archive.torrent",
-                  "icon": "fight",
-                  "color": "#dc2626",
-                  "tags": [
-                        "lucha",
-                        "violento",
-                        "competitivo"
-                  ]
-            },
-            {
-                  "id": "outlast",
-                  "name": "Outlast",
-                  "category": "Juego",
-                  "subcategory": "Terror",
-                  "description": "Terror psicológico.",
-                  "url": "https://gofile.io/d/o8N8Kw",
-                  "icon": "horror",
-                  "color": "#64748b",
-                  "tags": [
-                        "terror",
-                        "psicologico",
-                        "supervivencia"
-                  ]
-            },
-            {
-                  "id": "resident-evil-4",
-                  "name": "Resident Evil 4",
-                  "category": "Juego",
-                  "subcategory": "Terror",
-                  "description": "Survival Horror clásico.",
-                  "url": "https://ts.bzzhr.to/d/kq1ghgkoedtq?v=A1b6XofoEt7EH4X8rVcng8WjfoDJ3Fcq-YIclPOgmD8L8fB_t7_xYxkromrU0hpE_dT2QrEYL4eujW1ZiXmApRihIi6o5SvqDSybbnlP9gMuwRNjopdeXAhunW9pkmUjQy83H1kKhmNFS6WmdKz_IsIrsr1RILYExrZS03NpTmdlxJDc3xcSSTjLVbnIEvEEjtJeYvK2UsXunFSv9jbsgkEfrWUY_MqAegCF80579LgncVZ4lJJYmYy-p2bCjVbVltp1AF4",
-                  "icon": "horror",
-                  "color": "#64748b",
-                  "tags": [
-                        "terror",
-                        "survival",
-                        "clasico"
-                  ]
-            },
-            {
-                  "id": "red-dead-redemption",
-                  "name": "Red Dead Redemption",
-                  "category": "Juego",
-                  "subcategory": "Acción",
-                  "description": "Acción en el Viejo Oeste.",
-                  "url": "https://buzzheavier.com/zzym69t6kvul",
-                  "icon": "cowboy",
-                  "color": "#92400e",
-                  "tags": [
-                        "accion",
-                        "oeste",
-                        "mundo-abierto"
-                  ]
-            },
-            {
-                  "id": "sonic-3-air",
-                  "name": "Sonic 3 AIR",
-                  "category": "Juego",
-                  "subcategory": "Plataformas",
-                  "description": "Remasterización de Sonic 3.",
-                  "url": "https://github.com/Eukaryot/sonic3air/releases/download/v24.02.02.0-stable/sonic3air_game.tar.gz",
-                  "icon": "platformer",
-                  "color": "#06b6d4",
-                  "tags": [
-                        "plataformas",
-                        "retro",
-                        "seg"
-                  ]
-            },
-            {
-                  "id": "sonic-mania",
-                  "name": "Sonic Mania",
-                  "category": "Juego",
-                  "subcategory": "Plataformas",
-                  "description": "Plataformas 2D retro.",
-                  "url": "https://drive.google.com/file/d/183PmgIWra9O5QNSZvrPskMx-0yPbQLEj/view",
-                  "icon": "platformer",
-                  "color": "#06b6d4",
-                  "tags": [
-                        "plataformas",
-                        "retro",
-                        "2d"
-                  ]
-            },
-            {
-                  "id": "stardew-valley",
-                  "name": "Stardew Valley",
-                  "category": "Juego",
-                  "subcategory": "Simulación",
-                  "description": "Gestión de granja y rol.",
-                  "url": "https://ts.bzzhr.to/d/8sr89mbhzi84?v=o2u4qhvpanFXdzkDXgaBYWRly_h1LkQPBJBlkC7RIUM-TMGdJc--hH8lYq_2fhiAvdJ-WLZN0qMX_toAlsxhOmrdsP00TtUn9bEDfJP6O8FNuoHlUrhUNKaEd04qH6gybN1Q3Js3HtPQND32FQrSp7DUykhxtEgdFu6icbcPCVMkTH5I2DaaZ1W69pA818mGiWwehvTCNdkL1Gd9ntnM7k7h78ouIgJuCc4h",
-                  "icon": "farm",
-                  "color": "#22c55e",
-                  "tags": [
-                        "simulacion",
-                        "granja",
-                        "rol"
-                  ]
-            },
-            {
-                  "id": "minecraft-apk",
-                  "name": "Minecraft APK X86",
-                  "category": "Juego",
-                  "subcategory": "Sandbox",
-                  "description": "Versión para emuladores/PC.",
-                  "url": "https://mcpelife.com/",
-                  "icon": "cube",
-                  "color": "#16a34a",
-                  "tags": [
-                        "sandbox",
-                        "construccion",
-                        "online"
-                  ]
-            },
-            {
-                  "id": "minecraft-bedrock",
-                  "name": "Minecraft Bedrock",
-                  "category": "Juego",
-                  "subcategory": "Sandbox",
-                  "description": "Launcher Bedrock.",
-                  "url": "https://www.mediafire.com/file/7ng8hziyywsfya3/MCPELauncher.flatpak/file",
-                  "icon": "cube",
-                  "color": "#16a34a",
-                  "tags": [
-                        "sandbox",
-                        "construccion",
-                        "bedrock"
-                  ]
-            },
-            {
-                  "id": "the-forest",
-                  "name": "The Forest",
-                  "category": "Juego",
-                  "subcategory": "Terror",
-                  "description": "Supervivencia y terror.",
-                  "url": "https://gofile.io/d/PcDLDW",
-                  "icon": "horror",
-                  "color": "#64748b",
-                  "tags": [
-                        "terror",
-                        "supervivencia",
-                        "bosque"
-                  ]
-            },
-            {
-                  "id": "terraria",
-                  "name": "Terraria",
-                  "category": "Juego",
-                  "subcategory": "Sandbox",
-                  "description": "Sandbox 2D exploración.",
-                  "url": "https://pixeldrain.com/u/czcpunqK",
-                  "icon": "cube",
-                  "color": "#16a34a",
-                  "tags": [
-                        "sandbox",
-                        "2d",
-                        "exploracion"
-                  ]
-            },
-            {
-                  "id": "walking-dead-s1",
-                  "name": "Walking Dead S1",
-                  "category": "Juego",
-                  "subcategory": "Aventura",
-                  "description": "Aventura narrativa.",
-                  "url": "https://gofile.io/d/1dBbUM",
-                  "icon": "adventure",
-                  "color": "#8b5cf6",
-                  "tags": [
-                        "aventura",
-                        "narrativa",
-                        "zombies"
-                  ]
-            },
-            {
-                  "id": "walking-dead-final-season",
-                  "name": "The Walking Dead: The Final Season",
-                  "category": "Juego",
-                  "subcategory": "Aventura",
-                  "description": "Aventura narrativa. El cierre de la historia de Clementine.",
-                  "url": "https://ts.bzzhr.to/d/usghd6058bty?v=BfI5MkV-C5SqDorUcbhqCe5nXLwUe8Dvz3_ymVGTpcdQEIEyRzYyjbBQdamweHiyVFwBME8esrUJG4Zo8__97f_Wpk1CvUE0jVj8r88hf8L--G32z4tACItlc6Laj5UVv0JRziGlpr6VXHWrcumnNpICPjAJG19M-ilq0uNECUgSxRcyCDrp-0YLGrd1u5z9Ku6YrVNaU9rUZITwEwApSg_1qYP763idwHAVsoPNC7Pw-5XlIcyn",
-                  "icon": "adventure",
-                  "color": "#8b5cf6",
-                  "tags": [
-                        "aventura",
-                        "narrativa",
-                        "zombies"
-                  ]
-            },
-            {
-                  "id": "blasphemous",
-                  "name": "Blasphemous",
-                  "category": "Juego",
-                  "subcategory": "Acción",
-                  "description": "Metroidvania de acción brutal en un mundo oscuro y religioso.",
-                  "url": "https://ts.bzzhr.to/d/2lo88oaa4gib?v=gcR1-OP7ZIeR-p7rMSuRrSwyKYPAvqB0ooB5TiX-KNV2XJjlup1PQOmDj1bCIGTUsrUuSG_qFY7X8lX7aBt58tb06khzO4IGakiRcEa2CII-EQ5q2AZ0pyDsdHucjnPlqNVTP_ckc-TFT8qgr75mbjH0K9zE8Q5b3Kj-rsOf9_u8g0FmZq8YitwHdDriPqLtjaU9K7AmBK-gutPhpcKrejKK5tMQ",
-                  "icon": "sword",
-                  "color": "#dc2626",
-                  "tags": [
-                        "accion",
-                        "metroidvania",
-                        "plataformas"
-                  ]
-            },
-            {
-                  "id": "hades-2",
-                  "name": "Hades 2",
-                  "category": "Juego",
-                  "subcategory": "Acción",
-                  "description": "Roguelike de acción ambientado en la mitología griega.",
-                  "url": "https://ts.bzzhr.to/d/lbu3xvv4rqry?v=QNX-yASRhkEl9evD0NiykF4F5eX5y_K7kTIjfiRaKBKkpB0YoyPMh_W8WBNMKlpy9goKkLAnt_544FN4qqoip8t--TiChvVDVXSxTIF2Px0JEgqSNlYAgl2F4v_D3R5eNHRCig9lKU2HzZv-Gc00Ojdcj8xzz4mBAHE31HUXq-D7VUIhiHgoIp2IQ443kMY9H-_8DA858TDOa48_RVh9",
-                  "icon": "fire",
-                  "color": "#7c3aed",
-                  "tags": [
-                        "accion",
-                        "roguelike",
-                        "mitologia"
-                  ]
-            },
-            {
-                  "id": "cod-world-at-war",
-                  "name": "Call of Duty: World at War",
-                  "category": "Juego",
-                  "subcategory": "Shooter",
-                  "description": "Shooter bélico ambientado en la Segunda Guerra Mundial.",
-                  "url": "https://ts.bzzhr.to/d/ywt9cge2aaj6?v=4l0NZEfVGB2RzdTTrL8b-W8l2aPfeLYiqsP0u-KHzd6t6o4Q-zN9-WVCX6-HUC1dJ9ToeqKJKGFr_IxpaYW-DWln1T1B2CpTuO9X1J6AFhNKJjV-gPfPnRkKMEu3SLqcBSSGbjuy4SRFdrXgVIBE3LfEPjN8BX4nqlfXWVRCaX4pBj11XpV83OpAsTbm1LvED1-W4KNhOQM2g5aMLl1tRFxK3BmlH8BkTF0BuwGXhdjV6tBlvc6ATAZvjldDIo05yQ",
-                  "icon": "crosshair",
-                  "color": "#4d7c0f",
-                  "tags": [
-                        "shooter",
-                        "guerra",
-                        "multijugador"
-                  ]
-            },
-            {
-                  "id": "zelda-botw",
-                  "name": "The Legend of Zelda: Breath of the Wild",
-                  "category": "Juego",
-                  "subcategory": "Aventura",
-                  "description": "Mundo abierto de accion y exploracion.",
-                  "url": "https://example.com/zelda-botw",
-                  "icon": "gamepad",
-                  "color": "#2e7d32",
-                  "tags": [
-                        "aventura",
-                        "mundo-abierto",
-                        "nintendo"
-                  ]
-            },
-            {
-                  "id": "witcher-3",
-                  "name": "The Witcher 3: Wild Hunt",
-                  "category": "Juego",
-                  "subcategory": "RPG",
-                  "description": "RPG de mundo abierto.",
-                  "url": "https://example.com/witcher-3",
-                  "icon": "sword",
-                  "color": "#b71c1c",
-                  "tags": [
-                        "rpg",
-                        "mundo-abierto",
-                        "fantasia"
-                  ]
-            },
-            {
-                  "id": "cyberpunk-2077",
-                  "name": "Cyberpunk 2077",
-                  "category": "Juego",
-                  "subcategory": "RPG",
-                  "description": "RPG de mundo abierto futurista.",
-                  "url": "https://example.com/cyberpunk-2077",
-                  "icon": "gamepad",
-                  "color": "#ff9800",
-                  "tags": [
-                        "rpg",
-                        "futurista",
-                        "mundo-abierto"
-                  ]
-            },
-            {
-                  "id": "elden-ring",
-                  "name": "Elden Ring",
-                  "category": "Juego",
-                  "subcategory": "Soulslike",
-                  "description": "RPG de accion de mundo abierto.",
-                  "url": "https://example.com/elden-ring",
-                  "icon": "sword",
-                  "color": "#c9a227",
-                  "tags": [
-                        "soulslike",
-                        "fantasia",
-                        "dificil"
-                  ]
-            },
-            {
-                  "id": "dark-souls-3",
-                  "name": "Dark Souls III",
-                  "category": "Juego",
-                  "subcategory": "Soulslike",
-                  "description": "Accion y rol desafiante.",
-                  "url": "https://example.com/dark-souls-3",
-                  "icon": "sword",
-                  "color": "#555555",
-                  "tags": [
-                        "soulslike",
-                        "fantasia",
-                        "dificil"
-                  ]
-            },
-            {
-                  "id": "sekiro",
-                  "name": "Sekiro: Shadows Die Twice",
-                  "category": "Juego",
-                  "subcategory": "Soulslike",
-                  "description": "Accion con espadas en Japon feudal.",
-                  "url": "https://example.com/sekiro",
-                  "icon": "sword",
-                  "color": "#37474f",
-                  "tags": [
-                        "soulslike",
-                        "japon",
-                        "accion"
-                  ]
-            },
-            {
-                  "id": "bloodborne",
-                  "name": "Bloodborne",
-                  "category": "Juego",
-                  "subcategory": "Soulslike",
-                  "description": "Accion gotica.",
-                  "url": "https://example.com/bloodborne",
-                  "icon": "horror",
-                  "color": "#37474f",
-                  "tags": [
-                        "soulslike",
-                        "horror",
-                        "accion"
-                  ]
-            },
-            {
-                  "id": "god-of-war-2018",
-                  "name": "God of War (2018)",
-                  "category": "Juego",
-                  "subcategory": "Accion",
-                  "description": "Accion mitologica nordica.",
-                  "url": "https://example.com/god-of-war-2018",
-                  "icon": "fire",
-                  "color": "#1565c0",
-                  "tags": [
-                        "accion",
-                        "mitologia",
-                        "nordico"
-                  ]
-            },
-            {
-                  "id": "spiderman",
-                  "name": "Marvel's Spider-Man",
-                  "category": "Juego",
-                  "subcategory": "Accion",
-                  "description": "Superheroe de mundo abierto.",
-                  "url": "https://example.com/spiderman",
-                  "icon": "gamepad",
-                  "color": "#e53935",
-                  "tags": [
-                        "accion",
-                        "superheroe",
-                        "mundo-abierto"
-                  ]
-            },
-            {
-                  "id": "red-dead-redemption-2",
-                  "name": "Red Dead Redemption 2",
-                  "category": "Juego",
-                  "subcategory": "Aventura",
-                  "description": "Mundo abierto del oeste.",
-                   "url": "https://ts.bzzhr.to/d/ck7nob6r1bcv?v=4UucLGcviOqZiMlNSTSEUlpuxUj3k8KSBA-5u8GLf9_CD3PN_bgSbTRg1vMCnCjLLC0jeP5FOgA8PPt51Fv2hISWKXOdaoe74k64alEP0EtBqSyLrKlhJDNKzuFF7VcF6l4uIzTYXtTCjSncCKyJKiiuiZq3W6g7BfFxf9SbR-Tfe7-vl_LykezSHQ0s5RZHN-CNm7BI",
-                  "icon": "cowboy",
-                  "color": "#6d4c41",
-                  "tags": [
-                        "aventura",
-                        "oeste",
-                        "mundo-abierto"
-                  ]
-            },
-            {
-                  "id": "horizon-zero-dawn",
-                  "name": "Horizon Zero Dawn",
-                  "category": "Juego",
-                  "subcategory": "Aventura",
-                  "description": "Mundo abierto con maquinas.",
-                  "url": "https://example.com/horizon-zero-dawn",
-                  "icon": "gamepad",
-                  "color": "#fb8c00",
-                  "tags": [
-                        "aventura",
-                        "mundo-abierto",
-                        "maquinas"
-                  ]
-            },
-            {
-                  "id": "ghost-of-tsushima",
-                  "name": "Ghost of Tsushima",
-                  "category": "Juego",
-                  "subcategory": "Accion",
-                  "description": "Accion samurai.",
-                  "url": "https://example.com/ghost-of-tsushima",
-                  "icon": "sword",
-                  "color": "#212121",
-                  "tags": [
-                        "accion",
-                        "samurai",
-                        "japon"
-                  ]
-            },
-            {
-                  "id": "detroit-become-human",
-                  "name": "Detroit: Become Human",
-                  "category": "Juego",
-                  "subcategory": "Aventura",
-                  "description": "Thriller narrativo.",
-                  "url": "https://example.com/detroit-become-human",
-                  "icon": "gamepad",
-                  "color": "#455a64",
-                  "tags": [
-                        "aventura",
-                        "narrativo",
-                        "decisiones"
-                  ]
-            },
-            {
-                  "id": "uncharted-4",
-                  "name": "Uncharted 4",
-                  "category": "Juego",
-                  "subcategory": "Aventura",
-                  "description": "Aventura y accion.",
-                  "url": "https://example.com/uncharted-4",
-                  "icon": "adventure",
-                  "color": "#00897b",
-                  "tags": [
-                        "aventura",
-                        "accion",
-                        "tesoros"
-                  ]
-            },
-            {
-                  "id": "last-of-us",
-                  "name": "The Last of Us",
-                  "category": "Juego",
-                  "subcategory": "Aventura",
-                  "description": "Supervivencia narrativa.",
-                  "url": "https://example.com/last-of-us",
-                  "icon": "horror",
-                  "color": "#558b2f",
-                  "tags": [
-                        "aventura",
-                        "horror",
-                        "supervivencia"
-                  ]
-            },
-            {
-                  "id": "ea-fc-24",
-                  "name": "EA FC 24",
-                  "category": "Juego",
-                  "subcategory": "Deportes",
-                  "description": "Futbol.",
-                  "url": "https://example.com/ea-fc-24",
-                  "icon": "car",
-                  "color": "#00c853",
-                  "tags": [
-                        "deportes",
-                        "futbol"
-                  ]
-            },
-            {
-                  "id": "cod-modern-warfare",
-                  "name": "Call of Duty: Modern Warfare",
-                  "category": "Juego",
-                  "subcategory": "Shooter",
-                  "description": "Shooter belico.",
-                  "url": "https://example.com/cod-modern-warfare",
-                  "icon": "crosshair",
-                  "color": "#455a64",
-                  "tags": [
-                        "shooter",
-                        "guerra",
-                        "multijugador"
-                  ]
-            },
-            {
-                  "id": "battlefield-2042",
-                  "name": "Battlefield 2042",
-                  "category": "Juego",
-                  "subcategory": "Shooter",
-                  "description": "Shooter belico.",
-                  "url": "https://example.com/battlefield-2042",
-                  "icon": "crosshair",
-                  "color": "#283593",
-                  "tags": [
-                        "shooter",
-                        "guerra",
-                        "multijugador"
-                  ]
-            },
-            {
-                  "id": "halo-infinite",
-                  "name": "Halo Infinite",
-                  "category": "Juego",
-                  "subcategory": "Shooter",
-                  "description": "Shooter de ciencia ficcion.",
-                  "url": "https://example.com/halo-infinite",
-                  "icon": "crosshair",
-                  "color": "#00897b",
-                  "tags": [
-                        "shooter",
-                        "sci-fi",
-                        "multijugador"
-                  ]
-            },
-            {
-                  "id": "doom-eternal",
-                  "name": "DOOM Eternal",
-                  "category": "Juego",
-                  "subcategory": "Shooter",
-                  "description": "Shooter frenetico.",
-                  "url": "https://example.com/doom-eternal",
-                  "icon": "fire",
-                  "color": "#b71c1c",
-                  "tags": [
-                        "shooter",
-                        "demonios",
-                        "accion"
-                  ]
-            },
-            {
-                  "id": "doom-2016",
-                  "name": "DOOM (2016)",
-                  "category": "Juego",
-                  "subcategory": "Shooter",
-                  "description": "Shooter demoniaco.",
-                  "url": "https://example.com/doom-2016",
-                  "icon": "fire",
-                  "color": "#c62828",
-                  "tags": [
-                        "shooter",
-                        "demonios",
-                        "accion"
-                  ]
-            },
-            {
-                  "id": "wolfenstein-2",
-                  "name": "Wolfenstein II",
-                  "category": "Juego",
-                  "subcategory": "Shooter",
-                  "description": "Shooter belico alternativo.",
-                  "url": "https://example.com/wolfenstein-2",
-                  "icon": "crosshair",
-                  "color": "#455a64",
-                  "tags": [
-                        "shooter",
-                        "guerra",
-                        "alternativo"
-                  ]
-            },
-            {
-                  "id": "metro-exodus",
-                  "name": "Metro Exodus",
-                  "category": "Juego",
-                  "subcategory": "Shooter",
-                  "description": "Shooter postapocaliptico.",
-                  "url": "https://example.com/metro-exodus",
-                  "icon": "horror",
-                  "color": "#37474f",
-                  "tags": [
-                        "shooter",
-                        "postapocalipsis",
-                        "horror"
-                  ]
-            },
-            {
-                  "id": "fallout-4",
-                  "name": "Fallout 4",
-                  "category": "Juego",
-                  "subcategory": "RPG",
-                  "description": "RPG postapocaliptico.",
-                  "url": "https://example.com/fallout-4",
-                  "icon": "adventure",
-                  "color": "#558b2f",
-                  "tags": [
-                        "rpg",
-                        "postapocalipsis",
-                        "mundo-abierto"
-                  ]
-            },
-            {
-                  "id": "fallout-new-vegas",
-                  "name": "Fallout: New Vegas",
-                  "category": "Juego",
-                  "subcategory": "RPG",
-                  "description": "RPG postapocaliptico.",
-                  "url": "https://example.com/fallout-new-vegas",
-                  "icon": "adventure",
-                  "color": "#ef6c00",
-                  "tags": [
-                        "rpg",
-                        "postapocalipsis",
-                        "mundo-abierto"
-                  ]
-            },
-            {
-                  "id": "skyrim",
-                  "name": "The Elder Scrolls V: Skyrim",
-                  "category": "Juego",
-                  "subcategory": "RPG",
-                  "description": "RPG de fantasia.",
-                  "url": "https://example.com/skyrim",
-                  "icon": "sword",
-                  "color": "#6d4c41",
-                  "tags": [
-                        "rpg",
-                        "fantasia",
-                        "mundo-abierto"
-                  ]
-            },
-            {
-                  "id": "oblivion",
-                  "name": "The Elder Scrolls IV: Oblivion",
-                  "category": "Juego",
-                  "subcategory": "RPG",
-                  "description": "RPG de fantasia.",
-                  "url": "https://example.com/oblivion",
-                  "icon": "sword",
-                  "color": "#5d4037",
-                  "tags": [
-                        "rpg",
-                        "fantasia",
-                        "mundo-abierto"
-                  ]
-            },
-            {
-                  "id": "portal-2",
-                  "name": "Portal 2",
-                  "category": "Juego",
-                  "subcategory": "Puzzle",
-                  "description": "Puzzle de portales.",
-                  "url": "https://example.com/portal-2",
-                  "icon": "cube",
-                  "color": "#ff9800",
-                  "tags": [
-                        "puzzle",
-                        "portal",
-                        "logica"
-                  ]
-            },
-            {
-                  "id": "half-life",
-                  "name": "Half-Life",
-                  "category": "Juego",
-                  "subcategory": "Shooter",
-                  "description": "Shooter clasico.",
-                  "url": "https://example.com/half-life",
-                  "icon": "crosshair",
-                  "color": "#b71c1c",
-                  "tags": [
-                        "shooter",
-                        "sci-fi",
-                        "clasico"
-                  ]
-            },
-            {
-                  "id": "left-4-dead-2",
-                  "name": "Left 4 Dead 2",
-                  "category": "Juego",
-                  "subcategory": "Shooter",
-                  "description": "Shooter cooperativo zombie.",
-                  "url": "https://example.com/left-4-dead-2",
-                  "icon": "horror",
-                  "color": "#558b2f",
-                  "tags": [
-                        "shooter",
-                        "zombie",
-                        "cooperativo"
-                  ]
-            },
-            {
-                  "id": "bioshock",
-                  "name": "BioShock",
-                  "category": "Juego",
-                  "subcategory": "Shooter",
-                  "description": "Shooter de historia.",
-                  "url": "https://ts.bzzhr.to/d/071u3qoaaqgh?v=bMVBpCc5ddx9DIbLlCQrhRspwjlRM67e3D-TcvUOqiIUf02kjt6CuTYun_EtSJmOKdafEZnkYSFaj2Vas_kiGfBXQz7VVvkWdU3WF_8z0-X_PnhBB7TbVNnPQj-z1qMmrHD4Das9TTKnDwTxvWJYxiUfPdyGS3U4D0cb32qftXBhG1eBp07M9gIBdSNq0zrlgpH8RXi7xYRiN59dSbYT",
-                  "icon": "horror",
-                  "color": "#1565c0",
-                  "tags": [
-                        "shooter",
-                        "historia",
-                        "sci-fi"
-                  ]
-            },
-            {
-                  "id": "tomb-raider",
-                  "name": "Tomb Raider (2013)",
-                  "category": "Juego",
-                  "subcategory": "Aventura",
-                  "description": "Aventura y accion.",
-                  "url": "https://example.com/tomb-raider",
-                  "icon": "adventure",
-                  "color": "#00897b",
-                  "tags": [
-                        "aventura",
-                        "accion",
-                        "arqueologia"
-                  ]
-            },
-            {
-                  "id": "rise-tomb-raider",
-                  "name": "Rise of the Tomb Raider",
-                  "category": "Juego",
-                  "subcategory": "Aventura",
-                  "description": "Aventura y accion.",
-                  "url": "https://example.com/rise-tomb-raider",
-                  "icon": "adventure",
-                  "color": "#00897b",
-                  "tags": [
-                        "aventura",
-                        "accion",
-                        "arqueologia"
-                  ]
-            },
-            {
-                  "id": "far-cry-5",
-                  "name": "Far Cry 5",
-                  "category": "Juego",
-                  "subcategory": "Shooter",
-                  "description": "Shooter de mundo abierto.",
-                  "url": "https://example.com/far-cry-5",
-                  "icon": "crosshair",
-                  "color": "#ef6c00",
-                  "tags": [
-                        "shooter",
-                        "mundo-abierto",
-                        "accion"
-                  ]
-            },
-            {
-                  "id": "far-cry-6",
-                  "name": "Far Cry 6",
-                  "category": "Juego",
-                  "subcategory": "Shooter",
-                  "description": "Shooter de mundo abierto.",
-                  "url": "https://example.com/far-cry-6",
-                  "icon": "crosshair",
-                  "color": "#c62828",
-                  "tags": [
-                        "shooter",
-                        "mundo-abierto",
-                        "accion"
-                  ]
-            },
-            {
-                  "id": "far-cry-primal",
-                  "name": "Far Cry Primal",
-                  "category": "Juego",
-                  "subcategory": "Shooter",
-                  "description": "Shooter prehistorico.",
-                  "url": "https://example.com/far-cry-primal",
-                  "icon": "crosshair",
-                  "color": "#4e342e",
-                  "tags": [
-                        "shooter",
-                        "prehistorico",
-                        "mundo-abierto"
-                  ]
-            },
-            {
-                  "id": "ac-odyssey",
-                  "name": "Assassin's Creed Odyssey",
-                  "category": "Juego",
-                  "subcategory": "Accion",
-                  "description": "Mundo abierto griego.",
-                  "url": "https://ts.bzzhr.to/d/9ijwpud2aubn?v=jIhmCK6bjr2935Q4i_6PUDu_k9lkNeqYW5PCjr85MjkPZkdVJCknXqxHWwoGGgPc3JBEbQ1DfAWv-7z2lKQ1Xj8MnVcbGq1mhNqsyEIquL1ajX5L_Uq5S8wf75_xx91fQHQWPeWcTk3XMJ4kKwMz4NeKRDO9A3GovxHiVLBL9eOdMTewP9pa205Q0c-iFfGZdworbhhKmGhmaIy26EHVYsZ6Xb2nhG7j_PQnllTFNLdJpcQv46tEvVPu2AE9",
-                  "icon": "sword",
-                  "color": "#1565c0",
-                  "tags": [
-                        "accion",
-                        "mundo-abierto",
-                        "grecia"
-                  ]
-            },
-            {
-                  "id": "ac-valhalla",
-                  "name": "Assassin's Creed Valhalla",
-                  "category": "Juego",
-                  "subcategory": "Accion",
-                  "description": "Mundo abierto vikingo.",
-                  "url": "https://example.com/ac-valhalla",
-                  "icon": "sword",
-                  "color": "#1565c0",
-                  "tags": [
-                        "accion",
-                        "mundo-abierto",
-                        "vikingos"
-                  ]
-            },
-            {
-                  "id": "ac-unity",
-                  "name": "Assassin's Creed Unity",
-                  "category": "Juego",
-                  "subcategory": "Accion",
-                  "description": "Mundo abierto frances.",
-                   "url": "https://ts.bzzhr.to/d/e5shwi6a457m?v=TDOFFeG34yKZKJ-cwo2aBCyXuTNijv1o3ufIbFs1yBWodwVTWaxw7c4QByfI1T8_6M4sLr5tudgRab2G-ofNL_OcFDkHcMCL9XQNCa3WNpNob5UN2rH8imE425op-hqTZDDTqpiabXwnutHigBvXd--t2TskuqWue8i-Af25wcuxIjHTONMWHTGLEekbtAK3iiQXWYIH-V4xFTDLbhrGWCFXvgmpmZzYxI4szKDs05TxYeiv9C_WwA",
-                  "icon": "sword",
-                  "color": "#1565c0",
-                  "tags": [
-                        "accion",
-                        "mundo-abierto",
-                        "francia"
-                  ]
-            },
-            {
-                  "id": "ac-brotherhood",
-                  "name": "Assassin's Creed Brotherhood",
-                  "category": "Juego",
-                  "subcategory": "Accion",
-                  "description": "Mundo abierto renacentista.",
-                  "url": "https://example.com/ac-brotherhood",
-                  "icon": "sword",
-                  "color": "#1565c0",
-                  "tags": [
-                        "accion",
-                        "mundo-abierto",
-                        "italia"
-                  ]
-            },
-            {
-                  "id": "ac-origins",
-                  "name": "Assassin's Creed Origins",
-                  "category": "Juego",
-                  "subcategory": "Accion",
-                  "description": "Mundo abierto egipcio.",
-                  "url": "https://example.com/ac-origins",
-                  "icon": "sword",
-                  "color": "#1565c0",
-                  "tags": [
-                        "accion",
-                        "mundo-abierto",
-                        "egipto"
-                  ]
-            },
-            {
-                  "id": "prince-of-persia",
-                  "name": "Prince of Persia",
-                  "category": "Juego",
-                  "subcategory": "Aventura",
-                  "description": "Plataformas y accion.",
-                  "url": "https://example.com/prince-of-persia",
-                  "icon": "sword",
-                  "color": "#f9a825",
-                  "tags": [
-                        "aventura",
-                        "plataformas",
-                        "accion"
-                  ]
-            },
-            {
-                  "id": "dishonored",
-                  "name": "Dishonored",
-                  "category": "Juego",
-                  "subcategory": "Accion",
-                  "description": "Accion y sigilo.",
-                  "url": "https://example.com/dishonored",
-                  "icon": "sword",
-                  "color": "#37474f",
-                  "tags": [
-                        "accion",
-                        "sigilo",
-                        "fantasia"
-                  ]
-            },
-            {
-                  "id": "hitman-3",
-                  "name": "Hitman 3",
-                  "category": "Juego",
-                  "subcategory": "Accion",
-                  "description": "Infiltracion.",
-                  "url": "https://example.com/hitman-3",
-                  "icon": "crosshair",
-                  "color": "#212121",
-                  "tags": [
-                        "accion",
-                        "infiltracion",
-                        "sigilo"
-                  ]
-            },
-            {
-                  "id": "watch-dogs",
-                  "name": "Watch Dogs",
-                  "category": "Juego",
-                  "subcategory": "Aventura",
-                  "description": "Mundo abierto hacker.",
-                  "url": "https://example.com/watch-dogs",
-                  "icon": "adventure",
-                  "color": "#1565c0",
-                  "tags": [
-                        "aventura",
-                        "mundo-abierto",
-                        "hacking"
-                  ]
-            },
-            {
-                  "id": "sleeping-dogs",
-                  "name": "Sleeping Dogs",
-                  "category": "Juego",
-                  "subcategory": "Accion",
-                  "description": "Accion en Hong Kong.",
-                  "url": "https://example.com/sleeping-dogs",
-                  "icon": "adventure",
-                  "color": "#283593",
-                  "tags": [
-                        "accion",
-                        "hong-kong",
-                        "mundo-abierto"
-                  ]
-            },
-            {
-                  "id": "mafia-definitive",
-                  "name": "Mafia: Definitive Edition",
-                  "category": "Juego",
-                  "subcategory": "Aventura",
-                  "description": "Mafia anos 30.",
-                  "url": "https://example.com/mafia-definitive",
-                  "icon": "adventure",
-                  "color": "#b71c1c",
-                  "tags": [
-                        "aventura",
-                        "crimen",
-                        "anos-30"
-                  ]
-            },
-            {
-                  "id": "just-cause-4",
-                  "name": "Just Cause 4",
-                  "category": "Juego",
-                  "subcategory": "Accion",
-                  "description": "Mundo abierto caotico.",
-                  "url": "https://example.com/just-cause-4",
-                  "icon": "adventure",
-                  "color": "#e53935",
-                  "tags": [
-                        "accion",
-                        "mundo-abierto",
-                        "sandbox"
-                  ]
-            },
-            {
-                  "id": "subnautica",
-                  "name": "Subnautica",
-                  "category": "Juego",
-                  "subcategory": "Aventura",
-                  "description": "Supervivencia submarina.",
-                  "url": "https://example.com/subnautica",
-                  "icon": "adventure",
-                  "color": "#0277bd",
-                  "tags": [
-                        "aventura",
-                        "supervivencia",
-                        "submarino"
-                  ]
-            },
-            {
-                  "id": "no-mans-sky",
-                  "name": "No Man's Sky",
-                  "category": "Juego",
-                  "subcategory": "Aventura",
-                  "description": "Exploracion espacial.",
-                  "url": "https://example.com/no-mans-sky",
-                  "icon": "adventure",
-                  "color": "#4527a0",
-                  "tags": [
-                        "aventura",
-                        "espacio",
-                        "exploracion"
-                  ]
-            },
-            {
-                  "id": "ark-survival",
-                  "name": "Ark: Survival Evolved",
-                  "category": "Juego",
-                  "subcategory": "Aventura",
-                  "description": "Supervivencia con dinosaurios.",
-                  "url": "https://ts.bzzhr.to/d/kbm2dupgc190?v=lHS1j3mWZREIOEjdjXtJ4L1q01gm8ps-yJLZalpcRyH6Gy1cXutkj21ZCLTrt_1Ye9ll5yT4QiuaUPHhePqW2KgUi7NBdyMzidR2siuTI0cZBAv_cdEtt4JK6KylVLX1nimojmE4DlkRBpwK_XW9Af4r8-8P7_giutcJqXRbvjWld30pW42qlrV6-VEdGCUJf6fM90o4OL4JMJSQvK8lF2HnFJgOTA1rM8YiRo94-M_WbUP7PsVd",
-                  "icon": "adventure",
-                  "color": "#558b2f",
-                  "tags": [
-                        "aventura",
-                        "supervivencia",
-                        "dinosaurios"
-                  ]
-            },
-            {
-                  "id": "celeste",
-                  "name": "Celeste",
-                  "category": "Juego",
-                  "subcategory": "Plataformas",
-                  "description": "Plataformas dificil.",
-                  "url": "https://example.com/celeste",
-                  "icon": "platformer",
-                  "color": "#5c6bc0",
-                  "tags": [
-                        "plataformas",
-                        "dificil",
-                        "indie"
-                  ]
-            },
-            {
-                  "id": "dead-cells",
-                  "name": "Dead Cells",
-                  "category": "Juego",
-                  "subcategory": "Roguelike",
-                  "description": "Roguelike de accion.",
-                  "url": "https://example.com/dead-cells",
-                  "icon": "sword",
-                  "color": "#37474f",
-                  "tags": [
-                        "roguelike",
-                        "accion",
-                        "indie"
-                  ]
-            },
-            {
-                  "id": "hades",
-                  "name": "Hades",
-                  "category": "Juego",
-                  "subcategory": "Roguelike",
-                  "description": "Roguelike de accion.",
-                  "url": "https://example.com/hades",
-                  "icon": "fire",
-                  "color": "#7c3aed",
-                  "tags": [
-                        "roguelike",
-                        "accion",
-                        "mitologia"
-                  ]
-            },
-            {
-                  "id": "ori-blind-forest",
-                  "name": "Ori and the Blind Forest",
-                  "category": "Juego",
-                  "subcategory": "Plataformas",
-                  "description": "Plataformas metroidvania.",
-                  "url": "https://example.com/ori-blind-forest",
-                  "icon": "platformer",
-                  "color": "#00897b",
-                  "tags": [
-                        "plataformas",
-                        "metroidvania",
-                        "indie"
-                  ]
-            },
-            {
-                  "id": "undertale",
-                  "name": "Undertale",
-                  "category": "Juego",
-                  "subcategory": "RPG",
-                  "description": "RPG unico.",
-                  "url": "https://example.com/undertale",
-                  "icon": "gamepad",
-                  "color": "#37474f",
-                  "tags": [
-                        "rpg",
-                        "indie",
-                        "unique"
-                  ]
-            },
-            {
-                  "id": "persona-5",
-                  "name": "Persona 5",
-                  "category": "Juego",
-                  "subcategory": "RPG",
-                  "description": "RPG de personas.",
-                  "url": "https://example.com/persona-5",
-                  "icon": "gamepad",
-                  "color": "#e53935",
-                  "tags": [
-                        "rpg",
-                        "colegio",
-                        "turnos"
-                  ]
-            },
-            {
-                  "id": "yakuza-0",
-                  "name": "Yakuza 0",
-                  "category": "Juego",
-                  "subcategory": "Accion",
-                  "description": "Accion y drama.",
-                  "url": "https://example.com/yakuza-0",
-                  "icon": "adventure",
-                  "color": "#1565c0",
-                  "tags": [
-                        "accion",
-                        "drama",
-                        "japon"
-                  ]
-            },
-            {
-                  "id": "judgment",
-                  "name": "Judgment",
-                  "category": "Juego",
-                  "subcategory": "Accion",
-                  "description": "Accion legal.",
-                  "url": "https://example.com/judgment",
-                  "icon": "adventure",
-                  "color": "#37474f",
-                  "tags": [
-                        "accion",
-                        "legal",
-                        "japon"
-                  ]
-            },
-            {
-                  "id": "re-village",
-                  "name": "Resident Evil Village",
-                  "category": "Juego",
-                  "subcategory": "Horror",
-                  "description": "Supervivencia de horror.",
-                  "url": "https://example.com/re-village",
-                  "icon": "horror",
-                  "color": "#b71c1c",
-                  "tags": [
-                        "horror",
-                        "supervivencia",
-                        "resident-evil"
-                  ]
-            },
-            {
-                  "id": "re2-remake",
-                  "name": "Resident Evil 2 Remake",
-                  "category": "Juego",
-                  "subcategory": "Horror",
-                  "description": "Supervivencia de horror.",
-                  "url": "https://example.com/re2-remake",
-                  "icon": "horror",
-                  "color": "#b71c1c",
-                  "tags": [
-                        "horror",
-                        "supervivencia",
-                        "remake"
-                  ]
-            },
-            {
-                  "id": "re3-remake",
-                  "name": "Resident Evil 3 Remake",
-                  "category": "Juego",
-                  "subcategory": "Horror",
-                  "description": "Supervivencia de horror.",
-                  "url": "https://example.com/re3-remake",
-                  "icon": "horror",
-                  "color": "#b71c1c",
-                  "tags": [
-                        "horror",
-                        "supervivencia",
-                        "remake"
-                  ]
-            }
+  "apps": [
+    {
+      "id": "assassins-creed-2",
+      "name": "Assassin's Creed II",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Acción y aventura. Renacimiento italiano.",
+      "url": "https://ts.bzzhr.to/d/7m35lpl1e1od?v=IU9E8068gUFnp9u5WEmmqtxZt-45KIPEohqdZHmEFOFiwWtn4n6ZMXyqk2g-RW4937EGsr28HYPA92S_WvTR0b6n_ICJNthyb6jLjsubSHg_GbJEZzA43yfndgyJlpGou8DxYnL1AyDhY1pW9dXT43hNw9vUMBdiqxwuWUM0c1BS8EwG3hGuJ6j83ogwNLe6enydWST6gMjDPu6RM_mjJ18D3AEOzF8rdqxVLjZL79HSZg",
+      "icon": "sword",
+      "color": "#7c3aed",
+      "tags": [
+        "aventura",
+        "accion",
+        "mundo-abierto"
       ]
+    },
+    {
+      "id": "assassins-creed-4",
+      "name": "Assassin's Creed IV",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Acción naval y aventura. Piratería.",
+      "url": "https://gofile.io/d/gOLwyT",
+      "icon": "sword",
+      "color": "#7c3aed",
+      "tags": [
+        "aventura",
+        "accion",
+        "naval"
+      ]
+    },
+    {
+      "id": "balatro",
+      "name": "Balatro",
+      "category": "Juego",
+      "subcategory": "Cartas",
+      "description": "Juego de cartas tipo Roguelike.",
+      "url": "https://ts.bzzhr.to/d/92nyc3drwyd3?v=wYtf4Yk8Dp0XboNyT1gbH2neZFCcUMeo713wyxhTj-WckvW7NAv5jUZ3f1SSBmC9Wa0dgbXzWi4KSEpQXjS_JMjngxua49eOvEM-2V4_RAYaHYTuOSkdX-3ZRGKA8w1q2wrZJFXVzBOQ0MGmdiW52tUsyz6yo6v67OcsewMLw3IZQGyFN0wlANrsk5bVbXZMKMCPkfmKruCuerJCEQ",
+      "icon": "cards",
+      "color": "#10b981",
+      "tags": [
+        "cartas",
+        "roguelike",
+        "estrategia"
+      ]
+    },
+    {
+      "id": "bully",
+      "name": "Bully",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Aventura de mundo abierto escolar.",
+      "url": "https://ts.bzzhr.to/d/em6bjyg8dxwz?v=5-bDE9zJFEFBoJm3Qd8adO3NkwBydjftHTQGUcBN0fiLnp7_5n48HR7imBf3ikpuZpHUwwxUFXAtWJcZgE5a31M_HThNPrFdbvxpTmSlAQ82Cn9ZM54gxezxAAjDElHTfYMoNrbm39aQzTHI6H2WkaOCvPT4-1bK-Nmq3t-9f1SWteiSOcS3-KjB-yG05q26frOylatHPgIl",
+      "icon": "school",
+      "color": "#f59e0b",
+      "tags": [
+        "aventura",
+        "mundo-abierto",
+        "escolar"
+      ]
+    },
+    {
+      "id": "cuphead",
+      "name": "Cuphead",
+      "category": "Juego",
+      "subcategory": "Plataformas",
+      "description": "Plataformas estilo años 30.",
+      "url": "https://ts.bzzhr.to/d/n6odzuvudocs?v=OEnDH-Y-Y5_78RDf9xOAg6jeXrkoJI6-ZXxln6NGUQLn0j_epENuulsx549xzXSM0_34Yw6lM_Dz9mvuImsWslOGdGQvg8o2KGSSRsZXvZkv4A65-zbcd1RYDNQ70nb4vki-p8FbedCr-OVW8PrzaOCNivnQaDvl8KSxB_nUZK2MhopOvO3Egg6kaHqxqPOd2hX_wJeK_dtKLDMpsQ",
+      "icon": "platformer",
+      "color": "#ef4444",
+      "tags": [
+        "plataformas",
+        "retro",
+        "dificil"
+      ]
+    },
+    {
+      "id": "dragon-ball-impact",
+      "name": "Dragon Ball Impact",
+      "category": "Juego",
+      "subcategory": "Lucha",
+      "description": "Proyecto independiente DB.",
+      "url": "https://101mdtb.itch.io/dragon-ball-impact",
+      "icon": "fight",
+      "color": "#f97316",
+      "tags": [
+        "lucha",
+        "anime",
+        "independiente"
+      ]
+    },
+    {
+      "id": "dragon-ball-fighterz",
+      "name": "Dragon Ball FighterZ",
+      "category": "Juego",
+      "subcategory": "Lucha",
+      "description": "Lucha competitiva 2.5D.",
+      "url": "https://buzzheavier.com/9994kmnp4uyz",
+      "icon": "fight",
+      "color": "#f97316",
+      "tags": [
+        "lucha",
+        "anime",
+        "competitivo"
+      ]
+    },
+    {
+      "id": "far-cry-2",
+      "name": "Far Cry 2",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter supervivencia África.",
+      "url": "https://ts.bzzhr.to/d/ha614nrb42oi?v=l_Jjnj0BpKzQbaWmQsW3twkcYopLZw4P6eIbg7rQr6fzaQRgdqB01S_LdXX0awCM03F60u8K8iMTsyGF6ptSFRoW_SihAzAqNK9l0fLw_Q3NazC2Vm2rE068T7GaD3bWqHbNR33X4iAyAOTXtvyHVX7DFy1QNlrkx0wbPPqCt8jAposcpEsK06MP53M9TAlNq3IqgKw4Re8RpUrg1Ev6t_QHt2yIts5njoRaQ4ZMuiXaipkzzRVWjMghmNUphQwuCKpF",
+      "icon": "crosshair",
+      "color": "#dc2626",
+      "tags": [
+        "shooter",
+        "supervivencia",
+        "africa"
+      ]
+    },
+    {
+      "id": "far-cry-3",
+      "name": "Far Cry 3",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter supervivencia Tropical.",
+      "url": "https://ts.bzzhr.to/d/hnam4zxjo3k5?v=7TLgZmwlvLowpfCko4pAnEuvuVe-G2whqVy8iMcrZiibRt445ufsjomkgN3K5eRIDC9wyqEpZsWGKolVBWAZH7wcB8xm1rpz-4iA4Tnt9ivM6SaTBTtv_Yf4vammDawShU_PVbTsOY5SFEZEZV5wHSu0ZtRtDkbs-V6CtT3nnF_yoV7c8tiFLKp_9ge2WedFi6kbXsLn9mM4ZHwHRj-DZjE",
+      "icon": "crosshair",
+      "color": "#dc2626",
+      "tags": [
+        "shooter",
+        "supervivencia",
+        "tropical"
+      ]
+    },
+    {
+      "id": "geometry-dash",
+      "name": "Geometry Dash",
+      "category": "Juego",
+      "subcategory": "Plataformas",
+      "description": "Plataformas rítmico.",
+      "url": "https://buzzheavier.com/pzm4ncupaxrl",
+      "icon": "platformer",
+      "color": "#06b6d4",
+      "tags": [
+        "plataformas",
+        "ritmo",
+        "dificil"
+      ]
+    },
+    {
+      "id": "god-of-war-ragnarok",
+      "name": "God of War Ragnarök",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Acción y aventura. La saga nórdica de Kratos y Atreus.",
+      "url": "https://ts.bzzhr.to/d/i3t0797hahst?v=OCw_IiWaWGOc91LTeN7rtb6gOzlC2bOrO3JfUB-B_Q_5BKGH1OQIR2TOdI0AofQ130GIgyJG04RhLPaR2sA4mqHLm50tckmffYdXD0st5eulFaPL2UwOM9qtRXjIkFzNytFf-e5PIdD1w3cPQi0LbWtwrg9E2mBP8EsoaBWJQ0OlRmGA9ch_G0Lt4Vvetd2GOdtgcHLJ4z0MOripItslXCRfYAzwxaw",
+      "icon": "sword",
+      "color": "#dc2626",
+      "tags": [
+        "aventura",
+        "accion",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "gta-iv",
+      "name": "GTA IV",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Sandbox de acción. Full Edition.",
+      "url": "https://ts.bzzhr.to/d/akft1ubwr2g1?v=KOWg10kvme9KedKDiUbF19TOSvNnRzTdsjt6FaqCI6tHjNGje0n5DPQuJtLyqNZtLP9qI20RXTd47TEWn-KA69n2WDvlQQ6VC0rzlyz5RlaRcm-8ngYAcJSHFxJJd0K4ibG5bCky198EuM4Qmn--hnIkbpw6q-IsSwV2YmpCgZP4FH8c9a5fI7dmf2-N070RYMgUkGsVI0v_",
+      "icon": "gamepad",
+      "color": "#7c3aed",
+      "tags": [
+        "accion",
+        "sandbox",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "gta-iv-lite",
+      "name": "GTA IV Lite",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Optimizado para bajos recursos.",
+      "url": "https://buzzheavier.com/2crh203if8e6",
+      "icon": "gamepad",
+      "color": "#7c3aed",
+      "tags": [
+        "accion",
+        "sandbox",
+        "lite"
+      ]
+    },
+    {
+      "id": "gta-san-andreas",
+      "name": "GTA San Andreas",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Clásico sandbox de acción.",
+      "url": "https://gofile.io/d/bLnb2N",
+      "icon": "gamepad",
+      "color": "#7c3aed",
+      "tags": [
+        "accion",
+        "sandbox",
+        "clasico"
+      ]
+    },
+    {
+      "id": "gta-v",
+      "name": "GTA V",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Sandbox de acción estándar.",
+      "url": "https://buzzheavier.com/ouvyovqmuez0",
+      "icon": "gamepad",
+      "color": "#7c3aed",
+      "tags": [
+        "accion",
+        "sandbox",
+        "popular"
+      ]
+    },
+    {
+      "id": "gta-v-lite",
+      "name": "GTA V Lite",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Versión optimizada rendimiento.",
+      "url": "https://www.mediafire.com/file/7jypn4pi0quc9bn",
+      "icon": "gamepad",
+      "color": "#7c3aed",
+      "tags": [
+        "accion",
+        "sandbox",
+        "lite"
+      ]
+    },
+    {
+      "id": "gta-v-super-lite",
+      "name": "GTA V Super Lite",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Máxima compresión.",
+      "url": "https://gofile.io/d/uJgXFD",
+      "icon": "gamepad",
+      "color": "#7c3aed",
+      "tags": [
+        "accion",
+        "sandbox",
+        "super-lite"
+      ]
+    },
+    {
+      "id": "gta-v-hyper-lite",
+      "name": "GTA V Hyper Lite 2 GB",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Mierdon no descargar.",
+      "url": "https://gofile.io/d/LKUWl6",
+      "icon": "gamepad",
+      "color": "#7c3aed",
+      "tags": [
+        "accion",
+        "sandbox",
+        "hyper-lite"
+      ]
+    },
+    {
+      "id": "hollow-knight",
+      "name": "Hollow Knight",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Metroidvania y exploración.",
+      "url": "https://ts.bzzhr.to/d/h22jtc3h54d7?v=BLTKKf7ffqWAiuL0HaQLLQL-m7KPLShFt4J2cAKbuh1QOUs_CdUzPW4aLOOWIyI4ir7DLGeik8vAD4edN6AlVroE_iBhHMtviDfq8SQLeGpfbuJcWQfZcA4z7Esw8wbdiim7FQzCJRhvkKs6dRWXRxyEOvMT-818tj_cP_BXq-YCmlBm49OxxfSx8Gp2d45c7P286tTX8c11MsRBbge7tg3MCcKcxjzduw",
+      "icon": "adventure",
+      "color": "#8b5cf6",
+      "tags": [
+        "metroidvania",
+        "exploracion",
+        "indie"
+      ]
+    },
+    {
+      "id": "jump-force",
+      "name": "Jump Force",
+      "category": "Juego",
+      "subcategory": "Lucha",
+      "description": "Crossover lucha Shonen.",
+      "url": "https://buzzheavier.com/1rv0xeou6ix2",
+      "icon": "fight",
+      "color": "#f97316",
+      "tags": [
+        "lucha",
+        "anime",
+        "crossover"
+      ]
+    },
+    {
+      "id": "naruto-storm-4",
+      "name": "Naruto Storm 4",
+      "category": "Juego",
+      "subcategory": "Lucha",
+      "description": "Lucha 3D Ninja.",
+      "url": "https://buzzheavier.com/gb4xhh25zw7q",
+      "icon": "fight",
+      "color": "#f97316",
+      "tags": [
+        "lucha",
+        "anime",
+        "ninja"
+      ]
+    },
+    {
+      "id": "nfs-most-wanted",
+      "name": "NFS Most Wanted",
+      "category": "Juego",
+      "subcategory": "Carreras",
+      "description": "Conducción arcade Black Ed.",
+      "url": "https://buzzheavier.com/mkl161mmd7qw",
+      "icon": "car",
+      "color": "#14b8a6",
+      "tags": [
+        "carreras",
+        "arcade",
+        "coches"
+      ]
+    },
+    {
+      "id": "mortal-kombat-xl",
+      "name": "Mortal Kombat XL",
+      "category": "Juego",
+      "subcategory": "Lucha",
+      "description": "Lucha (vía Torrent).",
+      "url": "https://archive.org/download/MK_XL_OPT/MK_XL_OPT_archive.torrent",
+      "icon": "fight",
+      "color": "#dc2626",
+      "tags": [
+        "lucha",
+        "violento",
+        "competitivo"
+      ]
+    },
+    {
+      "id": "outlast",
+      "name": "Outlast",
+      "category": "Juego",
+      "subcategory": "Terror",
+      "description": "Terror psicológico.",
+      "url": "https://gofile.io/d/o8N8Kw",
+      "icon": "horror",
+      "color": "#64748b",
+      "tags": [
+        "terror",
+        "psicologico",
+        "supervivencia"
+      ]
+    },
+    {
+      "id": "resident-evil-4",
+      "name": "Resident Evil 4",
+      "category": "Juego",
+      "subcategory": "Terror",
+      "description": "Survival Horror clásico.",
+      "url": "https://ts.bzzhr.to/d/kq1ghgkoedtq?v=A1b6XofoEt7EH4X8rVcng8WjfoDJ3Fcq-YIclPOgmD8L8fB_t7_xYxkromrU0hpE_dT2QrEYL4eujW1ZiXmApRihIi6o5SvqDSybbnlP9gMuwRNjopdeXAhunW9pkmUjQy83H1kKhmNFS6WmdKz_IsIrsr1RILYExrZS03NpTmdlxJDc3xcSSTjLVbnIEvEEjtJeYvK2UsXunFSv9jbsgkEfrWUY_MqAegCF80579LgncVZ4lJJYmYy-p2bCjVbVltp1AF4",
+      "icon": "horror",
+      "color": "#64748b",
+      "tags": [
+        "terror",
+        "survival",
+        "clasico"
+      ]
+    },
+    {
+      "id": "red-dead-redemption",
+      "name": "Red Dead Redemption",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Acción en el Viejo Oeste.",
+      "url": "https://buzzheavier.com/zzym69t6kvul",
+      "icon": "cowboy",
+      "color": "#92400e",
+      "tags": [
+        "accion",
+        "oeste",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "sonic-3-air",
+      "name": "Sonic 3 AIR",
+      "category": "Juego",
+      "subcategory": "Plataformas",
+      "description": "Remasterización de Sonic 3.",
+      "url": "https://github.com/Eukaryot/sonic3air/releases/download/v24.02.02.0-stable/sonic3air_game.tar.gz",
+      "icon": "platformer",
+      "color": "#06b6d4",
+      "tags": [
+        "plataformas",
+        "retro",
+        "seg"
+      ]
+    },
+    {
+      "id": "sonic-mania",
+      "name": "Sonic Mania",
+      "category": "Juego",
+      "subcategory": "Plataformas",
+      "description": "Plataformas 2D retro.",
+      "url": "https://drive.google.com/file/d/183PmgIWra9O5QNSZvrPskMx-0yPbQLEj/view",
+      "icon": "platformer",
+      "color": "#06b6d4",
+      "tags": [
+        "plataformas",
+        "retro",
+        "2d"
+      ]
+    },
+    {
+      "id": "stardew-valley",
+      "name": "Stardew Valley",
+      "category": "Juego",
+      "subcategory": "Simulación",
+      "description": "Gestión de granja y rol.",
+      "url": "https://ts.bzzhr.to/d/8sr89mbhzi84?v=o2u4qhvpanFXdzkDXgaBYWRly_h1LkQPBJBlkC7RIUM-TMGdJc--hH8lYq_2fhiAvdJ-WLZN0qMX_toAlsxhOmrdsP00TtUn9bEDfJP6O8FNuoHlUrhUNKaEd04qH6gybN1Q3Js3HtPQND32FQrSp7DUykhxtEgdFu6icbcPCVMkTH5I2DaaZ1W69pA818mGiWwehvTCNdkL1Gd9ntnM7k7h78ouIgJuCc4h",
+      "icon": "farm",
+      "color": "#22c55e",
+      "tags": [
+        "simulacion",
+        "granja",
+        "rol"
+      ]
+    },
+    {
+      "id": "minecraft-apk",
+      "name": "Minecraft APK X86",
+      "category": "Juego",
+      "subcategory": "Sandbox",
+      "description": "Versión para emuladores/PC.",
+      "url": "https://mcpelife.com/",
+      "icon": "cube",
+      "color": "#16a34a",
+      "tags": [
+        "sandbox",
+        "construccion",
+        "online"
+      ]
+    },
+    {
+      "id": "minecraft-bedrock",
+      "name": "Minecraft Bedrock",
+      "category": "Juego",
+      "subcategory": "Sandbox",
+      "description": "Launcher Bedrock.",
+      "url": "https://www.mediafire.com/file/7ng8hziyywsfya3/MCPELauncher.flatpak/file",
+      "icon": "cube",
+      "color": "#16a34a",
+      "tags": [
+        "sandbox",
+        "construccion",
+        "bedrock"
+      ]
+    },
+    {
+      "id": "the-forest",
+      "name": "The Forest",
+      "category": "Juego",
+      "subcategory": "Terror",
+      "description": "Supervivencia y terror.",
+      "url": "https://gofile.io/d/PcDLDW",
+      "icon": "horror",
+      "color": "#64748b",
+      "tags": [
+        "terror",
+        "supervivencia",
+        "bosque"
+      ]
+    },
+    {
+      "id": "terraria",
+      "name": "Terraria",
+      "category": "Juego",
+      "subcategory": "Sandbox",
+      "description": "Sandbox 2D exploración.",
+      "url": "https://pixeldrain.com/u/czcpunqK",
+      "icon": "cube",
+      "color": "#16a34a",
+      "tags": [
+        "sandbox",
+        "2d",
+        "exploracion"
+      ]
+    },
+    {
+      "id": "walking-dead-s1",
+      "name": "Walking Dead S1",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Aventura narrativa.",
+      "url": "https://gofile.io/d/1dBbUM",
+      "icon": "adventure",
+      "color": "#8b5cf6",
+      "tags": [
+        "aventura",
+        "narrativa",
+        "zombies"
+      ]
+    },
+    {
+      "id": "walking-dead-final-season",
+      "name": "The Walking Dead: The Final Season",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Aventura narrativa. El cierre de la historia de Clementine.",
+      "url": "https://ts.bzzhr.to/d/usghd6058bty?v=BfI5MkV-C5SqDorUcbhqCe5nXLwUe8Dvz3_ymVGTpcdQEIEyRzYyjbBQdamweHiyVFwBME8esrUJG4Zo8__97f_Wpk1CvUE0jVj8r88hf8L--G32z4tACItlc6Laj5UVv0JRziGlpr6VXHWrcumnNpICPjAJG19M-ilq0uNECUgSxRcyCDrp-0YLGrd1u5z9Ku6YrVNaU9rUZITwEwApSg_1qYP763idwHAVsoPNC7Pw-5XlIcyn",
+      "icon": "adventure",
+      "color": "#8b5cf6",
+      "tags": [
+        "aventura",
+        "narrativa",
+        "zombies"
+      ]
+    },
+    {
+      "id": "blasphemous",
+      "name": "Blasphemous",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Metroidvania de acción brutal en un mundo oscuro y religioso.",
+      "url": "https://ts.bzzhr.to/d/2lo88oaa4gib?v=gcR1-OP7ZIeR-p7rMSuRrSwyKYPAvqB0ooB5TiX-KNV2XJjlup1PQOmDj1bCIGTUsrUuSG_qFY7X8lX7aBt58tb06khzO4IGakiRcEa2CII-EQ5q2AZ0pyDsdHucjnPlqNVTP_ckc-TFT8qgr75mbjH0K9zE8Q5b3Kj-rsOf9_u8g0FmZq8YitwHdDriPqLtjaU9K7AmBK-gutPhpcKrejKK5tMQ",
+      "icon": "sword",
+      "color": "#dc2626",
+      "tags": [
+        "accion",
+        "metroidvania",
+        "plataformas"
+      ]
+    },
+    {
+      "id": "hades-2",
+      "name": "Hades 2",
+      "category": "Juego",
+      "subcategory": "Acción",
+      "description": "Roguelike de acción ambientado en la mitología griega.",
+      "url": "https://ts.bzzhr.to/d/lbu3xvv4rqry?v=QNX-yASRhkEl9evD0NiykF4F5eX5y_K7kTIjfiRaKBKkpB0YoyPMh_W8WBNMKlpy9goKkLAnt_544FN4qqoip8t--TiChvVDVXSxTIF2Px0JEgqSNlYAgl2F4v_D3R5eNHRCig9lKU2HzZv-Gc00Ojdcj8xzz4mBAHE31HUXq-D7VUIhiHgoIp2IQ443kMY9H-_8DA858TDOa48_RVh9",
+      "icon": "fire",
+      "color": "#7c3aed",
+      "tags": [
+        "accion",
+        "roguelike",
+        "mitologia"
+      ]
+    },
+    {
+      "id": "cod-world-at-war",
+      "name": "Call of Duty: World at War",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter bélico ambientado en la Segunda Guerra Mundial.",
+      "url": "https://ts.bzzhr.to/d/ywt9cge2aaj6?v=4l0NZEfVGB2RzdTTrL8b-W8l2aPfeLYiqsP0u-KHzd6t6o4Q-zN9-WVCX6-HUC1dJ9ToeqKJKGFr_IxpaYW-DWln1T1B2CpTuO9X1J6AFhNKJjV-gPfPnRkKMEu3SLqcBSSGbjuy4SRFdrXgVIBE3LfEPjN8BX4nqlfXWVRCaX4pBj11XpV83OpAsTbm1LvED1-W4KNhOQM2g5aMLl1tRFxK3BmlH8BkTF0BuwGXhdjV6tBlvc6ATAZvjldDIo05yQ",
+      "icon": "crosshair",
+      "color": "#4d7c0f",
+      "tags": [
+        "shooter",
+        "guerra",
+        "multijugador"
+      ]
+    },
+    {
+      "id": "zelda-botw",
+      "name": "The Legend of Zelda: Breath of the Wild",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Mundo abierto de accion y exploracion.",
+      "url": "https://example.com/zelda-botw",
+      "icon": "gamepad",
+      "color": "#2e7d32",
+      "tags": [
+        "aventura",
+        "mundo-abierto",
+        "nintendo"
+      ]
+    },
+    {
+      "id": "witcher-3",
+      "name": "The Witcher 3: Wild Hunt",
+      "category": "Juego",
+      "subcategory": "RPG",
+      "description": "RPG de mundo abierto.",
+      "url": "https://example.com/witcher-3",
+      "icon": "sword",
+      "color": "#b71c1c",
+      "tags": [
+        "rpg",
+        "mundo-abierto",
+        "fantasia"
+      ]
+    },
+    {
+      "id": "cyberpunk-2077",
+      "name": "Cyberpunk 2077",
+      "category": "Juego",
+      "subcategory": "RPG",
+      "description": "RPG de mundo abierto futurista.",
+      "url": "https://example.com/cyberpunk-2077",
+      "icon": "gamepad",
+      "color": "#ff9800",
+      "tags": [
+        "rpg",
+        "futurista",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "elden-ring",
+      "name": "Elden Ring",
+      "category": "Juego",
+      "subcategory": "Soulslike",
+      "description": "RPG de accion de mundo abierto.",
+      "url": "https://example.com/elden-ring",
+      "icon": "sword",
+      "color": "#c9a227",
+      "tags": [
+        "soulslike",
+        "fantasia",
+        "dificil"
+      ]
+    },
+    {
+      "id": "dark-souls-3",
+      "name": "Dark Souls III",
+      "category": "Juego",
+      "subcategory": "Soulslike",
+      "description": "Accion y rol desafiante.",
+      "url": "https://example.com/dark-souls-3",
+      "icon": "sword",
+      "color": "#555555",
+      "tags": [
+        "soulslike",
+        "fantasia",
+        "dificil"
+      ]
+    },
+    {
+      "id": "sekiro",
+      "name": "Sekiro: Shadows Die Twice",
+      "category": "Juego",
+      "subcategory": "Soulslike",
+      "description": "Accion con espadas en Japon feudal.",
+      "url": "https://example.com/sekiro",
+      "icon": "sword",
+      "color": "#37474f",
+      "tags": [
+        "soulslike",
+        "japon",
+        "accion"
+      ]
+    },
+    {
+      "id": "bloodborne",
+      "name": "Bloodborne",
+      "category": "Juego",
+      "subcategory": "Soulslike",
+      "description": "Accion gotica.",
+      "url": "https://example.com/bloodborne",
+      "icon": "horror",
+      "color": "#37474f",
+      "tags": [
+        "soulslike",
+        "horror",
+        "accion"
+      ]
+    },
+    {
+      "id": "god-of-war-2018",
+      "name": "God of War (2018)",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Accion mitologica nordica.",
+      "url": "https://example.com/god-of-war-2018",
+      "icon": "fire",
+      "color": "#1565c0",
+      "tags": [
+        "accion",
+        "mitologia",
+        "nordico"
+      ]
+    },
+    {
+      "id": "spiderman",
+      "name": "Marvel's Spider-Man",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Superheroe de mundo abierto.",
+      "url": "https://example.com/spiderman",
+      "icon": "gamepad",
+      "color": "#e53935",
+      "tags": [
+        "accion",
+        "superheroe",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "red-dead-redemption-2",
+      "name": "Red Dead Redemption 2",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Mundo abierto del oeste.",
+      "url": "https://ts.bzzhr.to/d/ck7nob6r1bcv?v=4UucLGcviOqZiMlNSTSEUlpuxUj3k8KSBA-5u8GLf9_CD3PN_bgSbTRg1vMCnCjLLC0jeP5FOgA8PPt51Fv2hISWKXOdaoe74k64alEP0EtBqSyLrKlhJDNKzuFF7VcF6l4uIzTYXtTCjSncCKyJKiiuiZq3W6g7BfFxf9SbR-Tfe7-vl_LykezSHQ0s5RZHN-CNm7BI",
+      "icon": "cowboy",
+      "color": "#6d4c41",
+      "tags": [
+        "aventura",
+        "oeste",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "horizon-zero-dawn",
+      "name": "Horizon Zero Dawn",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Mundo abierto con maquinas.",
+      "url": "https://example.com/horizon-zero-dawn",
+      "icon": "gamepad",
+      "color": "#fb8c00",
+      "tags": [
+        "aventura",
+        "mundo-abierto",
+        "maquinas"
+      ]
+    },
+    {
+      "id": "ghost-of-tsushima",
+      "name": "Ghost of Tsushima",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Accion samurai.",
+      "url": "https://example.com/ghost-of-tsushima",
+      "icon": "sword",
+      "color": "#212121",
+      "tags": [
+        "accion",
+        "samurai",
+        "japon"
+      ]
+    },
+    {
+      "id": "detroit-become-human",
+      "name": "Detroit: Become Human",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Thriller narrativo.",
+      "url": "https://example.com/detroit-become-human",
+      "icon": "gamepad",
+      "color": "#455a64",
+      "tags": [
+        "aventura",
+        "narrativo",
+        "decisiones"
+      ]
+    },
+    {
+      "id": "uncharted-4",
+      "name": "Uncharted 4",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Aventura y accion.",
+      "url": "https://example.com/uncharted-4",
+      "icon": "adventure",
+      "color": "#00897b",
+      "tags": [
+        "aventura",
+        "accion",
+        "tesoros"
+      ]
+    },
+    {
+      "id": "last-of-us",
+      "name": "The Last of Us",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Supervivencia narrativa.",
+      "url": "https://example.com/last-of-us",
+      "icon": "horror",
+      "color": "#558b2f",
+      "tags": [
+        "aventura",
+        "horror",
+        "supervivencia"
+      ]
+    },
+    {
+      "id": "ea-fc-24",
+      "name": "EA FC 24",
+      "category": "Juego",
+      "subcategory": "Deportes",
+      "description": "Futbol.",
+      "url": "https://example.com/ea-fc-24",
+      "icon": "car",
+      "color": "#00c853",
+      "tags": [
+        "deportes",
+        "futbol"
+      ]
+    },
+    {
+      "id": "cod-modern-warfare",
+      "name": "Call of Duty: Modern Warfare",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter belico.",
+      "url": "https://example.com/cod-modern-warfare",
+      "icon": "crosshair",
+      "color": "#455a64",
+      "tags": [
+        "shooter",
+        "guerra",
+        "multijugador"
+      ]
+    },
+    {
+      "id": "battlefield-2042",
+      "name": "Battlefield 2042",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter belico.",
+      "url": "https://example.com/battlefield-2042",
+      "icon": "crosshair",
+      "color": "#283593",
+      "tags": [
+        "shooter",
+        "guerra",
+        "multijugador"
+      ]
+    },
+    {
+      "id": "halo-infinite",
+      "name": "Halo Infinite",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter de ciencia ficcion.",
+      "url": "https://example.com/halo-infinite",
+      "icon": "crosshair",
+      "color": "#00897b",
+      "tags": [
+        "shooter",
+        "sci-fi",
+        "multijugador"
+      ]
+    },
+    {
+      "id": "doom-eternal",
+      "name": "DOOM Eternal",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter frenetico.",
+      "url": "https://example.com/doom-eternal",
+      "icon": "fire",
+      "color": "#b71c1c",
+      "tags": [
+        "shooter",
+        "demonios",
+        "accion"
+      ]
+    },
+    {
+      "id": "doom-2016",
+      "name": "DOOM (2016)",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter demoniaco.",
+      "url": "https://example.com/doom-2016",
+      "icon": "fire",
+      "color": "#c62828",
+      "tags": [
+        "shooter",
+        "demonios",
+        "accion"
+      ]
+    },
+    {
+      "id": "wolfenstein-2",
+      "name": "Wolfenstein II",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter belico alternativo.",
+      "url": "https://example.com/wolfenstein-2",
+      "icon": "crosshair",
+      "color": "#455a64",
+      "tags": [
+        "shooter",
+        "guerra",
+        "alternativo"
+      ]
+    },
+    {
+      "id": "metro-exodus",
+      "name": "Metro Exodus",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter postapocaliptico.",
+      "url": "https://example.com/metro-exodus",
+      "icon": "horror",
+      "color": "#37474f",
+      "tags": [
+        "shooter",
+        "postapocalipsis",
+        "horror"
+      ]
+    },
+    {
+      "id": "fallout-4",
+      "name": "Fallout 4",
+      "category": "Juego",
+      "subcategory": "RPG",
+      "description": "RPG postapocaliptico.",
+      "url": "https://example.com/fallout-4",
+      "icon": "adventure",
+      "color": "#558b2f",
+      "tags": [
+        "rpg",
+        "postapocalipsis",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "fallout-new-vegas",
+      "name": "Fallout: New Vegas",
+      "category": "Juego",
+      "subcategory": "RPG",
+      "description": "RPG postapocaliptico.",
+      "url": "https://example.com/fallout-new-vegas",
+      "icon": "adventure",
+      "color": "#ef6c00",
+      "tags": [
+        "rpg",
+        "postapocalipsis",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "skyrim",
+      "name": "The Elder Scrolls V: Skyrim",
+      "category": "Juego",
+      "subcategory": "RPG",
+      "description": "RPG de fantasia.",
+      "url": "https://example.com/skyrim",
+      "icon": "sword",
+      "color": "#6d4c41",
+      "tags": [
+        "rpg",
+        "fantasia",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "oblivion",
+      "name": "The Elder Scrolls IV: Oblivion",
+      "category": "Juego",
+      "subcategory": "RPG",
+      "description": "RPG de fantasia.",
+      "url": "https://example.com/oblivion",
+      "icon": "sword",
+      "color": "#5d4037",
+      "tags": [
+        "rpg",
+        "fantasia",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "portal-2",
+      "name": "Portal 2",
+      "category": "Juego",
+      "subcategory": "Puzzle",
+      "description": "Puzzle de portales.",
+      "url": "https://example.com/portal-2",
+      "icon": "cube",
+      "color": "#ff9800",
+      "tags": [
+        "puzzle",
+        "portal",
+        "logica"
+      ]
+    },
+    {
+      "id": "half-life",
+      "name": "Half-Life",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter clasico.",
+      "url": "https://example.com/half-life",
+      "icon": "crosshair",
+      "color": "#b71c1c",
+      "tags": [
+        "shooter",
+        "sci-fi",
+        "clasico"
+      ]
+    },
+    {
+      "id": "left-4-dead-2",
+      "name": "Left 4 Dead 2",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter cooperativo zombie.",
+      "url": "https://example.com/left-4-dead-2",
+      "icon": "horror",
+      "color": "#558b2f",
+      "tags": [
+        "shooter",
+        "zombie",
+        "cooperativo"
+      ]
+    },
+    {
+      "id": "bioshock",
+      "name": "BioShock",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter de historia.",
+      "url": "https://ts.bzzhr.to/d/071u3qoaaqgh?v=bMVBpCc5ddx9DIbLlCQrhRspwjlRM67e3D-TcvUOqiIUf02kjt6CuTYun_EtSJmOKdafEZnkYSFaj2Vas_kiGfBXQz7VVvkWdU3WF_8z0-X_PnhBB7TbVNnPQj-z1qMmrHD4Das9TTKnDwTxvWJYxiUfPdyGS3U4D0cb32qftXBhG1eBp07M9gIBdSNq0zrlgpH8RXi7xYRiN59dSbYT",
+      "icon": "horror",
+      "color": "#1565c0",
+      "tags": [
+        "shooter",
+        "historia",
+        "sci-fi"
+      ]
+    },
+    {
+      "id": "tomb-raider",
+      "name": "Tomb Raider (2013)",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Aventura y accion.",
+      "url": "https://example.com/tomb-raider",
+      "icon": "adventure",
+      "color": "#00897b",
+      "tags": [
+        "aventura",
+        "accion",
+        "arqueologia"
+      ]
+    },
+    {
+      "id": "rise-tomb-raider",
+      "name": "Rise of the Tomb Raider",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Aventura y accion.",
+      "url": "https://example.com/rise-tomb-raider",
+      "icon": "adventure",
+      "color": "#00897b",
+      "tags": [
+        "aventura",
+        "accion",
+        "arqueologia"
+      ]
+    },
+    {
+      "id": "far-cry-5",
+      "name": "Far Cry 5",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter de mundo abierto.",
+      "url": "https://example.com/far-cry-5",
+      "icon": "crosshair",
+      "color": "#ef6c00",
+      "tags": [
+        "shooter",
+        "mundo-abierto",
+        "accion"
+      ]
+    },
+    {
+      "id": "far-cry-6",
+      "name": "Far Cry 6",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter de mundo abierto.",
+      "url": "https://example.com/far-cry-6",
+      "icon": "crosshair",
+      "color": "#c62828",
+      "tags": [
+        "shooter",
+        "mundo-abierto",
+        "accion"
+      ]
+    },
+    {
+      "id": "far-cry-primal",
+      "name": "Far Cry Primal",
+      "category": "Juego",
+      "subcategory": "Shooter",
+      "description": "Shooter prehistorico.",
+      "url": "https://example.com/far-cry-primal",
+      "icon": "crosshair",
+      "color": "#4e342e",
+      "tags": [
+        "shooter",
+        "prehistorico",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "ac-odyssey",
+      "name": "Assassin's Creed Odyssey",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Mundo abierto griego.",
+      "url": "https://ts.bzzhr.to/d/9ijwpud2aubn?v=jIhmCK6bjr2935Q4i_6PUDu_k9lkNeqYW5PCjr85MjkPZkdVJCknXqxHWwoGGgPc3JBEbQ1DfAWv-7z2lKQ1Xj8MnVcbGq1mhNqsyEIquL1ajX5L_Uq5S8wf75_xx91fQHQWPeWcTk3XMJ4kKwMz4NeKRDO9A3GovxHiVLBL9eOdMTewP9pa205Q0c-iFfGZdworbhhKmGhmaIy26EHVYsZ6Xb2nhG7j_PQnllTFNLdJpcQv46tEvVPu2AE9",
+      "icon": "sword",
+      "color": "#1565c0",
+      "tags": [
+        "accion",
+        "mundo-abierto",
+        "grecia"
+      ]
+    },
+    {
+      "id": "ac-valhalla",
+      "name": "Assassin's Creed Valhalla",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Mundo abierto vikingo.",
+      "url": "https://example.com/ac-valhalla",
+      "icon": "sword",
+      "color": "#1565c0",
+      "tags": [
+        "accion",
+        "mundo-abierto",
+        "vikingos"
+      ]
+    },
+    {
+      "id": "ac-unity",
+      "name": "Assassin's Creed Unity",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Mundo abierto frances.",
+      "url": "https://ts.bzzhr.to/d/e5shwi6a457m?v=TDOFFeG34yKZKJ-cwo2aBCyXuTNijv1o3ufIbFs1yBWodwVTWaxw7c4QByfI1T8_6M4sLr5tudgRab2G-ofNL_OcFDkHcMCL9XQNCa3WNpNob5UN2rH8imE425op-hqTZDDTqpiabXwnutHigBvXd--t2TskuqWue8i-Af25wcuxIjHTONMWHTGLEekbtAK3iiQXWYIH-V4xFTDLbhrGWCFXvgmpmZzYxI4szKDs05TxYeiv9C_WwA",
+      "icon": "sword",
+      "color": "#1565c0",
+      "tags": [
+        "accion",
+        "mundo-abierto",
+        "francia"
+      ]
+    },
+    {
+      "id": "ac-brotherhood",
+      "name": "Assassin's Creed Brotherhood",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Mundo abierto renacentista.",
+      "url": "https://example.com/ac-brotherhood",
+      "icon": "sword",
+      "color": "#1565c0",
+      "tags": [
+        "accion",
+        "mundo-abierto",
+        "italia"
+      ]
+    },
+    {
+      "id": "ac-origins",
+      "name": "Assassin's Creed Origins",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Mundo abierto egipcio.",
+      "url": "https://example.com/ac-origins",
+      "icon": "sword",
+      "color": "#1565c0",
+      "tags": [
+        "accion",
+        "mundo-abierto",
+        "egipto"
+      ]
+    },
+    {
+      "id": "prince-of-persia",
+      "name": "Prince of Persia",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Plataformas y accion.",
+      "url": "https://example.com/prince-of-persia",
+      "icon": "sword",
+      "color": "#f9a825",
+      "tags": [
+        "aventura",
+        "plataformas",
+        "accion"
+      ]
+    },
+    {
+      "id": "dishonored",
+      "name": "Dishonored",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Accion y sigilo.",
+      "url": "https://example.com/dishonored",
+      "icon": "sword",
+      "color": "#37474f",
+      "tags": [
+        "accion",
+        "sigilo",
+        "fantasia"
+      ]
+    },
+    {
+      "id": "hitman-3",
+      "name": "Hitman 3",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Infiltracion.",
+      "url": "https://example.com/hitman-3",
+      "icon": "crosshair",
+      "color": "#212121",
+      "tags": [
+        "accion",
+        "infiltracion",
+        "sigilo"
+      ]
+    },
+    {
+      "id": "watch-dogs",
+      "name": "Watch Dogs",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Mundo abierto hacker.",
+      "url": "https://example.com/watch-dogs",
+      "icon": "adventure",
+      "color": "#1565c0",
+      "tags": [
+        "aventura",
+        "mundo-abierto",
+        "hacking"
+      ]
+    },
+    {
+      "id": "sleeping-dogs",
+      "name": "Sleeping Dogs",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Accion en Hong Kong.",
+      "url": "https://example.com/sleeping-dogs",
+      "icon": "adventure",
+      "color": "#283593",
+      "tags": [
+        "accion",
+        "hong-kong",
+        "mundo-abierto"
+      ]
+    },
+    {
+      "id": "mafia-definitive",
+      "name": "Mafia: Definitive Edition",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Mafia anos 30.",
+      "url": "https://example.com/mafia-definitive",
+      "icon": "adventure",
+      "color": "#b71c1c",
+      "tags": [
+        "aventura",
+        "crimen",
+        "anos-30"
+      ]
+    },
+    {
+      "id": "just-cause-4",
+      "name": "Just Cause 4",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Mundo abierto caotico.",
+      "url": "https://example.com/just-cause-4",
+      "icon": "adventure",
+      "color": "#e53935",
+      "tags": [
+        "accion",
+        "mundo-abierto",
+        "sandbox"
+      ]
+    },
+    {
+      "id": "subnautica",
+      "name": "Subnautica",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Supervivencia submarina.",
+      "url": "https://example.com/subnautica",
+      "icon": "adventure",
+      "color": "#0277bd",
+      "tags": [
+        "aventura",
+        "supervivencia",
+        "submarino"
+      ]
+    },
+    {
+      "id": "no-mans-sky",
+      "name": "No Man's Sky",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Exploracion espacial.",
+      "url": "https://example.com/no-mans-sky",
+      "icon": "adventure",
+      "color": "#4527a0",
+      "tags": [
+        "aventura",
+        "espacio",
+        "exploracion"
+      ]
+    },
+    {
+      "id": "ark-survival",
+      "name": "Ark: Survival Evolved",
+      "category": "Juego",
+      "subcategory": "Aventura",
+      "description": "Supervivencia con dinosaurios.",
+      "url": "https://ts.bzzhr.to/d/kbm2dupgc190?v=lHS1j3mWZREIOEjdjXtJ4L1q01gm8ps-yJLZalpcRyH6Gy1cXutkj21ZCLTrt_1Ye9ll5yT4QiuaUPHhePqW2KgUi7NBdyMzidR2siuTI0cZBAv_cdEtt4JK6KylVLX1nimojmE4DlkRBpwK_XW9Af4r8-8P7_giutcJqXRbvjWld30pW42qlrV6-VEdGCUJf6fM90o4OL4JMJSQvK8lF2HnFJgOTA1rM8YiRo94-M_WbUP7PsVd",
+      "icon": "adventure",
+      "color": "#558b2f",
+      "tags": [
+        "aventura",
+        "supervivencia",
+        "dinosaurios"
+      ]
+    },
+    {
+      "id": "celeste",
+      "name": "Celeste",
+      "category": "Juego",
+      "subcategory": "Plataformas",
+      "description": "Plataformas dificil.",
+      "url": "https://example.com/celeste",
+      "icon": "platformer",
+      "color": "#5c6bc0",
+      "tags": [
+        "plataformas",
+        "dificil",
+        "indie"
+      ]
+    },
+    {
+      "id": "dead-cells",
+      "name": "Dead Cells",
+      "category": "Juego",
+      "subcategory": "Roguelike",
+      "description": "Roguelike de accion.",
+      "url": "https://example.com/dead-cells",
+      "icon": "sword",
+      "color": "#37474f",
+      "tags": [
+        "roguelike",
+        "accion",
+        "indie"
+      ]
+    },
+    {
+      "id": "hades",
+      "name": "Hades",
+      "category": "Juego",
+      "subcategory": "Roguelike",
+      "description": "Roguelike de accion.",
+      "url": "https://example.com/hades",
+      "icon": "fire",
+      "color": "#7c3aed",
+      "tags": [
+        "roguelike",
+        "accion",
+        "mitologia"
+      ]
+    },
+    {
+      "id": "ori-blind-forest",
+      "name": "Ori and the Blind Forest",
+      "category": "Juego",
+      "subcategory": "Plataformas",
+      "description": "Plataformas metroidvania.",
+      "url": "https://example.com/ori-blind-forest",
+      "icon": "platformer",
+      "color": "#00897b",
+      "tags": [
+        "plataformas",
+        "metroidvania",
+        "indie"
+      ]
+    },
+    {
+      "id": "undertale",
+      "name": "Undertale",
+      "category": "Juego",
+      "subcategory": "RPG",
+      "description": "RPG unico.",
+      "url": "https://example.com/undertale",
+      "icon": "gamepad",
+      "color": "#37474f",
+      "tags": [
+        "rpg",
+        "indie",
+        "unique"
+      ]
+    },
+    {
+      "id": "persona-5",
+      "name": "Persona 5",
+      "category": "Juego",
+      "subcategory": "RPG",
+      "description": "RPG de personas.",
+      "url": "https://example.com/persona-5",
+      "icon": "gamepad",
+      "color": "#e53935",
+      "tags": [
+        "rpg",
+        "colegio",
+        "turnos"
+      ]
+    },
+    {
+      "id": "yakuza-0",
+      "name": "Yakuza 0",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Accion y drama.",
+      "url": "https://example.com/yakuza-0",
+      "icon": "adventure",
+      "color": "#1565c0",
+      "tags": [
+        "accion",
+        "drama",
+        "japon"
+      ]
+    },
+    {
+      "id": "judgment",
+      "name": "Judgment",
+      "category": "Juego",
+      "subcategory": "Accion",
+      "description": "Accion legal.",
+      "url": "https://example.com/judgment",
+      "icon": "adventure",
+      "color": "#37474f",
+      "tags": [
+        "accion",
+        "legal",
+        "japon"
+      ]
+    },
+    {
+      "id": "re-village",
+      "name": "Resident Evil Village",
+      "category": "Juego",
+      "subcategory": "Horror",
+      "description": "Supervivencia de horror.",
+      "url": "https://example.com/re-village",
+      "icon": "horror",
+      "color": "#b71c1c",
+      "tags": [
+        "horror",
+        "supervivencia",
+        "resident-evil"
+      ]
+    },
+    {
+      "id": "re2-remake",
+      "name": "Resident Evil 2 Remake",
+      "category": "Juego",
+      "subcategory": "Horror",
+      "description": "Supervivencia de horror.",
+      "url": "https://example.com/re2-remake",
+      "icon": "horror",
+      "color": "#b71c1c",
+      "tags": [
+        "horror",
+        "supervivencia",
+        "remake"
+      ]
+    },
+    {
+      "id": "re3-remake",
+      "name": "Resident Evil 3 Remake",
+      "category": "Juego",
+      "subcategory": "Horror",
+      "description": "Supervivencia de horror.",
+      "url": "https://example.com/re3-remake",
+      "icon": "horror",
+      "color": "#b71c1c",
+      "tags": [
+        "horror",
+        "supervivencia",
+        "remake"
+      ]
+    }
+  ]
 }
