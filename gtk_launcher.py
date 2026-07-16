@@ -204,9 +204,9 @@ SGDB_NAME_MAP = {
 class _DBusTrayIcon:
     """System tray via D-Bus StatusNotifierItem + D-BusMenu on the same bus."""
 
-    _SNI_XML = "<node><interface name=\"org.kde.StatusNotifierItem\">"         '<property name="Category" type="s" access="read"/>'         '<property name="Id" type="s" access="read"/>'         '<property name="Title" type="s" access="read"/>'         '<property name="Status" type="s" access="read"/>'         '<property name="IconName" type="s" access="read"/>'         '<property name="Menu" type="o" access="read"/>'         '<property name="ItemIsMenu" type="b" access="read"/>'         '<property name="ToolTip" type="(sasa{sv})" access="read"/>'         '<method name="Activate"><arg name="x" type="i" direction="in"/><arg name="y" type="i" direction="in"/></method>'         '<method name="SecondaryActivate"><arg name="x" type="i" direction="in"/><arg name="y" type="i" direction="in"/></method>'         "</interface></node>"
+    _SNI_XML = "<node><interface name=\"org.kde.StatusNotifierItem\">"         '<property name="Category" type="s" access="read"/>'         '<property name="Id" type="s" access="read"/>'         '<property name="Title" type="s" access="read"/>'         '<property name="Status" type="s" access="read"/>'         '<property name="IconName" type="s" access="read"/>'         '<property name="Menu" type="o" access="read"/>'         '<property name="ItemIsMenu" type="b" access="read"/>'         '<property name="ToolTip" type="(sasa{sv})" access="read"/>'         '<method name="Activate"><arg name="x" type="i" direction="in"/><arg name="y" type="i" direction="in"/></method>'         '<method name="SecondaryActivate"><arg name="x" type="i" direction="in"/><arg name="y" type="i" direction="in"/></method>'         '<method name="ContextMenu"><arg name="x" type="i" direction="in"/><arg name="y" type="i" direction="in"/></method>'         "</interface></node>"
 
-    _MENU_XML = "<node><interface name=\"com.canonical.dbusmenu\">"         '<method name="GetRevision"><arg name="revision" type="u" direction="out"/></method>'         '<method name="Event"><arg name="id" type="i" direction="in"/><arg name="eventType" type="s" direction="in"/><arg name="data" type="v" direction="in"/><arg name="timestamp" type="u" direction="in"/></method>'         '<method name="EventGroup"><arg name="events" type="a(isvvu)" direction="in"/><arg name="receiver" type="s" direction="out"/></method>'         '<signal name="LayoutUpdated"><arg name="revision" type="u"/><arg name="parentId" type="i"/></signal>'         "</interface></node>"
+    _MENU_XML = "<node><interface name=\"com.canonical.dbusmenu\">"         '<method name="GetRevision"><arg name="revision" type="u" direction="out"/></method>'         '<method name="GetLayout"><arg name="parentId" type="i" direction="in"/><arg name="recursionDepth" type="i" direction="in"/><arg name="propertyNames" type="as" direction="in"/><arg name="timestamp" type="u" direction="in"/><arg name="revision" type="u" direction="out"/><arg name="layout" type="(u(ia{sv}av))" direction="out"/></method>'         '<method name="GetGroupProperties"><arg name="ids" type="ai" direction="in"/><arg name="propertyNames" type="as" direction="in"/><arg name="timestamp" type="u" direction="in"/><arg name="properties" type="a(ia{sv})" direction="out"/></method>'         '<method name="Event"><arg name="id" type="i" direction="in"/><arg name="eventType" type="s" direction="in"/><arg name="data" type="v" direction="in"/><arg name="timestamp" type="u" direction="in"/></method>'         '<method name="EventGroup"><arg name="events" type="a(isvvu)" direction="in"/><arg name="receiver" type="s" direction="out"/></method>'         '<method name="AboutToShow"><arg name="id" type="i" direction="in"/><arg name="needUpdate" type="b" direction="out"/></method>'         '<signal name="LayoutUpdated"><arg name="revision" type="u"/><arg name="parentId" type="i"/></signal>'         "</interface></node>"
 
     def __init__(self, on_activate, on_quit, on_downloads=None):
         self._on_activate = on_activate
@@ -280,8 +280,12 @@ class _DBusTrayIcon:
         return False
 
     def _sni_method_call(self, conn, sender, obj, iface, method, params, inv):
-        GLib.idle_add(self._on_activate)
-        inv.return_value(None)
+        if method in ("Activate", "SecondaryActivate"):
+            GLib.idle_add(self._on_activate)
+        try:
+            inv.return_value(None)
+        except Exception:
+            pass
 
     def _sni_get_property(self, conn, sender, obj, iface, prop):
         props = {
@@ -313,6 +317,20 @@ class _DBusTrayIcon:
                     children.append(GLib.Variant("(ia{sv}av)", (mid, props, [])))
                 root = GLib.Variant("(ia{sv}av)", (0, {}, children))
                 inv.return_value(GLib.Variant("(u(ia{sv}av))", (self._menu_rev, root)))
+            elif method == "GetGroupProperties":
+                props_out = []
+                for mid, label, cb in self._menu_items:
+                    if mid == 0:
+                        continue
+                    if params[0] and mid not in params[0]:
+                        continue
+                    props_out.append(GLib.Variant("(ia{sv})", (mid, {
+                        "label": GLib.Variant("s", label),
+                        "visible": GLib.Variant("b", True),
+                    })))
+                inv.return_value(GLib.Variant("(a(ia{sv}))", (props_out,)))
+            elif method == "AboutToShow":
+                inv.return_value(GLib.Variant("(b)", (False,)))
             elif method == "Event":
                 item_id = params[0]
                 for mid, label, cb in self._menu_items:
