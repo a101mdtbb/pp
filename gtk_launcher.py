@@ -202,94 +202,136 @@ SGDB_NAME_MAP = {
 
 
 class _DBusTrayIcon:
-    _SNI_XML = '<node><interface name="org.kde.StatusNotifierItem">'         '<property name="Category" type="s" access="read"/>'         '<property name="Id" type="s" access="read"/>'         '<property name="Title" type="s" access="read"/>'         '<property name="Status" type="s" access="read"/>'         '<property name="IconName" type="s" access="read"/>'         '<property name="Menu" type="o" access="read"/>'         '<property name="ItemIsMenu" type="b" access="read"/>'         '<method name="Activate"><arg name="x" type="i" direction="in"/><arg name="y" type="i" direction="in"/></method>'         '<method name="SecondaryActivate"><arg name="x" type="i" direction="in"/><arg name="y" type="i" direction="in"/></method>'         '</interface></node>'
+    """System tray via D-Bus StatusNotifierItem + D-BusMenu."""
 
-    _MENU_XML = '<node><interface name="com.canonical.dbusmenu">'         '<method name="GetRevision"><arg name="revision" type="u" direction="out"/></method>'         '<method name="Event"><arg name="id" type="i" direction="in"/><arg name="type" type="s" direction="in"/><arg name="data" type="v" direction="in"/><arg name="time" type="u" direction="in"/></method>'         '<signal name="LayoutUpdated"><arg name="revision" type="u"/><arg name="parentId" type="i"/></signal>'         '</interface></node>'
+    _SNI_XML = '<node><interface name="org.kde.StatusNotifierItem"><property name="Category" type="s" access="read"/><property name="Id" type="s" access="read"/><property name="Title" type="s" access="read"/><property name="Status" type="s" access="read"/><property name="IconName" type="s" access="read"/><property name="Menu" type="o" access="read"/><property name="ItemIsMenu" type="b" access="read"/><property name="ToolTip" type="(sasa{sv})" access="read"/><method name="Activate"><arg name="x" type="i" direction="in"/><arg name="y" type="i" direction="in"/></method><method name="SecondaryActivate"><arg name="x" type="i" direction="in"/><arg name="y" type="i" direction="in"/></method></interface></node>'
+    _MENU_XML = '<node><interface name="com.canonical.dbusmenu"><method name="GetLayout"><arg name="parentId" type="i" direction="in"/><arg name="recursionDepth" type="i" direction="in"/><arg name="propertyNames" type="as" direction="in"/><arg name="timestamp" type="u" direction="in"/><arg name="revision" type="u" direction="out"/><arg name="layout" type="(u(ia{sv}av))" direction="out"/></method><method name="Event"><arg name="id" type="i" direction="in"/><arg name="eventType" type="s" direction="in"/><arg name="data" type="v" direction="in"/><arg name="timestamp" type="u" direction="in"/></method><method name="EventGroup"><arg name="events" type="a(isvvu)" direction="in"/><arg name="receiver" type="s" direction="out"/></method><signal name="LayoutUpdated"><arg name="revision" type="u"/><arg name="parentId" type="i"/></signal></interface></node>'
 
     def __init__(self, on_activate, on_quit, on_downloads=None):
         self._on_activate = on_activate
         self._on_quit = on_quit
         self._on_downloads = on_downloads
-        self._bus_id = None
-        self._menu_bus_id = None
         self._conn = None
-        self._menu_rev = 1
-        self._menu_items = {
-            1: ("Abrir PP Launcher", on_activate),
-            2: ("Ver descargas", on_downloads or on_activate),
-            3: ("Salir", on_quit),
-        }
-        self._bus_id = Gio.bus_own_name(
-            Gio.BusType.SESSION,
-            f"org.kde.StatusNotifierItem-{os.getpid()}-1",
-            Gio.BusNameOwnerFlags.NONE,
-            self._acquired, None, None)
+        self._menu_bus_id = None
+        self._sni_bus_id = None
+        self._menu_rev = 0
+        self._sni_path = "/StatusNotifierItem"
+        self._menu_path = "/MenuBar"
+        self._bus_name = f"org.kde.StatusNotifierItem-{os.getpid()}-1"
+        self._menu_bus_name = f"com.canonical.dbusmenu-{os.getpid()}"
 
-    def _acquired(self, conn, name):
+        self._menu_items = [
+            (1, "Abrir PP Launcher", on_activate),
+            (2, "Ver descargas", on_downloads or on_activate),
+            (0, "", None),
+            (3, "Salir", on_quit),
+        ]
+
+        self._sni_bus_id = Gio.bus_own_name(
+            Gio.BusType.SESSION, self._bus_name,
+            Gio.BusNameOwnerFlags.NONE,
+            self._on_sni_acquired, None, None)
+
+    def _on_sni_acquired(self, conn, name):
         self._conn = conn
-        node = Gio.DBusNodeInfo.new_for_xml(self._SNI_XML)
-        conn.register_object("/StatusNotifierItem",
-                             node.lookup_interface("org.kde.StatusNotifierItem"),
-                             self._method_call, None, None)
+
+        sni_node = Gio.DBusNodeInfo.new_for_xml(self._SNI_XML)
+        conn.register_object(
+            self._sni_path,
+            sni_node.lookup_interface("org.kde.StatusNotifierItem"),
+            self._sni_method_call,
+            self._sni_get_property,
+            None)
+
         menu_node = Gio.DBusNodeInfo.new_for_xml(self._MENU_XML)
         self._menu_bus_id = Gio.bus_own_name(
-            Gio.BusType.SESSION,
-            f"com.canonical.dbusmenu-{os.getpid()}",
+            Gio.BusType.SESSION, self._menu_bus_name,
             Gio.BusNameOwnerFlags.NONE,
-            lambda c, n: c.register_object("/MenuBar",
+            lambda c, n: c.register_object(
+                self._menu_path,
                 menu_node.lookup_interface("com.canonical.dbusmenu"),
-                self._menu_method, None, None),
+                self._menu_method_call, None, None),
             None, None)
-        def _register_with_watcher():
-            try:
-                conn.call_sync("org.kde.StatusNotifierWatcher",
-                               "/StatusNotifierWatcher",
-                               "org.kde.StatusNotifierWatcher",
-                               "RegisterStatusNotifierItem",
-                               GLib.Variant("(s)", (f"org.kde.StatusNotifierItem-{os.getpid()}-1",)),
-                               None, Gio.DBusCallFlags.NONE, -1, None)
-            except Exception:
-                pass
-            return False
-        GLib.timeout_add(200, _register_with_watcher)
 
-    def _method_call(self, conn, sender, obj, iface, method, params, inv):
+        GLib.timeout_add(300, self._register_watcher)
+
+    def _register_watcher(self):
+        if not self._conn:
+            return False
+        try:
+            self._conn.call_sync(
+                "org.kde.StatusNotifierWatcher",
+                "/StatusNotifierWatcher",
+                "org.kde.StatusNotifierWatcher",
+                "RegisterStatusNotifierItem",
+                GLib.Variant("(s)", (self._bus_name,)),
+                None, Gio.DBusCallFlags.NONE, -1, None)
+        except Exception:
+            pass
+        return False
+
+    def _sni_method_call(self, conn, sender, obj, iface, method, params, inv):
         GLib.idle_add(self._on_activate)
         inv.return_value(None)
 
-    def _menu_method(self, conn, sender, obj, iface, method, params, inv):
+    def _sni_get_property(self, conn, sender, obj, iface, prop, invocation):
+        props = {
+            "Category": GLib.Variant("s", "ApplicationStatus"),
+            "Id": GLib.Variant("s", "pp-launcher"),
+            "Title": GLib.Variant("s", "PP Launcher"),
+            "Status": GLib.Variant("s", "Active"),
+            "IconName": GLib.Variant("s", "folder-games-symbolic"),
+            "Menu": GLib.Variant("o", self._menu_bus_name + self._menu_path),
+            "ItemIsMenu": GLib.Variant("b", False),
+            "ToolTip": GLib.Variant("(sasa{sv})", ("PP Launcher", ["PP Launcher"], {})),
+        }
+        val = props.get(prop)
+        if val is not None:
+            invocation.return_value(val)
+        else:
+            invocation.return_value(GLib.Variant("s", ""))
+
+    def _menu_method_call(self, conn, sender, obj, iface, method, params, inv):
         if method == "GetRevision":
             inv.return_value(GLib.Variant("(u)", (self._menu_rev,)))
         elif method == "GetLayout":
             children = []
-            for mid, (label, callback) in self._menu_items.items():
-                props = {"label": GLib.Variant("s", label), "visible": GLib.Variant("b", True)}
-                children.append(GLib.Variant("(i sa{sv} av)", (mid, props, [])))
-            layout = GLib.Variant("(u (i a{sv} av))", (0, 0, {}, children))
-            inv.return_value(GLib.Variant("(u (u(ia{sv}av)))", (self._menu_rev, layout)))
+            for mid, label, cb in self._menu_items:
+                if mid == 0:
+                    continue
+                props = {
+                    "label": GLib.Variant("s", label),
+                    "visible": GLib.Variant("b", True),
+                    "type": GLib.Variant("s", "standard"),
+                }
+                children.append(GLib.Variant("(ia{sv}av)", (mid, props, [])))
+            root = GLib.Variant("(ia{sv}av)", (0, {}, children))
+            inv.return_value(GLib.Variant("(u(ia{sv}av))", (self._menu_rev, root)))
         elif method == "Event":
             item_id = params[0]
-            callback = self._menu_items.get(item_id, (None, None))[1]
-            if callback:
-                GLib.idle_add(callback)
+            for mid, label, cb in self._menu_items:
+                if mid == item_id and cb:
+                    GLib.idle_add(cb)
+                    break
             inv.return_value(None)
         elif method == "EventGroup":
-            for item_id in params[0]:
-                callback = self._menu_items.get(item_id, (None, None))[1]
-                if callback:
-                    GLib.idle_add(callback)
-            inv.return_value(None)
+            for event in params[0]:
+                item_id = event[0]
+                for mid, label, cb in self._menu_items:
+                    if mid == item_id and cb:
+                        GLib.idle_add(cb)
+                        break
+            inv.return_value(GLib.Variant("s", ""))
         else:
             inv.return_value(None)
 
     def destroy(self):
-        if self._bus_id:
-            Gio.bus_unown_name(self._bus_id)
-            self._bus_id = None
+        if self._sni_bus_id:
+            Gio.bus_unown_name(self._sni_bus_id)
+            self._sni_bus_id = None
         if self._menu_bus_id:
             Gio.bus_unown_name(self._menu_bus_id)
             self._menu_bus_id = None
-
 
 CSS = b"""
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; } }
