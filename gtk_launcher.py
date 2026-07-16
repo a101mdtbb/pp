@@ -274,7 +274,7 @@ class _DBusTrayIcon:
         GLib.idle_add(self._on_activate)
         inv.return_value(None)
 
-    def _sni_get_property(self, conn, sender, obj, iface, prop, invocation):
+    def _sni_get_property(self, conn, sender, obj, iface, prop):
         props = {
             "Category": GLib.Variant("s", "ApplicationStatus"),
             "Id": GLib.Variant("s", "pp-launcher"),
@@ -285,11 +285,7 @@ class _DBusTrayIcon:
             "ItemIsMenu": GLib.Variant("b", False),
             "ToolTip": GLib.Variant("(sasa{sv})", ("PP Launcher", ["PP Launcher"], {})),
         }
-        val = props.get(prop)
-        if val is not None:
-            invocation.return_value(val)
-        else:
-            invocation.return_value(GLib.Variant("s", ""))
+        return props.get(prop, GLib.Variant("s", ""))
 
     def _menu_method_call(self, conn, sender, obj, iface, method, params, inv):
         if method == "GetRevision":
@@ -842,6 +838,7 @@ class PPLauncher(Gtk.Application):
         self._dl_game_names = {}
         self._dl_completion_timers = []
         self._dl_pending_refresh = False
+        self._needs_refresh = True
 
     def do_activate(self):
         if hasattr(self, "win") and self.win is not None:
@@ -1821,6 +1818,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         self.current_view = view
         self.search_entry.set_text("")
         self._update_nav_active()
+        self._needs_refresh = True
         self.render_view()
 
     def _update_nav_active(self):
@@ -1831,11 +1829,14 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
 
     def on_search_changed(self, entry):
         self.search_term = entry.get_text().strip().lower()
+        self._needs_refresh = True
         self.render_view()
 
     def render_view(self):
         self.stack.set_visible_child_name("grid")
-        self._refresh_current_view()
+        if getattr(self, "_needs_refresh", True):
+            self._refresh_current_view()
+            self._needs_refresh = False
 
     def _refresh_current_view(self):
         for child in list(self.flow_box):
@@ -2039,7 +2040,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         nav_box.set_margin_bottom(4)
         back_btn = Gtk.Button(icon_name="go-previous-symbolic")
         back_btn.set_has_frame(False)
-        back_btn.connect("clicked", lambda b: self.render_view())
+        back_btn.connect("clicked", lambda b: self.stack.set_visible_child_name("grid"))
         nav_box.append(back_btn)
 
         back_lbl = Gtk.Label(label="Volver")
