@@ -12,6 +12,14 @@ gi.require_version("Gtk", "4.0")
 gi.require_version("Gdk", "4.0")
 gi.require_version("GdkPixbuf", "2.0")
 from gi.repository import Gtk, Gdk, GdkPixbuf, Gio, GLib, Pango
+import signal as _signal
+_HAS_APPIND = False
+try:
+    gi.require_version("AppIndicator3", "0.1")
+    from gi.repository import AppIndicator3 as _AppIndicator3
+    _HAS_APPIND = True
+except (ValueError, ImportError):
+    pass
 import json
 import os
 import re
@@ -190,6 +198,77 @@ SGDB_NAME_MAP = {
     "EA FC 24": "EA Sports FC 24",
     "DOOM (2016)": "DOOM",
 }
+
+
+
+class _DBusTrayIcon:
+    _SNI_XML = '<node><interface name="org.kde.StatusNotifierItem">'         '<property name="Category" type="s" access="read"/>'         '<property name="Id" type="s" access="read"/>'         '<property name="Title" type="s" access="read"/>'         '<property name="Status" type="s" access="read"/>'         '<property name="IconName" type="s" access="read"/>'         '<property name="Menu" type="o" access="read"/>'         '<property name="ItemIsMenu" type="b" access="read"/>'         '<method name="Activate"><arg name="x" type="i" direction="in"/><arg name="y" type="i" direction="in"/></method>'         '<method name="SecondaryActivate"><arg name="x" type="i" direction="in"/><arg name="y" type="i" direction="in"/></method>'         '</interface></node>'
+
+    _MENU_XML = '<node><interface name="com.canonical.dbusmenu">'         '<method name="GetRevision"><arg name="revision" type="u" direction="out"/></method>'         '<method name="Event"><arg name="id" type="i" direction="in"/><arg name="type" type="s" direction="in"/><arg name="data" type="v" direction="in"/><arg name="time" type="u" direction="in"/></method>'         '<signal name="LayoutUpdated"><arg name="revision" type="u"/><arg name="parentId" type="i"/></signal>'         '</interface></node>'
+
+    def __init__(self, on_activate, on_quit):
+        self._on_activate = on_activate
+        self._on_quit = on_quit
+        self._bus_id = None
+        self._menu_bus_id = None
+        self._conn = None
+        self._menu_rev = 1
+        self._bus_id = Gio.bus_own_name(
+            Gio.BusType.SESSION,
+            f"org.kde.StatusNotifierItem-{os.getpid()}-1",
+            Gio.BusNameOwnerFlags.NONE,
+            self._acquired, None, None)
+
+    def _acquired(self, conn, name):
+        self._conn = conn
+        node = Gio.DBusNodeInfo.new_for_xml(self._SNI_XML)
+        conn.register_object("/StatusNotifierItem",
+                             node.lookup_interface("org.kde.StatusNotifierItem"),
+                             self._method_call, None, None)
+        menu_node = Gio.DBusNodeInfo.new_for_xml(self._MENU_XML)
+        self._menu_bus_id = Gio.bus_own_name(
+            Gio.BusType.SESSION,
+            f"com.canonical.dbusmenu-{os.getpid()}",
+            Gio.BusNameOwnerFlags.NONE,
+            lambda c, n: c.register_object("/MenuBar",
+                menu_node.lookup_interface("com.canonical.dbusmenu"),
+                self._menu_method, None, None),
+            None, None)
+        try:
+            conn.call_sync("org.kde.StatusNotifierWatcher",
+                           "/StatusNotifierWatcher",
+                           "org.kde.StatusNotifierWatcher",
+                           "RegisterStatusNotifierItem",
+                           GLib.Variant("(s)", (f"org.kde.StatusNotifierItem-{os.getpid()}-1",)),
+                           None, Gio.DBusCallFlags.NONE, -1, None)
+        except Exception:
+            pass
+
+    def _method_call(self, conn, sender, obj, iface, method, params, inv):
+        GLib.idle_add(self._on_activate)
+        inv.return_value(None)
+
+    def _menu_method(self, conn, sender, obj, iface, method, params, inv):
+        if method == "GetRevision":
+            inv.return_value(GLib.Variant("(u)", (self._menu_rev,)))
+        elif method == "Event":
+            item_id = params[0]
+            if item_id == 1:
+                GLib.idle_add(self._on_activate)
+            elif item_id == 2:
+                GLib.idle_add(self._on_quit)
+            inv.return_value(None)
+        else:
+            inv.return_value(None)
+
+    def destroy(self):
+        if self._bus_id:
+            Gio.bus_unown_name(self._bus_id)
+            self._bus_id = None
+        if self._menu_bus_id:
+            Gio.bus_unown_name(self._menu_bus_id)
+            self._menu_bus_id = None
+
 
 CSS = b"""
 @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; } }
@@ -718,6 +797,7 @@ class PPLauncher(Gtk.Application):
         self.win = Gtk.ApplicationWindow(application=self, title="PP Launcher")
         self.win.set_default_size(1200, 750)
         self.win.connect("close-request", self._on_close)
+        self._setup_tray()
 
         main_vbox = Gtk.Box(orientation=Gtk.Orientation.VERTICAL)
         self.win.set_child(main_vbox)
@@ -989,8 +1069,43 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             self._refresh_current_view()
 
     def _on_close(self, *args):
+        self.win.set_visible(False)
+        return True
+
+    def _show_window(self):
+        self.win.set_visible(True)
+        self.win.present()
+
+    def _quit_app(self):
+        if hasattr(self, '_tray') and self._tray:
+            self._tray.destroy()
         self.win.get_application().quit()
-        return False
+
+    def _setup_tray(self):
+        self._tray = None
+        if _HAS_APPIND:
+            try:
+                ind = _AppIndicator3.Indicator.new(
+                    "pp-launcher", "folder-games-symbolic",
+                    _AppIndicator3.IndicatorCategory.APPLICATION_STATUS)
+                ind.set_status(_AppIndicator3.IndicatorStatus.ACTIVE)
+                menu = Gtk.Menu()
+                m1 = Gtk.MenuItem(label="Abrir PP Launcher")
+                m1.connect("activate", lambda _: self._show_window())
+                menu.append(m1)
+                m2 = Gtk.MenuItem(label="Salir")
+                m2.connect("activate", lambda _: self._quit_app())
+                menu.append(m2)
+                menu.show_all()
+                ind.set_menu(menu)
+                self._tray = ind
+                return
+            except Exception:
+                pass
+        try:
+            self._tray = _DBusTrayIcon(self._show_window, self._quit_app)
+        except Exception:
+            pass
 
     def _update_dl_panel(self):
         all_status = self.dl_manager.get_all_status()
