@@ -206,13 +206,19 @@ class _DBusTrayIcon:
 
     _MENU_XML = '<node><interface name="com.canonical.dbusmenu">'         '<method name="GetRevision"><arg name="revision" type="u" direction="out"/></method>'         '<method name="Event"><arg name="id" type="i" direction="in"/><arg name="type" type="s" direction="in"/><arg name="data" type="v" direction="in"/><arg name="time" type="u" direction="in"/></method>'         '<signal name="LayoutUpdated"><arg name="revision" type="u"/><arg name="parentId" type="i"/></signal>'         '</interface></node>'
 
-    def __init__(self, on_activate, on_quit):
+    def __init__(self, on_activate, on_quit, on_downloads=None):
         self._on_activate = on_activate
         self._on_quit = on_quit
+        self._on_downloads = on_downloads
         self._bus_id = None
         self._menu_bus_id = None
         self._conn = None
         self._menu_rev = 1
+        self._menu_items = {
+            1: ("Abrir PP Launcher", on_activate),
+            2: ("Ver descargas", on_downloads or on_activate),
+            3: ("Salir", on_quit),
+        }
         self._bus_id = Gio.bus_own_name(
             Gio.BusType.SESSION,
             f"org.kde.StatusNotifierItem-{os.getpid()}-1",
@@ -254,12 +260,24 @@ class _DBusTrayIcon:
     def _menu_method(self, conn, sender, obj, iface, method, params, inv):
         if method == "GetRevision":
             inv.return_value(GLib.Variant("(u)", (self._menu_rev,)))
+        elif method == "GetLayout":
+            children = []
+            for mid, (label, callback) in self._menu_items.items():
+                props = {"label": GLib.Variant("s", label), "visible": GLib.Variant("b", True)}
+                children.append(GLib.Variant("(i sa{sv} av)", (mid, props, [])))
+            layout = GLib.Variant("(u (i a{sv} av))", (0, 0, {}, children))
+            inv.return_value(GLib.Variant("(u (u(ia{sv}av)))", (self._menu_rev, layout)))
         elif method == "Event":
             item_id = params[0]
-            if item_id == 1:
-                GLib.idle_add(self._on_activate)
-            elif item_id == 2:
-                GLib.idle_add(self._on_quit)
+            callback = self._menu_items.get(item_id, (None, None))[1]
+            if callback:
+                GLib.idle_add(callback)
+            inv.return_value(None)
+        elif method == "EventGroup":
+            for item_id in params[0]:
+                callback = self._menu_items.get(item_id, (None, None))[1]
+                if callback:
+                    GLib.idle_add(callback)
             inv.return_value(None)
         else:
             inv.return_value(None)
@@ -1085,6 +1103,11 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         self.win.set_visible(True)
         self.win.present()
 
+    def _show_downloads(self):
+        self.win.set_visible(True)
+        self.win.present()
+        GLib.idle_add(self.dl_popover.popup)
+
     def _quit_app(self):
         if hasattr(self, '_tray') and self._tray:
             self._tray.destroy()
@@ -1104,9 +1127,14 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
                 m1 = Gtk.MenuItem(label="Abrir PP Launcher")
                 m1.connect("activate", lambda _: self._show_window())
                 menu.append(m1)
-                m2 = Gtk.MenuItem(label="Salir")
-                m2.connect("activate", lambda _: self._quit_app())
+                m2 = Gtk.MenuItem(label="Ver descargas")
+                m2.connect("activate", lambda _: self._show_downloads())
                 menu.append(m2)
+                sep = Gtk.SeparatorMenuItem()
+                menu.append(sep)
+                m3 = Gtk.MenuItem(label="Salir")
+                m3.connect("activate", lambda _: self._quit_app())
+                menu.append(m3)
                 menu.show_all()
                 ind.set_menu(menu)
                 self._tray = ind
@@ -1114,7 +1142,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             except Exception:
                 pass
         try:
-            self._tray = _DBusTrayIcon(self._show_window, self._quit_app)
+            self._tray = _DBusTrayIcon(self._show_window, self._quit_app, self._show_downloads)
         except Exception:
             pass
 
