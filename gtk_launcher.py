@@ -502,7 +502,7 @@ headerbar-title {
   box-shadow: inset 0 -1px 0 alpha(currentColor, 0.08);
 }
 window {
-  background: alpha(@window_bg_color, 0.72);
+  background: alpha(@window_bg_color, 0.92);
 }
 .nav-tab {
   background: alpha(currentColor, 0.04);
@@ -1064,52 +1064,13 @@ class PPLauncher(Gtk.Application):
         menu_btn.set_popover(popover)
         header.pack_end(menu_btn)
 
-        self.dl_list = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
-        self.dl_scroll = Gtk.ScrolledWindow()
-        self.dl_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        self.dl_scroll.set_min_content_width(400)
-        self.dl_scroll.set_max_content_height(440)
-        self.dl_scroll.set_propagate_natural_height(True)
-        self.dl_scroll.set_child(self.dl_list)
-
-        self.dl_empty = Gtk.Label(label="No hay descargas activas")
-        self.dl_empty.add_css_class("dim-label")
-        self.dl_empty.set_margin_top(28)
-        self.dl_empty.set_margin_bottom(28)
-
-        pop_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
-        pop_box.set_margin_start(10)
-        pop_box.set_margin_end(10)
-        pop_box.set_margin_top(10)
-        pop_box.set_margin_bottom(10)
-        pop_box.set_size_request(430, -1)
-        dl_hdr = Gtk.Label(label="Descargas")
-        dl_hdr.set_xalign(0)
-        dl_hdr.add_css_class("dl-pop-title")
-        pop_box.append(dl_hdr)
-        pop_box.append(self.dl_empty)
-        pop_box.append(self.dl_scroll)
-
-        self.dl_popover = Gtk.Popover()
-        self.dl_popover.set_child(pop_box)
-
-        badge_overlay = Gtk.Overlay()
-        dl_icon = Gtk.Image(icon_name="folder-download-symbolic")
-        dl_icon.set_pixel_size(20)
-        badge_overlay.set_child(dl_icon)
-        self.dl_badge = Gtk.Label(label="")
-        self.dl_badge.add_css_class("dl-badge")
-        self.dl_badge.set_halign(Gtk.Align.END)
-        self.dl_badge.set_valign(Gtk.Align.START)
-        self.dl_badge.set_visible(False)
-        badge_overlay.add_overlay(self.dl_badge)
-
-        self.dl_menu_button = Gtk.MenuButton()
-        self.dl_menu_button.set_child(badge_overlay)
-        self.dl_menu_button.set_always_show_arrow(False)
-        self.dl_menu_button.set_tooltip_text("Descargas")
-        self.dl_menu_button.set_popover(self.dl_popover)
-        header.pack_end(self.dl_menu_button)
+        self.dl_nav_button = Gtk.Button()
+        _dl_icon = Gtk.Image(icon_name="folder-download-symbolic")
+        _dl_icon.set_pixel_size(20)
+        self.dl_nav_button.set_child(_dl_icon)
+        self.dl_nav_button.set_tooltip_text("Descargas")
+        self.dl_nav_button.connect("clicked", lambda b: self._switch_view("descargas"))
+        header.pack_end(self.dl_nav_button)
 
         self.nav_bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
         self.nav_bar.set_margin_start(8)
@@ -1140,6 +1101,22 @@ class PPLauncher(Gtk.Application):
         self.detail_scroll = Gtk.ScrolledWindow()
         self.detail_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         self.stack.add_named(self.detail_scroll, "detail")
+
+        self.dl_page_scroll = Gtk.ScrolledWindow()
+        self.dl_page_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        self.stack.add_named(self.dl_page_scroll, "downloads")
+        self.dl_page_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
+        self.dl_page_box.set_margin_start(24)
+        self.dl_page_box.set_margin_end(24)
+        self.dl_page_box.set_margin_top(20)
+        self.dl_page_box.set_margin_bottom(20)
+        self.dl_page_scroll.set_child(self.dl_page_box)
+        self.dl_empty = Gtk.Label(label="No hay descargas activas")
+        self.dl_empty.add_css_class("dim-label")
+        self.dl_empty.set_margin_top(28)
+        self.dl_empty.set_margin_bottom(28)
+        self.dl_page_box.append(self.dl_empty)
+
         self.stack.set_visible_child_name("grid")
 
         self.flow_box = Gtk.FlowBox()
@@ -1284,7 +1261,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
     def _show_downloads(self):
         self.win.set_visible(True)
         self.win.present()
-        GLib.idle_add(self.dl_popover.popup)
+        GLib.idle_add(lambda: self._switch_view("descargas"))
 
     def _quit_app(self):
         if hasattr(self, '_tray') and self._tray:
@@ -1363,7 +1340,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
                     self.dl_manager.active_downloads.pop(game_id, None)
                 w = self.dl_widgets.pop(game_id, None)
                 if w:
-                    self.dl_list.remove(w)
+                    self.dl_page_box.remove(w)
                 name = self._dl_game_names.pop(game_id, game_id)
                 url = status.get("url", "")
                 GLib.idle_add(self._show_browser_dialog, game_id, name, url)
@@ -1373,7 +1350,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
                 name = self._dl_game_names.get(game_id, game_id)
                 w = self._make_dl_widget(game_id, name)
                 self.dl_widgets[game_id] = w
-                self.dl_list.append(w)
+                self.dl_page_box.append(w)
             self._update_dl_widget(self.dl_widgets[game_id], status)
 
         finished = [gid for gid in self.dl_widgets
@@ -1382,20 +1359,16 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             status = all_status.get(gid, {})
             w = self.dl_widgets.pop(gid, None)
             if w:
-                self.dl_list.remove(w)
+                self.dl_page_box.remove(w)
             self._dl_game_names.pop(gid, None)
             self._dl_pending_refresh = True
 
         count = len(self.dl_widgets)
+        self._dl_nav_label.set_text(f"Descargas ({count})" if count else "Descargas")
         if count:
-            self.dl_badge.set_text(str(count))
-            self.dl_badge.set_visible(True)
             self.dl_empty.set_visible(False)
-            self.dl_scroll.set_visible(True)
         else:
-            self.dl_badge.set_visible(False)
             self.dl_empty.set_visible(True)
-            self.dl_scroll.set_visible(False)
 
         if self._dl_pending_refresh and not self.dl_widgets:
             self._dl_pending_refresh = False
@@ -1403,6 +1376,55 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
                 GLib.idle_add(self._refresh_current_view)
 
         return True
+
+    def _refresh_dl_page(self):
+        for child in list(self.dl_page_box):
+            self.dl_page_box.remove(child)
+
+        all_status = self.dl_manager.get_all_status()
+        active = []
+        for game_id in self.dl_manager.get_queue_order():
+            if game_id in all_status:
+                active.append((game_id, all_status[game_id]))
+
+        if not active:
+            empty_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
+            empty_box.set_halign(Gtk.Align.CENTER)
+            empty_box.set_valign(Gtk.Align.CENTER)
+            empty_box.set_vexpand(True)
+            ic = Gtk.Image(icon_name="folder-download-symbolic")
+            ic.set_pixel_size(64)
+            ic.add_css_class("dim-label")
+            empty_box.append(ic)
+            lbl = Gtk.Label(label="No hay descargas activas")
+            lbl.add_css_class("title-2")
+            empty_box.append(lbl)
+            sub = Gtk.Label(label="Elige un juego de la tienda para empezar a descargar")
+            sub.add_css_class("dim-label")
+            empty_box.append(sub)
+            self.dl_page_box.append(empty_box)
+            self.dl_empty = empty_box
+            self.dl_widgets = {}
+            self._dl_game_names = {}
+            count = 0
+            self._dl_nav_label.set_text("Descargas")
+            return
+
+        header = Gtk.Label(label=f"Descargas activas ({len(active)})")
+        header.add_css_class("title-2")
+        header.set_xalign(0)
+        self.dl_page_box.append(header)
+
+        for game_id, status in active:
+            name = self._dl_game_names.get(game_id, game_id)
+            if game_id not in self.dl_widgets:
+                w = self._make_dl_widget(game_id, name)
+                self.dl_widgets[game_id] = w
+            self._update_dl_widget(self.dl_widgets[game_id], status)
+            self.dl_page_box.append(self.dl_widgets[game_id])
+
+        count = len(self.dl_widgets)
+        self._dl_nav_label.set_text(f"Descargas ({count})" if count else "Descargas")
 
     def _show_error_toast(self, game_name, error):
         toast = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
@@ -1419,7 +1441,8 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         self.dl_panel.set_visible(True)
         def remove():
             self.dl_panel.remove(toast)
-            if not any(self.dl_list):
+            has_dl = bool(self.dl_widgets)
+            if not has_dl:
                 self.dl_panel.set_visible(False)
             return False
         GLib.timeout_add(5000, remove)
@@ -1573,7 +1596,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         self.dl_manager.download(game_id, game_name, url,
                                  progress_callback=lambda *a: None,
                                  done_callback=self._on_download_done)
-        GLib.idle_add(self.dl_popover.popup)
+        GLib.idle_add(lambda: self._switch_view("descargas"))
 
     def _on_download_done(self, gid, gname, path):
         pass
@@ -1886,6 +1909,15 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
 
         self.nav_bar.append(Gtk.Separator(orientation=Gtk.Orientation.VERTICAL))
 
+        btn_dl = self._nav_button("Descargas", None)
+        btn_dl.connect("clicked", lambda b: self._switch_view("descargas"))
+        self.nav_bar.append(btn_dl)
+        self.nav_items.append(("descargas", btn_dl))
+        self._dl_nav_btn = btn_dl
+        self._dl_nav_label = btn_dl.get_child().get_first_child().get_next_sibling()
+
+        self.nav_bar.append(Gtk.Separator(orientation=Gtk.Orientation.VERTICAL))
+
         pref_btn = self._nav_button("Preferencias", None)
         pref_btn.connect("clicked", lambda b: self.show_preferences())
         self.nav_bar.append(pref_btn)
@@ -1940,9 +1972,14 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
     def _switch_view(self, view):
         self.current_view = view
         self.search_entry.set_text("")
+        self.search_entry.set_visible(view != "descargas")
         self._update_nav_active()
-        self._needs_refresh = True
-        self.render_view()
+        if view == "descargas":
+            self.stack.set_visible_child_name("downloads")
+            self._refresh_dl_page()
+        else:
+            self._needs_refresh = True
+            self.render_view()
 
     def _update_nav_active(self):
         for name, btn in self.nav_items:
