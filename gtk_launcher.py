@@ -492,6 +492,84 @@ scrollbar.horizontal slider { min-height: 9px; }
 .tray-popup button { border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; }
 .tray-popup button:hover { background: alpha(currentColor, 0.10); }
 
+/* ============================================================
+   LIQUID GLASS -- Transparencia estilo vitral (quitar bloque
+   entero para volver al estilo opaco original).
+   ============================================================ */
+headerbar,
+headerbar-title {
+  background: alpha(@window_bg_color, 0.55);
+  box-shadow: inset 0 -1px 0 alpha(currentColor, 0.08);
+}
+window {
+  background: alpha(@window_bg_color, 0.72);
+}
+.nav-tab {
+  background: alpha(currentColor, 0.04);
+  border: 1px solid alpha(currentColor, 0.07);
+  box-shadow: 0 1px 3px alpha(black, 0.08);
+}
+.nav-tab:hover {
+  background: alpha(currentColor, 0.10);
+  border-color: alpha(currentColor, 0.14);
+  box-shadow: 0 2px 8px alpha(black, 0.12);
+}
+.nav-tab-active {
+  background: alpha(@accent_bg_color, 0.22);
+  border-color: alpha(@accent_bg_color, 0.35);
+  box-shadow: 0 1px 6px alpha(@accent_bg_color, 0.18);
+}
+.search-pill {
+  background: alpha(currentColor, 0.05);
+  border: 1px solid alpha(currentColor, 0.10);
+  box-shadow: inset 0 1px 4px alpha(black, 0.06);
+}
+.dl-card {
+  background: alpha(currentColor, 0.05);
+  border: 1px solid alpha(currentColor, 0.09);
+  box-shadow: 0 2px 8px alpha(black, 0.12);
+}
+.hero {
+  background: linear-gradient(135deg, alpha(@accent_bg_color, 0.18), alpha(currentColor, 0.04));
+  border: 1px solid alpha(currentColor, 0.10);
+  box-shadow: 0 4px 16px alpha(black, 0.10);
+}
+.detail-card {
+  background: alpha(currentColor, 0.04);
+  border: 1px solid alpha(currentColor, 0.08);
+  box-shadow: 0 2px 8px alpha(black, 0.08);
+}
+.pref-group {
+  background: alpha(currentColor, 0.04);
+  border: 1px solid alpha(currentColor, 0.08);
+  box-shadow: 0 1px 4px alpha(black, 0.06);
+}
+.about-box {
+  background: linear-gradient(135deg, alpha(@accent_bg_color, 0.14), alpha(currentColor, 0.03));
+  border: 1px solid alpha(currentColor, 0.10);
+  box-shadow: 0 4px 16px alpha(black, 0.08);
+}
+.game-cell {
+  background: alpha(currentColor, 0.03);
+  border: 1px solid alpha(currentColor, 0.06);
+  border-radius: 16px;
+}
+.game-cell:hover {
+  border-color: alpha(currentColor, 0.14);
+  box-shadow: 0 6px 20px alpha(black, 0.14);
+}
+.cover-box {
+  border: 1px solid alpha(white, 0.10);
+}
+.dl-panel {
+  background: alpha(@window_bg_color, 0.50);
+  border-top: 1px solid alpha(currentColor, 0.08);
+}
+.update-banner {
+  background: alpha(@accent_bg_color, 0.14);
+  border: 1px solid alpha(@accent_bg_color, 0.30);
+  box-shadow: 0 2px 10px alpha(@accent_bg_color, 0.12);
+}
 """
 
 DEFAULT_SETTINGS = {
