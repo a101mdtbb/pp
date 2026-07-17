@@ -1114,7 +1114,6 @@ class PPLauncher(Gtk.Application):
         self.win.present()
         self.load_data()
         GLib.timeout_add(500, self._update_dl_panel)
-        threading.Thread(target=self._auto_update_on_start, daemon=True).start()
 
     def _apply_theme(self):
         gtk_theme = self.settings.get("gtk_theme", "Adwaita")
@@ -1176,28 +1175,23 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             self._refresh_current_view()
 
     def _on_close(self, *args):
-        dialog = Gtk.MessageDialog(
-            transient_for=self.win,
-            modal=True,
-            message_type=Gtk.MessageType.QUESTION,
-            buttons=Gtk.ButtonsType.NONE,
-            text="¿Qué quieres hacer?",
-        )
-        dialog.set_secondary_text("Puedes dejar PP Launcher en segundo plano o cerrarlo completamente.")
-        dialog.add_button("Cerrar completamente", 0)
-        dialog.add_button("Minimizar al fondo", 1)
-        dialog.add_button("Cancelar", 2)
+        dialog = Gtk.AlertDialog()
+        dialog.set_message("¿Qué quieres hacer?")
+        dialog.set_detail("Puedes dejar PP Launcher en segundo plano o cerrarlo completamente.")
+        dialog.set_buttons(["Cerrar completamente", "Minimizar al fondo", "Cancelar"])
 
-        def on_response(d, resp):
-            d.destroy()
+        def on_finish(d, result):
+            try:
+                resp = d.choose_finish(result)
+            except GLib.Error:
+                return
             if resp == 0:
                 self._quit_app()
             elif resp == 1:
                 self.win.set_visible(False)
                 self.hold()
 
-        dialog.connect("response", on_response)
-        dialog.present()
+        dialog.choose(self.win, None, on_finish)
         return True
 
     def _show_window(self):
