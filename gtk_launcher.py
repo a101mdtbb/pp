@@ -495,18 +495,6 @@ scrollbar.horizontal slider { min-height: 9px; }
 .ac-item { border-radius: 8px; padding: 7px 12px; font-size: 13px; transition: background 120ms ease; }
 .ac-item:hover, .ac-item.ac-selected { background: alpha(@accent_bg_color, 0.15); color: @accent_bg_color; }
 .ac-item .ac-item-cat { font-size: 10px; opacity: 0.55; margin-left: 8px; }
-
-/* --- Historial de descargas --- */
-.dl-history-card { border-radius: 10px; padding: 8px 12px; margin: 2px 2px; background: alpha(currentColor, 0.04); }
-.dl-history-card .dl-h-name { font-size: 13px; font-weight: 700; }
-.dl-history-card .dl-h-meta { font-size: 11px; opacity: 0.6; }
-.dl-h-ok { color: #26a269; }
-.dl-h-err { color: #e01b24; }
-
-/* --- Tabs en popover descargas --- */
-.dl-tab-bar { border-radius: 10px; padding: 2px; background: alpha(currentColor, 0.07); }
-.dl-tab { border-radius: 8px; padding: 5px 14px; font-size: 12px; font-weight: 700; transition: all 160ms ease; }
-.dl-tab-active { background: alpha(@accent_bg_color, 0.20); color: @accent_bg_color; }
 """
 
 DEFAULT_SETTINGS = {
@@ -961,7 +949,7 @@ class PPLauncher(Gtk.Application):
         self.ac_row_pool = []
         self._ac_timer = None
 
-        for _ in range(8):
+        for _i in range(8):
             row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
             row.add_css_class("ac-item")
             name_lbl = Gtk.Label(label="")
@@ -976,6 +964,9 @@ class PPLauncher(Gtk.Application):
             self.ac_box.append(row)
             row.set_visible(False)
             self.ac_row_pool.append((row, name_lbl, cat_lbl))
+            row_ev = Gtk.GestureClick()
+            row_ev.connect("released", lambda g, n, x, y, idx=_i: self._on_ac_click(idx))
+            row.add_controller(row_ev)
 
         search_key = Gtk.EventControllerKey()
         search_key.connect("key-pressed", self._on_search_key)
@@ -1046,45 +1037,6 @@ class PPLauncher(Gtk.Application):
         self.dl_empty.set_margin_top(28)
         self.dl_empty.set_margin_bottom(28)
 
-        self.dl_history_list = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
-        self.dl_history_scroll = Gtk.ScrolledWindow()
-        self.dl_history_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        self.dl_history_scroll.set_min_content_width(400)
-        self.dl_history_scroll.set_max_content_height(440)
-        self.dl_history_scroll.set_propagate_natural_height(True)
-        self.dl_history_scroll.set_child(self.dl_history_list)
-        self.dl_history_scroll.set_visible(False)
-
-        self.dl_history_empty = Gtk.Label(label="Sin historial de descargas")
-        self.dl_history_empty.add_css_class("dim-label")
-        self.dl_history_empty.set_margin_top(28)
-        self.dl_history_empty.set_margin_bottom(28)
-        self.dl_history_empty.set_visible(False)
-
-        tab_bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=2)
-        tab_bar.add_css_class("dl-tab-bar")
-        tab_bar.set_halign(Gtk.Align.CENTER)
-        self._dl_tab_active = Gtk.Button(label="Activas")
-        self._dl_tab_active.add_css_class("dl-tab")
-        self._dl_tab_active.add_css_class("dl-tab-active")
-        self._dl_tab_active.set_has_frame(False)
-        self._dl_tab_active.connect("clicked", lambda b: self._switch_dl_tab("active"))
-        tab_bar.append(self._dl_tab_active)
-        self._dl_tab_history = Gtk.Button(label="Historial")
-        self._dl_tab_history.add_css_class("dl-tab")
-        self._dl_tab_history.set_has_frame(False)
-        self._dl_tab_history.connect("clicked", lambda b: self._switch_dl_tab("history"))
-        tab_bar.append(self._dl_tab_history)
-
-        self._dl_tab_content_active = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
-        self._dl_tab_content_active.append(self.dl_empty)
-        self._dl_tab_content_active.append(self.dl_scroll)
-
-        self._dl_tab_content_history = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
-        self._dl_tab_content_history.append(self.dl_history_empty)
-        self._dl_tab_content_history.append(self.dl_history_scroll)
-        self._dl_tab_content_history.set_visible(False)
-
         pop_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
         pop_box.set_margin_start(10)
         pop_box.set_margin_end(10)
@@ -1095,9 +1047,8 @@ class PPLauncher(Gtk.Application):
         dl_hdr.set_xalign(0)
         dl_hdr.add_css_class("dl-pop-title")
         pop_box.append(dl_hdr)
-        pop_box.append(tab_bar)
-        pop_box.append(self._dl_tab_content_active)
-        pop_box.append(self._dl_tab_content_history)
+        pop_box.append(self.dl_empty)
+        pop_box.append(self.dl_scroll)
 
         self.dl_popover = Gtk.Popover()
         self.dl_popover.set_child(pop_box)
@@ -1362,69 +1313,6 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
 
     def _on_window_removed(self, *args):
         pass
-
-    def _switch_dl_tab(self, tab):
-        is_active = tab == "active"
-        self._dl_tab_active.remove_css_class("dl-tab-active")
-        self._dl_tab_history.remove_css_class("dl-tab-active")
-        if is_active:
-            self._dl_tab_active.add_css_class("dl-tab-active")
-        else:
-            self._dl_tab_history.add_css_class("dl-tab-active")
-        self._dl_tab_content_active.set_visible(is_active)
-        self._dl_tab_content_history.set_visible(not is_active)
-        if not is_active:
-            self._load_download_history()
-
-    def _load_download_history(self):
-        for child in list(self.dl_history_list):
-            self.dl_history_list.remove(child)
-        history = self.dl_manager.get_history()
-        if not history:
-            self.dl_history_empty.set_visible(True)
-            self.dl_history_scroll.set_visible(False)
-            return
-        self.dl_history_empty.set_visible(False)
-        self.dl_history_scroll.set_visible(True)
-        for entry in history[:50]:
-            card = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
-            card.add_css_class("dl-history-card")
-            status = entry.get("status", "")
-            icon_name = "emblem-ok-symbolic" if status == "complete" else (
-                "emblem-error-symbolic" if status == "error" else "media-playback-stop-symbolic")
-            ic = Gtk.Image(icon_name=icon_name)
-            ic.set_pixel_size(16)
-            if status == "complete":
-                ic.add_css_class("dl-h-ok")
-            elif status == "error":
-                ic.add_css_class("dl-h-err")
-            card.append(ic)
-            info = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
-            info.set_hexpand(True)
-            nm = Gtk.Label(label=entry.get("game_name", "?"))
-            nm.set_xalign(0)
-            nm.add_css_class("dl-h-name")
-            nm.set_ellipsize(Pango.EllipsizeMode.END)
-            info.append(nm)
-            ts = entry.get("timestamp", 0)
-            if ts:
-                import datetime
-                dt_str = datetime.datetime.fromtimestamp(ts).strftime("%d/%m/%Y %H:%M")
-            else:
-                dt_str = ""
-            size = entry.get("size", 0)
-            size_str = _fmt_size(size) if size else ""
-            meta_parts = [dt_str]
-            if size_str:
-                meta_parts.append(size_str)
-            meta_parts.append(status)
-            ml = Gtk.Label(label=" \u00b7 ".join(meta_parts))
-            ml.set_xalign(0)
-            ml.add_css_class("dl-h-meta")
-            ml.set_ellipsize(Pango.EllipsizeMode.END)
-            info.append(ml)
-            card.append(info)
-            self.dl_history_list.append(card)
 
     def _update_dl_panel(self):
         all_status = self.dl_manager.get_all_status()
@@ -2068,6 +1956,10 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         self.ac_popover.popdown()
         self.search_entry.set_text("")
         self.show_detail(item)
+
+    def _on_ac_click(self, idx):
+        if 0 <= idx < len(self.ac_items_data):
+            self._on_ac_select(self.ac_items_data[idx])
 
     def _on_search_key(self, controller, keyval, keycode, state):
         n = len(self.ac_items_data)

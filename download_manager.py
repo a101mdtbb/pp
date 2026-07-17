@@ -14,7 +14,6 @@ import urllib.request
 
 DOWNLOADS_DIR = os.path.expanduser("~/PP-Games")
 INSTALLED_FILE = os.path.expanduser("~/.pp-launcher/installed.json")
-HISTORY_FILE = os.path.expanduser("~/.pp-launcher/download_history.json")
 TEMP_DIR = os.path.join(tempfile.gettempdir(), "pp-launcher-downloads")
 
 
@@ -591,7 +590,6 @@ class DownloadManager:
                         os.rmdir(game_dir)
                 except Exception:
                     pass
-                self._save_history(game_id, game_name, "cancelled", 0, "")
                 return
 
             # Validar que el archivo sea un juego real y no una página de error.
@@ -623,14 +621,11 @@ class DownloadManager:
             if done_callback:
                 done_callback(game_id, game_name, extracted_path or game_dir)
 
-            self._save_history(game_id, game_name, "complete", total, dest)
-
         except Exception as e:
             with self._lock:
                 self.active_downloads[game_id] = {"status": "error", "progress": 0, "error": str(e)}
             if progress_callback:
                 progress_callback(game_id, "error", 0, str(e))
-            self._save_history(game_id, game_name, "error", 0, str(e))
 
         finally:
             self._process_queue()
