@@ -490,11 +490,6 @@ scrollbar.horizontal slider { min-height: 9px; }
 .tray-popup button { border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; }
 .tray-popup button:hover { background: alpha(currentColor, 0.10); }
 
-/* --- Autocomplete de busqueda --- */
-.ac-popover { border-radius: 12px; padding: 4px; box-shadow: 0 6px 24px alpha(black, 0.45); }
-.ac-item { border-radius: 8px; padding: 7px 12px; font-size: 13px; transition: background 120ms ease; }
-.ac-item:hover, .ac-item.ac-selected { background: alpha(@accent_bg_color, 0.15); color: @accent_bg_color; }
-.ac-item .ac-item-cat { font-size: 10px; opacity: 0.55; margin-left: 8px; }
 """
 
 DEFAULT_SETTINGS = {
@@ -887,6 +882,7 @@ class PPLauncher(Gtk.Application):
         self._dl_completion_timers = []
         self._dl_pending_refresh = False
         self._needs_refresh = True
+        self._search_timer = None
 
     def do_activate(self):
         if hasattr(self, "win") and self.win is not None:
@@ -935,45 +931,6 @@ class PPLauncher(Gtk.Application):
         self.search_entry.add_css_class("search-pill")
         self.search_entry.connect("search-changed", self.on_search_changed)
         header.set_title_widget(self.search_entry)
-
-        self.ac_popover = Gtk.Popover()
-        self.ac_popover.set_has_arrow(False)
-        self.ac_popover.set_autohide(False)
-        self.ac_popover.add_css_class("ac-popover")
-        self.ac_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        self.ac_box.set_size_request(320, -1)
-        self.ac_popover.set_child(self.ac_box)
-        self.ac_popover.set_parent(header)
-        self.ac_selected_idx = -1
-        self.ac_items_data = []
-        self.ac_row_pool = []
-        self._search_timer = None
-
-        for _i in range(8):
-            row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
-            row.add_css_class("ac-item")
-            row.set_focusable(False)
-            name_lbl = Gtk.Label(label="")
-            name_lbl.set_xalign(0)
-            name_lbl.set_hexpand(True)
-            name_lbl.set_ellipsize(Pango.EllipsizeMode.END)
-            name_lbl.set_focusable(False)
-            row.append(name_lbl)
-            cat_lbl = Gtk.Label(label="")
-            cat_lbl.add_css_class("ac-item-cat")
-            cat_lbl.set_xalign(1)
-            cat_lbl.set_focusable(False)
-            row.append(cat_lbl)
-            self.ac_box.append(row)
-            row.set_visible(False)
-            self.ac_row_pool.append((row, name_lbl, cat_lbl))
-            row_ev = Gtk.GestureClick()
-            row_ev.connect("released", lambda g, n, x, y, idx=_i: self._on_ac_click(idx))
-            row.add_controller(row_ev)
-
-        search_key = Gtk.EventControllerKey()
-        search_key.connect("key-pressed", self._on_search_key)
-        self.search_entry.add_controller(search_key)
 
         menu_btn = Gtk.MenuButton()
         menu_btn.set_icon_name("open-menu-symbolic")
@@ -1923,78 +1880,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
     def _on_search_tick(self):
         self._search_timer = None
         self.render_view()
-        self._update_autocomplete()
         return False
-
-    def _update_autocomplete(self):
-        term = self.search_entry.get_text().strip().lower()
-        self.ac_items_data = []
-        self.ac_selected_idx = -1
-
-        for row, nl, cl in self.ac_row_pool:
-            row.set_visible(False)
-
-        if not term:
-            self.ac_popover.popdown()
-            return False
-
-        idx = 0
-        for item in self.catalog:
-            if idx >= len(self.ac_row_pool):
-                break
-            name = item.get("name", "")
-            cat = item.get("category", "")
-            if term in name.lower() or term in cat.lower():
-                row, nl, cl = self.ac_row_pool[idx]
-                nl.set_text(name)
-                cl.set_text(cat if cat else "")
-                cl.set_visible(bool(cat))
-                row.set_visible(True)
-                self.ac_items_data.append(item)
-                idx += 1
-
-        if not self.ac_items_data:
-            self.ac_popover.popdown()
-        else:
-            self.ac_popover.popup()
-            GLib.idle_add(self.search_entry.grab_focus)
-        return False
-
-    def _on_ac_select(self, item):
-        self.ac_popover.popdown()
-        self.search_entry.set_text("")
-        self.show_detail(item)
-
-    def _on_ac_click(self, idx):
-        if 0 <= idx < len(self.ac_items_data):
-            self._on_ac_select(self.ac_items_data[idx])
-
-    def _on_search_key(self, controller, keyval, keycode, state):
-        n = len(self.ac_items_data)
-        if n == 0 or not self.ac_popover.get_visible():
-            return False
-        if keyval == Gdk.KEY_Down:
-            self.ac_selected_idx = min(self.ac_selected_idx + 1, n - 1)
-            self._highlight_ac_item()
-            return True
-        elif keyval == Gdk.KEY_Up:
-            self.ac_selected_idx = max(self.ac_selected_idx - 1, 0)
-            self._highlight_ac_item()
-            return True
-        elif keyval == Gdk.KEY_Return:
-            if 0 <= self.ac_selected_idx < n:
-                self._on_ac_select(self.ac_items_data[self.ac_selected_idx])
-                return True
-        elif keyval == Gdk.KEY_Escape:
-            self.ac_popover.popdown()
-            return True
-        return False
-
-    def _highlight_ac_item(self):
-        for i, child in enumerate(self.ac_box):
-            child.remove_css_class("ac-selected")
-            if i == self.ac_selected_idx:
-                child.add_css_class("ac-selected")
 
     def render_view(self):
         self.stack.set_visible_child_name("grid")
