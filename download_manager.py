@@ -351,7 +351,6 @@ class DownloadManager:
         self._running_count = 0
         os.makedirs(DOWNLOADS_DIR, exist_ok=True)
         os.makedirs(TEMP_DIR, exist_ok=True)
-        os.makedirs(os.path.dirname(HISTORY_FILE), exist_ok=True)
 
     def get_installed(self):
         try:
@@ -661,31 +660,6 @@ class DownloadManager:
     def get_all_status(self):
         with self._lock:
             return dict(self.active_downloads)
-
-    def _save_history(self, game_id, game_name, status, size, detail):
-        try:
-            history = self.get_history()
-            entry = {
-                "game_id": game_id,
-                "game_name": game_name,
-                "status": status,
-                "size": size,
-                "detail": str(detail)[:200] if detail else "",
-                "timestamp": time.time(),
-            }
-            history.insert(0, entry)
-            history = history[:200]
-            with open(HISTORY_FILE, "w") as f:
-                json.dump(history, f, indent=2)
-        except Exception:
-            pass
-
-    def get_history(self):
-        try:
-            with open(HISTORY_FILE) as f:
-                return json.load(f)
-        except (FileNotFoundError, json.JSONDecodeError):
-            return []
 
 
 def _guess_filename(url, game_name):
