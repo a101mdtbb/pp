@@ -1176,8 +1176,28 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             self._refresh_current_view()
 
     def _on_close(self, *args):
-        self.win.set_visible(False)
-        self.hold()
+        dialog = Gtk.MessageDialog(
+            transient_for=self.win,
+            modal=True,
+            message_type=Gtk.MessageType.QUESTION,
+            buttons=Gtk.ButtonsType.NONE,
+            text="¿Qué quieres hacer?",
+        )
+        dialog.set_secondary_text("Puedes dejar PP Launcher en segundo plano o cerrarlo completamente.")
+        dialog.add_button("Cerrar completamente", 0)
+        dialog.add_button("Minimizar al fondo", 1)
+        dialog.add_button("Cancelar", 2)
+
+        def on_response(d, resp):
+            d.destroy()
+            if resp == 0:
+                self._quit_app()
+            elif resp == 1:
+                self.win.set_visible(False)
+                self.hold()
+
+        dialog.connect("response", on_response)
+        dialog.present()
         return True
 
     def _show_window(self):
@@ -1223,7 +1243,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             except Exception:
                 pass
         try:
-            self._tray = _DBusTrayIcon(self._show_tray_menu, self._quit_app, self._show_downloads, on_menu=self._show_tray_menu)
+            self._tray = _DBusTrayIcon(self._show_window, self._quit_app, self._show_downloads, on_menu=self._show_tray_menu)
         except Exception:
             pass
 
