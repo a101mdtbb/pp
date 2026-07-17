@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PP Launcher v8.1 - GTK4 nativo estilo Lutris + Descargas + YouTube"""
+"""PP Launcher v8.3 - GTK4 nativo estilo Lutris + Descargas + YouTube"""
 import os as _os
 _typelib = _os.path.join(_os.path.expanduser("~"), ".local", "lib", "girepository-1.0")
 if _os.path.isdir(_typelib):
@@ -47,11 +47,11 @@ if not os.path.exists(CATALOG_PATH):
 SETTINGS_FILE = os.path.join(Path.home(), ".pp-launcher", "settings.json")
 COVERS_DIR = os.path.join(Path.home(), ".pp-launcher", "covers")
 SGDB_BASE = "https://www.steamgriddb.com/api/v2"
-SGDB_UA = "PP-Launcher/8.1"
+SGDB_UA = "PP-Launcher/8.3"
 
 # Versión del programa. Súbela en cada push para que el auto-update no haga
 # downgrade y para versionar los cambios.
-APP_VERSION = "8.2"
+APP_VERSION = "8.3"
 
 
 def _version_tuple(v):
@@ -489,6 +489,24 @@ scrollbar.horizontal slider { min-height: 9px; }
 .tray-popup { background: @window_bg_color; border-radius: 14px; box-shadow: 0 6px 24px alpha(black, 0.45); border: 1px solid alpha(currentColor, 0.08); }
 .tray-popup button { border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; }
 .tray-popup button:hover { background: alpha(currentColor, 0.10); }
+
+/* --- Autocomplete de busqueda --- */
+.ac-popover { border-radius: 12px; padding: 4px; box-shadow: 0 6px 24px alpha(black, 0.45); }
+.ac-item { border-radius: 8px; padding: 7px 12px; font-size: 13px; transition: background 120ms ease; }
+.ac-item:hover, .ac-item.ac-selected { background: alpha(@accent_bg_color, 0.15); color: @accent_bg_color; }
+.ac-item .ac-item-cat { font-size: 10px; opacity: 0.55; margin-left: 8px; }
+
+/* --- Historial de descargas --- */
+.dl-history-card { border-radius: 10px; padding: 8px 12px; margin: 2px 2px; background: alpha(currentColor, 0.04); }
+.dl-history-card .dl-h-name { font-size: 13px; font-weight: 700; }
+.dl-history-card .dl-h-meta { font-size: 11px; opacity: 0.6; }
+.dl-h-ok { color: #26a269; }
+.dl-h-err { color: #e01b24; }
+
+/* --- Tabs en popover descargas --- */
+.dl-tab-bar { border-radius: 10px; padding: 2px; background: alpha(currentColor, 0.07); }
+.dl-tab { border-radius: 8px; padding: 5px 14px; font-size: 12px; font-weight: 700; transition: all 160ms ease; }
+.dl-tab-active { background: alpha(@accent_bg_color, 0.20); color: @accent_bg_color; }
 """
 
 DEFAULT_SETTINGS = {
@@ -930,6 +948,21 @@ class PPLauncher(Gtk.Application):
         self.search_entry.connect("search-changed", self.on_search_changed)
         header.set_title_widget(self.search_entry)
 
+        self.ac_popover = Gtk.Popover()
+        self.ac_popover.set_has_arrow(False)
+        self.ac_popover.set_autohide(True)
+        self.ac_popover.add_css_class("ac-popover")
+        self.ac_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
+        self.ac_box.set_size_request(280, -1)
+        self.ac_popover.set_child(self.ac_box)
+        self.ac_popover.set_parent(self.search_entry)
+        self.ac_selected_idx = -1
+        self.ac_items_data = []
+
+        search_key = Gtk.EventControllerKey()
+        search_key.connect("key-pressed", self._on_search_key)
+        self.search_entry.add_controller(search_key)
+
         menu_btn = Gtk.MenuButton()
         menu_btn.set_icon_name("open-menu-symbolic")
         menu_btn.set_tooltip_text("Menú")
@@ -995,6 +1028,45 @@ class PPLauncher(Gtk.Application):
         self.dl_empty.set_margin_top(28)
         self.dl_empty.set_margin_bottom(28)
 
+        self.dl_history_list = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
+        self.dl_history_scroll = Gtk.ScrolledWindow()
+        self.dl_history_scroll.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        self.dl_history_scroll.set_min_content_width(400)
+        self.dl_history_scroll.set_max_content_height(440)
+        self.dl_history_scroll.set_propagate_natural_height(True)
+        self.dl_history_scroll.set_child(self.dl_history_list)
+        self.dl_history_scroll.set_visible(False)
+
+        self.dl_history_empty = Gtk.Label(label="Sin historial de descargas")
+        self.dl_history_empty.add_css_class("dim-label")
+        self.dl_history_empty.set_margin_top(28)
+        self.dl_history_empty.set_margin_bottom(28)
+        self.dl_history_empty.set_visible(False)
+
+        tab_bar = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=2)
+        tab_bar.add_css_class("dl-tab-bar")
+        tab_bar.set_halign(Gtk.Align.CENTER)
+        self._dl_tab_active = Gtk.Button(label="Activas")
+        self._dl_tab_active.add_css_class("dl-tab")
+        self._dl_tab_active.add_css_class("dl-tab-active")
+        self._dl_tab_active.set_has_frame(False)
+        self._dl_tab_active.connect("clicked", lambda b: self._switch_dl_tab("active"))
+        tab_bar.append(self._dl_tab_active)
+        self._dl_tab_history = Gtk.Button(label="Historial")
+        self._dl_tab_history.add_css_class("dl-tab")
+        self._dl_tab_history.set_has_frame(False)
+        self._dl_tab_history.connect("clicked", lambda b: self._switch_dl_tab("history"))
+        tab_bar.append(self._dl_tab_history)
+
+        self._dl_tab_content_active = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
+        self._dl_tab_content_active.append(self.dl_empty)
+        self._dl_tab_content_active.append(self.dl_scroll)
+
+        self._dl_tab_content_history = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
+        self._dl_tab_content_history.append(self.dl_history_empty)
+        self._dl_tab_content_history.append(self.dl_history_scroll)
+        self._dl_tab_content_history.set_visible(False)
+
         pop_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=8)
         pop_box.set_margin_start(10)
         pop_box.set_margin_end(10)
@@ -1005,8 +1077,9 @@ class PPLauncher(Gtk.Application):
         dl_hdr.set_xalign(0)
         dl_hdr.add_css_class("dl-pop-title")
         pop_box.append(dl_hdr)
-        pop_box.append(self.dl_empty)
-        pop_box.append(self.dl_scroll)
+        pop_box.append(tab_bar)
+        pop_box.append(self._dl_tab_content_active)
+        pop_box.append(self._dl_tab_content_history)
 
         self.dl_popover = Gtk.Popover()
         self.dl_popover.set_child(pop_box)
@@ -1046,8 +1119,8 @@ class PPLauncher(Gtk.Application):
         main_vbox.append(main_area)
 
         self.stack = Gtk.Stack()
-        self.stack.set_transition_type(Gtk.StackTransitionType.CROSSFADE)
-        self.stack.set_transition_duration(150)
+        self.stack.set_transition_type(Gtk.StackTransitionType.SLIDE_LEFT_RIGHT)
+        self.stack.set_transition_duration(280)
         self.stack.set_vexpand(True)
         main_area.append(self.stack)
 
@@ -1114,6 +1187,7 @@ class PPLauncher(Gtk.Application):
         self.win.present()
         self.load_data()
         GLib.timeout_add(500, self._update_dl_panel)
+        GLib.timeout_add(2000, lambda: threading.Thread(target=self._auto_update_catalog, daemon=True).start())
 
     def _apply_theme(self):
         gtk_theme = self.settings.get("gtk_theme", "Adwaita")
@@ -1271,6 +1345,69 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
     def _on_window_removed(self, *args):
         pass
 
+    def _switch_dl_tab(self, tab):
+        is_active = tab == "active"
+        self._dl_tab_active.remove_css_class("dl-tab-active")
+        self._dl_tab_history.remove_css_class("dl-tab-active")
+        if is_active:
+            self._dl_tab_active.add_css_class("dl-tab-active")
+        else:
+            self._dl_tab_history.add_css_class("dl-tab-active")
+        self._dl_tab_content_active.set_visible(is_active)
+        self._dl_tab_content_history.set_visible(not is_active)
+        if not is_active:
+            self._load_download_history()
+
+    def _load_download_history(self):
+        for child in list(self.dl_history_list):
+            self.dl_history_list.remove(child)
+        history = self.dl_manager.get_history()
+        if not history:
+            self.dl_history_empty.set_visible(True)
+            self.dl_history_scroll.set_visible(False)
+            return
+        self.dl_history_empty.set_visible(False)
+        self.dl_history_scroll.set_visible(True)
+        for entry in history[:50]:
+            card = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=10)
+            card.add_css_class("dl-history-card")
+            status = entry.get("status", "")
+            icon_name = "emblem-ok-symbolic" if status == "complete" else (
+                "emblem-error-symbolic" if status == "error" else "media-playback-stop-symbolic")
+            ic = Gtk.Image(icon_name=icon_name)
+            ic.set_pixel_size(16)
+            if status == "complete":
+                ic.add_css_class("dl-h-ok")
+            elif status == "error":
+                ic.add_css_class("dl-h-err")
+            card.append(ic)
+            info = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=2)
+            info.set_hexpand(True)
+            nm = Gtk.Label(label=entry.get("game_name", "?"))
+            nm.set_xalign(0)
+            nm.add_css_class("dl-h-name")
+            nm.set_ellipsize(Pango.EllipsizeMode.END)
+            info.append(nm)
+            ts = entry.get("timestamp", 0)
+            if ts:
+                import datetime
+                dt_str = datetime.datetime.fromtimestamp(ts).strftime("%d/%m/%Y %H:%M")
+            else:
+                dt_str = ""
+            size = entry.get("size", 0)
+            size_str = _fmt_size(size) if size else ""
+            meta_parts = [dt_str]
+            if size_str:
+                meta_parts.append(size_str)
+            meta_parts.append(status)
+            ml = Gtk.Label(label=" \u00b7 ".join(meta_parts))
+            ml.set_xalign(0)
+            ml.add_css_class("dl-h-meta")
+            ml.set_ellipsize(Pango.EllipsizeMode.END)
+            info.append(ml)
+            card.append(info)
+            self.dl_history_list.append(card)
+
     def _update_dl_panel(self):
         all_status = self.dl_manager.get_all_status()
 
@@ -1393,6 +1530,22 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         cancel_btn.connect("clicked", lambda b, gid=game_id: self.dl_manager.cancel(gid))
         bottom.append(cancel_btn)
 
+        up_btn = Gtk.Button()
+        up_btn.set_icon_name("go-up-symbolic")
+        up_btn.set_has_frame(False)
+        up_btn.add_css_class("dl-iconbtn")
+        up_btn.set_tooltip_text("Subir prioridad")
+        up_btn.connect("clicked", lambda b, gid=game_id: self.dl_manager.reorder(gid, -1))
+        bottom.append(up_btn)
+
+        down_btn = Gtk.Button()
+        down_btn.set_icon_name("go-down-symbolic")
+        down_btn.set_has_frame(False)
+        down_btn.add_css_class("dl-iconbtn")
+        down_btn.set_tooltip_text("Bajar prioridad")
+        down_btn.connect("clicked", lambda b, gid=game_id: self.dl_manager.reorder(gid, 1))
+        bottom.append(down_btn)
+
         card.append(bottom)
 
         card._bar = bar
@@ -1421,6 +1574,12 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             w._eta_lbl.set_text("")
             w._bar.set_pulse_step(0.1)
             w._bar.pulse()
+            w._pause_btn.set_sensitive(False)
+        elif st == "queued":
+            w._pct_lbl.set_text("")
+            w._meta_lbl.set_text("En cola de descarga...")
+            w._eta_lbl.set_text("")
+            w._bar.set_fraction(0)
             w._pause_btn.set_sensitive(False)
         elif st in ("downloading", "paused"):
             w._pause_btn.set_sensitive(True)
@@ -1580,12 +1739,8 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         with urllib.request.urlopen(req, timeout=timeout) as r:
             return r.read()
 
-    def _auto_update_on_start(self):
-        GLib.idle_add(self._set_status, "Buscando actualizaciones...")
-        catalog_changed = False
-        program_changed = False
-        notes = []
-
+    def _auto_update_catalog(self):
+        """Descarga solo catalog.json del repo en segundo plano (no toca el programa)."""
         try:
             data = self._fetch_repo_file("catalog.json")
             old = b""
@@ -1599,77 +1754,16 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
                 with open(tmp, "wb") as f:
                     f.write(data)
                 os.replace(tmp, CATALOG_PATH)
-                catalog_changed = True
+                GLib.idle_add(self._after_catalog_update, True)
+            else:
+                GLib.idle_add(self._after_catalog_update, False)
         except Exception:
-            pass
+            GLib.idle_add(self._after_catalog_update, False)
 
-        # Versión remota para no hacer downgrade inadvertido
-        remote_version = None
-        try:
-            vdata = self._fetch_repo_file("version.txt", timeout=15)
-            remote_version = vdata.decode("utf-8").strip()
-        except Exception:
-            remote_version = None
-
-        for fn in ("gtk_launcher.py", "download_manager.py"):
-            try:
-                data = self._fetch_repo_file(fn, timeout=60)
-                dest = os.path.join(APP_DIR, fn)
-                old = b""
-                if os.path.exists(dest):
-                    with open(dest, "rb") as f:
-                        old = f.read()
-                if not data or data == old:
-                    continue
-                # No hacer downgrade si la versión remota es menor
-                if remote_version:
-                    try:
-                        if _version_tuple(remote_version) <= _version_tuple(APP_VERSION):
-                            notes.append(f"{fn}: sin cambios (versión remota anterior).")
-                            continue
-                    except Exception:
-                        pass
-                tmp = dest + ".tmp"
-                with open(tmp, "wb") as f:
-                    f.write(data)
-                # Red de seguridad: no aplicar un archivo que no compila
-                # (evita que un push roto deje el launcher inutilizable).
-                try:
-                    py_compile.compile(tmp, doraise=True)
-                except py_compile.PyCompileError:
-                    try:
-                        os.remove(tmp)
-                    except Exception:
-                        pass
-                    notes.append(f"{fn}: actualización omitida (el archivo remoto no compila).")
-                    continue
-                # Respaldo de la última versión buena antes de reemplazar
-                if old:
-                    try:
-                        shutil.copy2(dest, dest + ".bak")
-                    except Exception:
-                        pass
-                os.replace(tmp, dest)
-                program_changed = True
-            except Exception:
-                pass
-
-        GLib.idle_add(self._after_auto_update, catalog_changed, program_changed, notes)
-
-    def _after_auto_update(self, catalog_changed, program_changed, notes=None):
-        notes = notes or []
-        if catalog_changed:
+    def _after_catalog_update(self, changed):
+        if changed:
             self.load_data()
-        if program_changed:
-            if getattr(self, "update_banner", None):
-                self.update_banner.set_visible(True)
-            self._set_status("Actualización del programa lista \u2014 reinicia para aplicarla.")
-        elif catalog_changed:
-            self._set_status("Lista de juegos actualizada.")
-        elif notes:
-            self._set_status("; ".join(notes))
-        else:
-            self._set_status("")
+            self._set_status("Cat\u00e1logo actualizado.")
         return False
 
     def _restart_app(self, *a):
@@ -1914,6 +2008,86 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         self.search_term = entry.get_text().strip().lower()
         self._needs_refresh = True
         self.render_view()
+        self._update_autocomplete()
+
+    def _update_autocomplete(self):
+        term = self.search_entry.get_text().strip().lower()
+        for child in list(self.ac_box):
+            self.ac_box.remove(child)
+        self.ac_items_data = []
+        self.ac_selected_idx = -1
+
+        if not term or len(term) < 1:
+            self.ac_popover.popdown()
+            return
+
+        matches = []
+        for item in self.catalog:
+            name = item.get("name", "")
+            cat = item.get("category", "")
+            if term in name.lower() or term in cat.lower():
+                matches.append(item)
+            if len(matches) >= 8:
+                break
+
+        if not matches:
+            self.ac_popover.popdown()
+            return
+
+        for i, item in enumerate(matches):
+            row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+            row.add_css_class("ac-item")
+            row.set_cursor(True)
+            name_lbl = Gtk.Label(label=item.get("name", ""))
+            name_lbl.set_xalign(0)
+            name_lbl.set_ellipsize(Pango.EllipsizeMode.END)
+            row.append(name_lbl)
+            cat = item.get("category", "")
+            if cat:
+                cat_lbl = Gtk.Label(label=cat)
+                cat_lbl.add_css_class("ac-item-cat")
+                cat_lbl.set_xalign(1)
+                row.append(cat_lbl)
+            self.ac_box.append(row)
+            self.ac_items_data.append(item)
+
+            row_event = Gtk.GestureClick()
+            row_event.connect("released", lambda g, n, x, y, it=item: self._on_ac_select(it))
+            row.add_controller(row_event)
+
+        self.ac_popover.popup()
+
+    def _on_ac_select(self, item):
+        self.ac_popover.popdown()
+        self.search_entry.set_text("")
+        self.show_detail(item)
+
+    def _on_search_key(self, controller, keyval, keycode, state):
+        n = len(self.ac_items_data)
+        if n == 0:
+            return False
+        if keyval == Gdk.KEY_Down:
+            self.ac_selected_idx = min(self.ac_selected_idx + 1, n - 1)
+            self._highlight_ac_item()
+            return True
+        elif keyval == Gdk.KEY_Up:
+            self.ac_selected_idx = max(self.ac_selected_idx - 1, 0)
+            self._highlight_ac_item()
+            return True
+        elif keyval == Gdk.KEY_Return:
+            if 0 <= self.ac_selected_idx < n:
+                self._on_ac_select(self.ac_items_data[self.ac_selected_idx])
+                return True
+        elif keyval == Gdk.KEY_Escape:
+            self.ac_popover.popdown()
+            return True
+        return False
+
+    def _highlight_ac_item(self):
+        for i, child in enumerate(self.ac_box):
+            child.remove_css_class("ac-selected")
+            if i == self.ac_selected_idx:
+                child.add_css_class("ac-selected")
 
     def render_view(self):
         self.stack.set_visible_child_name("grid")

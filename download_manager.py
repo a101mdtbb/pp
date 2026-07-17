@@ -14,6 +14,7 @@ import urllib.request
 
 DOWNLOADS_DIR = os.path.expanduser("~/PP-Games")
 INSTALLED_FILE = os.path.expanduser("~/.pp-launcher/installed.json")
+HISTORY_FILE = os.path.expanduser("~/.pp-launcher/download_history.json")
 TEMP_DIR = os.path.join(tempfile.gettempdir(), "pp-launcher-downloads")
 
 
@@ -346,8 +347,12 @@ class DownloadManager:
         self.active_downloads = {}
         self._meta = {}
         self._lock = threading.Lock()
+        self._queue = []
+        self._max_concurrent = 3
+        self._running_count = 0
         os.makedirs(DOWNLOADS_DIR, exist_ok=True)
         os.makedirs(TEMP_DIR, exist_ok=True)
+        os.makedirs(os.path.dirname(HISTORY_FILE), exist_ok=True)
 
     def get_installed(self):
         try:
@@ -385,20 +390,67 @@ class DownloadManager:
             return installed[game_id].get("path")
         return None
 
-    def download(self, game_id, game_name, url, progress_callback=None, done_callback=None):
+    def download(self, game_id, game_name, url, progress_callback=None, done_callback=None, priority=0):
         with self._lock:
             st = self.active_downloads.get(game_id, {})
-            if st.get("status") in ("extracting_link", "downloading", "extracting", "paused"):
+            if st.get("status") in ("extracting_link", "downloading", "extracting", "paused", "queued"):
                 return False
-            self.active_downloads[game_id] = {"status": "extracting_link", "progress": 0}
+            self.active_downloads[game_id] = {"status": "queued", "progress": 0, "priority": priority}
+            self._queue.append({"game_id": game_id, "priority": priority})
+            self._queue.sort(key=lambda x: x["priority"], reverse=True)
         self._meta[game_id] = {
             "game_name": game_name,
             "url": url,
             "progress_callback": progress_callback,
             "done_callback": done_callback,
         }
-        threading.Thread(target=self._worker, args=(game_id, False), daemon=True).start()
+        self._process_queue()
         return True
+
+    def _process_queue(self):
+        with self._lock:
+            self._running_count = sum(
+                1 for st in self.active_downloads.values()
+                if st.get("status") in ("extracting_link", "downloading", "extracting"))
+            slots = self._max_concurrent - self._running_count
+            to_start = []
+            new_queue = []
+            for entry in self._queue:
+                gid = entry["game_id"]
+                st = self.active_downloads.get(gid, {}).get("status")
+                if st == "queued" and slots > 0:
+                    to_start.append(gid)
+                    slots -= 1
+                elif st == "queued":
+                    new_queue.append(entry)
+            self._queue = new_queue
+        for gid in to_start:
+            with self._lock:
+                self.active_downloads[gid]["status"] = "extracting_link"
+            threading.Thread(target=self._worker, args=(gid, False), daemon=True).start()
+
+    def reorder(self, game_id, direction):
+        with self._lock:
+            for i, entry in enumerate(self._queue):
+                if entry["game_id"] == game_id:
+                    new_i = i + direction
+                    if 0 <= new_i < len(self._queue):
+                        self._queue[i], self._queue[new_i] = self._queue[new_i], self._queue[i]
+                    break
+
+    def set_priority(self, game_id, priority):
+        with self._lock:
+            for entry in self._queue:
+                if entry["game_id"] == game_id:
+                    entry["priority"] = priority
+            self._queue.sort(key=lambda x: x["priority"], reverse=True)
+            st = self.active_downloads.get(game_id, {})
+            if st:
+                st["priority"] = priority
+
+    def get_queue_order(self):
+        with self._lock:
+            return [e["game_id"] for e in self._queue]
 
     def _worker(self, game_id, resume):
         meta = self._meta.get(game_id, {})
@@ -538,6 +590,8 @@ class DownloadManager:
                             os.rmdir(game_dir)
                     except Exception:
                         pass
+                    self._save_history(game_id, game_name, "cancelled", 0, "")
+                    self._process_queue()
                     return
 
             # Validar que el archivo sea un juego real y no una página de error.
@@ -569,11 +623,17 @@ class DownloadManager:
             if done_callback:
                 done_callback(game_id, game_name, extracted_path or game_dir)
 
+            self._save_history(game_id, game_name, "complete", total, dest)
+
         except Exception as e:
             with self._lock:
                 self.active_downloads[game_id] = {"status": "error", "progress": 0, "error": str(e)}
             if progress_callback:
                 progress_callback(game_id, "error", 0, str(e))
+            self._save_history(game_id, game_name, "error", 0, str(e))
+
+        finally:
+            self._process_queue()
 
     def pause(self, game_id):
         with self._lock:
@@ -606,6 +666,31 @@ class DownloadManager:
     def get_all_status(self):
         with self._lock:
             return dict(self.active_downloads)
+
+    def _save_history(self, game_id, game_name, status, size, detail):
+        try:
+            history = self.get_history()
+            entry = {
+                "game_id": game_id,
+                "game_name": game_name,
+                "status": status,
+                "size": size,
+                "detail": str(detail)[:200] if detail else "",
+                "timestamp": time.time(),
+            }
+            history.insert(0, entry)
+            history = history[:200]
+            with open(HISTORY_FILE, "w") as f:
+                json.dump(history, f, indent=2)
+        except Exception:
+            pass
+
+    def get_history(self):
+        try:
+            with open(HISTORY_FILE) as f:
+                return json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError):
+            return []
 
 
 def _guess_filename(url, game_name):
