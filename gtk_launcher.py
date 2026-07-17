@@ -491,85 +491,6 @@ scrollbar.horizontal slider { min-height: 9px; }
 .tray-popup { background: @window_bg_color; border-radius: 14px; box-shadow: 0 6px 24px alpha(black, 0.45); border: 1px solid alpha(currentColor, 0.08); }
 .tray-popup button { border-radius: 8px; padding: 8px 16px; font-size: 13px; font-weight: 600; }
 .tray-popup button:hover { background: alpha(currentColor, 0.10); }
-
-/* ============================================================
-   LIQUID GLASS -- Transparencia estilo vitral (quitar bloque
-   entero para volver al estilo opaco original).
-   ============================================================ */
-headerbar,
-headerbar-title {
-  background: alpha(@window_bg_color, 0.55);
-  box-shadow: inset 0 -1px 0 alpha(currentColor, 0.08);
-}
-window {
-  background: alpha(@window_bg_color, 0.92);
-}
-.nav-tab {
-  background: alpha(currentColor, 0.04);
-  border: 1px solid alpha(currentColor, 0.07);
-  box-shadow: 0 1px 3px alpha(black, 0.08);
-}
-.nav-tab:hover {
-  background: alpha(currentColor, 0.10);
-  border-color: alpha(currentColor, 0.14);
-  box-shadow: 0 2px 8px alpha(black, 0.12);
-}
-.nav-tab-active {
-  background: alpha(@accent_bg_color, 0.22);
-  border-color: alpha(@accent_bg_color, 0.35);
-  box-shadow: 0 1px 6px alpha(@accent_bg_color, 0.18);
-}
-.search-pill {
-  background: alpha(currentColor, 0.05);
-  border: 1px solid alpha(currentColor, 0.10);
-  box-shadow: inset 0 1px 4px alpha(black, 0.06);
-}
-.dl-card {
-  background: alpha(currentColor, 0.05);
-  border: 1px solid alpha(currentColor, 0.09);
-  box-shadow: 0 2px 8px alpha(black, 0.12);
-}
-.hero {
-  background: linear-gradient(135deg, alpha(@accent_bg_color, 0.18), alpha(currentColor, 0.04));
-  border: 1px solid alpha(currentColor, 0.10);
-  box-shadow: 0 4px 16px alpha(black, 0.10);
-}
-.detail-card {
-  background: alpha(currentColor, 0.04);
-  border: 1px solid alpha(currentColor, 0.08);
-  box-shadow: 0 2px 8px alpha(black, 0.08);
-}
-.pref-group {
-  background: alpha(currentColor, 0.04);
-  border: 1px solid alpha(currentColor, 0.08);
-  box-shadow: 0 1px 4px alpha(black, 0.06);
-}
-.about-box {
-  background: linear-gradient(135deg, alpha(@accent_bg_color, 0.14), alpha(currentColor, 0.03));
-  border: 1px solid alpha(currentColor, 0.10);
-  box-shadow: 0 4px 16px alpha(black, 0.08);
-}
-.game-cell {
-  background: alpha(currentColor, 0.03);
-  border: 1px solid alpha(currentColor, 0.06);
-  border-radius: 16px;
-}
-.game-cell:hover {
-  border-color: alpha(currentColor, 0.14);
-  box-shadow: 0 6px 20px alpha(black, 0.14);
-}
-.cover-box {
-  border: 1px solid alpha(white, 0.10);
-}
-.dl-panel {
-  background: alpha(@window_bg_color, 0.50);
-  border-top: 1px solid alpha(currentColor, 0.08);
-}
-.update-banner {
-  background: alpha(@accent_bg_color, 0.14);
-  border: 1px solid alpha(@accent_bg_color, 0.30);
-  box-shadow: 0 2px 10px alpha(@accent_bg_color, 0.12);
-}
 """
 
 DEFAULT_SETTINGS = {
@@ -1111,11 +1032,6 @@ class PPLauncher(Gtk.Application):
         self.dl_page_box.set_margin_top(20)
         self.dl_page_box.set_margin_bottom(20)
         self.dl_page_scroll.set_child(self.dl_page_box)
-        self.dl_empty = Gtk.Label(label="No hay descargas activas")
-        self.dl_empty.add_css_class("dim-label")
-        self.dl_empty.set_margin_top(28)
-        self.dl_empty.set_margin_bottom(28)
-        self.dl_page_box.append(self.dl_empty)
 
         self.stack.set_visible_child_name("grid")
 
@@ -1334,41 +1250,29 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
     def _update_dl_panel(self):
         all_status = self.dl_manager.get_all_status()
 
-        for game_id, status in list(all_status.items()):
-            if status["status"] == "needs_browser":
-                with self.dl_manager._lock:
-                    self.dl_manager.active_downloads.pop(game_id, None)
-                w = self.dl_widgets.pop(game_id, None)
-                if w:
-                    self.dl_page_box.remove(w)
-                name = self._dl_game_names.pop(game_id, game_id)
-                url = status.get("url", "")
-                GLib.idle_add(self._show_browser_dialog, game_id, name, url)
-                continue
-
-            if game_id not in self.dl_widgets:
-                name = self._dl_game_names.get(game_id, game_id)
-                w = self._make_dl_widget(game_id, name)
-                self.dl_widgets[game_id] = w
-                self.dl_page_box.append(w)
-            self._update_dl_widget(self.dl_widgets[game_id], status)
-
-        finished = [gid for gid in self.dl_widgets
-                    if gid not in all_status or all_status[gid]["status"] in ("complete", "error", "cancelled")]
-        for gid in finished:
-            status = all_status.get(gid, {})
-            w = self.dl_widgets.pop(gid, None)
-            if w:
-                self.dl_page_box.remove(w)
+        to_remove = [gid for gid in list(self.dl_widgets.keys())
+                     if gid not in all_status or all_status[gid]["status"] in ("complete", "error", "cancelled")]
+        for gid in to_remove:
             self._dl_game_names.pop(gid, None)
             self._dl_pending_refresh = True
+        if to_remove:
+            for gid in to_remove:
+                self.dl_widgets.pop(gid, None)
 
-        count = len(self.dl_widgets)
-        self._dl_nav_label.set_text(f"Descargas ({count})" if count else "Descargas")
-        if count:
-            self.dl_empty.set_visible(False)
-        else:
-            self.dl_empty.set_visible(True)
+        needs_browser = [gid for gid, s in all_status.items() if s["status"] == "needs_browser"]
+        for gid in needs_browser:
+            with self.dl_manager._lock:
+                self.dl_manager.active_downloads.pop(gid, None)
+            name = self._dl_game_names.pop(gid, gid)
+            url = all_status[gid].get("url", "")
+            GLib.idle_add(self._show_browser_dialog, gid, name, url)
+
+        active = []
+        for gid in self.dl_manager.get_queue_order():
+            if gid in all_status and all_status[gid]["status"] not in ("complete", "error", "cancelled", "needs_browser"):
+                active.append((gid, all_status[gid]))
+
+        self._rebuild_dl_page(active)
 
         if self._dl_pending_refresh and not self.dl_widgets:
             self._dl_pending_refresh = False
@@ -1377,15 +1281,19 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
 
         return True
 
-    def _refresh_dl_page(self):
+    def _rebuild_dl_page(self, active=None):
         for child in list(self.dl_page_box):
             self.dl_page_box.remove(child)
 
-        all_status = self.dl_manager.get_all_status()
-        active = []
-        for game_id in self.dl_manager.get_queue_order():
-            if game_id in all_status:
-                active.append((game_id, all_status[game_id]))
+        if active is None:
+            all_status = self.dl_manager.get_all_status()
+            active = []
+            for gid in self.dl_manager.get_queue_order():
+                if gid in all_status and all_status[gid]["status"] not in ("complete", "error", "cancelled", "needs_browser"):
+                    active.append((gid, all_status[gid]))
+
+        count = len(active)
+        self._dl_nav_label.set_text(f"Descargas ({count})" if count else "Descargas")
 
         if not active:
             empty_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
@@ -1404,13 +1312,9 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             empty_box.append(sub)
             self.dl_page_box.append(empty_box)
             self.dl_empty = empty_box
-            self.dl_widgets = {}
-            self._dl_game_names = {}
-            count = 0
-            self._dl_nav_label.set_text("Descargas")
             return
 
-        header = Gtk.Label(label=f"Descargas activas ({len(active)})")
+        header = Gtk.Label(label=f"Descargas activas ({count})")
         header.add_css_class("title-2")
         header.set_xalign(0)
         self.dl_page_box.append(header)
@@ -1423,8 +1327,8 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             self._update_dl_widget(self.dl_widgets[game_id], status)
             self.dl_page_box.append(self.dl_widgets[game_id])
 
-        count = len(self.dl_widgets)
-        self._dl_nav_label.set_text(f"Descargas ({count})" if count else "Descargas")
+    def _refresh_dl_page(self):
+        self._rebuild_dl_page()
 
     def _show_error_toast(self, game_name, error):
         toast = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=8)
