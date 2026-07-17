@@ -1237,64 +1237,35 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             except Exception:
                 pass
         try:
-            self._tray = _DBusTrayIcon(self._show_window, self._quit_app, self._show_downloads, on_menu=self._show_tray_menu)
+            self._tray = _DBusTrayIcon(self._show_tray_menu, self._quit_app, self._show_downloads, on_menu=self._show_tray_menu)
         except Exception:
             pass
 
     def _show_tray_menu(self):
-        if hasattr(self, '_tray_popup') and self._tray_popup:
-            self._tray_popup.destroy()
-            self._tray_popup = None
-            return
+        if not self.win.get_visible():
+            self.win.set_visible(True)
+            self.win.present()
 
-        popup = Gtk.Window(title="PP Launcher", transient_for=self.win, modal=True)
-        popup.set_default_size(260, -1)
-        popup.set_resizable(False)
-        popup.add_css_class("tray-popup")
+        dialog = Gtk.AlertDialog()
+        dialog.set_message("PP Launcher")
+        dialog.set_detail("Elige una opción:")
+        dialog.set_buttons(["Abrir PP Launcher", "Ver descargas", "Salir"])
 
-        outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
-        outer.set_margin_top(12)
-        outer.set_margin_bottom(12)
-        outer.set_margin_start(12)
-        outer.set_margin_end(12)
+        def on_finish(d, result):
+            try:
+                resp = d.choose_finish(result)
+            except GLib.Error:
+                return
+            if resp == 0:
+                self.win.present()
+            elif resp == 1:
+                self._show_downloads()
+            elif resp == 2:
+                self._quit_app()
 
-        lbl = Gtk.Label(label="PP Launcher")
-        lbl.add_css_class("title")
-        lbl.set_xalign(0)
-        lbl.set_markup("<b><big>PP Launcher</big></b>")
-        outer.append(lbl)
-
-        btn_open = Gtk.Button(label="Abrir PP Launcher")
-        btn_open.set_has_frame(False)
-        btn_open.set_xalign(0)
-        btn_open.connect("clicked", lambda _: self._tray_popup_action(self._show_window))
-
-        btn_down = Gtk.Button(label="Ver descargas")
-        btn_down.set_has_frame(False)
-        btn_down.set_xalign(0)
-        btn_down.connect("clicked", lambda _: self._tray_popup_action(self._show_downloads))
-
-        sep = Gtk.Separator(orientation=Gtk.Orientation.HORIZONTAL)
-
-        btn_quit = Gtk.Button(label="Salir")
-        btn_quit.set_has_frame(False)
-        btn_quit.set_xalign(0)
-        btn_quit.add_css_class("destructive-action")
-        btn_quit.connect("clicked", lambda _: self._tray_popup_action(self._quit_app))
-
-        outer.append(btn_open)
-        outer.append(btn_down)
-        outer.append(sep)
-        outer.append(btn_quit)
-
-        popup.set_child(outer)
-        self._tray_popup = popup
-        popup.present()
+        GLib.timeout_add(100, lambda: dialog.choose(self.win, None, on_finish))
 
     def _tray_popup_action(self, callback):
-        if hasattr(self, '_tray_popup') and self._tray_popup:
-            self._tray_popup.destroy()
-            self._tray_popup = None
         GLib.idle_add(callback)
 
     def _on_window_removed(self, *args):
