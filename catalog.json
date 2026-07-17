@@ -644,6 +644,21 @@
         "supervivencia",
         "dinosaurios"
       ]
+    },
+    {
+      "id": "forza-horizon-5",
+      "name": "Forza Horizon 5 Premium Edition",
+      "category": "Juego",
+      "subcategory": "Carreras",
+      "description": "Carreras de mundo abierto en México con cientos de autos. Premium Edition con todos los DLCs.",
+      "url": "https://bzzhr.to/kt8ih5gcswwk",
+      "icon": "car",
+      "color": "#f97316",
+      "tags": [
+        "carreras",
+        "mundo-abierto",
+        "multiplayer"
+      ]
     }
   ]
 }
