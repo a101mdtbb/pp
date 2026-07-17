@@ -882,6 +882,9 @@ class PPLauncher(Gtk.Application):
         self._dl_game_names = {}
         self._dl_completion_timers = []
         self._dl_pending_refresh = False
+        self._detail_progress = None
+        self._detail_dl_info = None
+        self._detail_progress_game_id = None
         self._needs_refresh = True
         self._search_timer = None
 
@@ -1146,8 +1149,11 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         appearance_keys = {"accent_color", "cover_radius", "grid_spacing",
                            "font_scale", "animations",
                            "show_cover_border", "card_bg"}
+        display_keys = {"show_badges", "show_title", "show_category", "sort_order"}
         if key in appearance_keys:
             self._apply_appearance()
+            self._refresh_current_view()
+        elif key in display_keys:
             self._refresh_current_view()
 
     def _on_close(self, *args):
@@ -1282,6 +1288,31 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         count = len(self.dl_widgets)
         if self._dl_nav_label:
             self._dl_nav_label.set_text(f"Descargas ({count})" if count else "Descargas")
+
+        if self._detail_progress and self._detail_progress_game_id:
+            dp_status = all_status.get(self._detail_progress_game_id)
+            if dp_status and dp_status["status"] in ("downloading", "extracting", "extracting_link", "queued"):
+                self._detail_progress.set_visible(True)
+                pct = dp_status.get("progress", 0)
+                st = dp_status["status"]
+                if st == "queued":
+                    self._detail_progress.set_fraction(0)
+                    self._detail_dl_info.set_text("En cola de descarga...")
+                elif st == "extracting_link":
+                    self._detail_progress.set_pulse_step(0.1)
+                    self._detail_progress.pulse()
+                    self._detail_dl_info.set_text("Obteniendo enlace...")
+                elif st == "downloading":
+                    self._detail_progress.set_fraction(pct / 100.0)
+                    speed = dp_status.get("speed", 0)
+                    speed_s = f"{speed / 1024 / 1024:.1f} MB/s" if speed > 1024 else f"{speed / 1024:.0f} KB/s"
+                    self._detail_dl_info.set_text(f"{pct}% · {speed_s}")
+                elif st == "extracting":
+                    self._detail_progress.set_pulse_step(0.1)
+                    self._detail_progress.pulse()
+                    self._detail_dl_info.set_text("Extrayendo...")
+            else:
+                self._detail_progress.set_visible(False)
 
         if on_dl_tab:
             has_widgets = bool(self.dl_widgets)
@@ -2128,6 +2159,8 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
 
     def show_detail(self, item):
         self.stack.set_visible_child_name("detail")
+        self._detail_progress = None
+        self._detail_dl_info = None
         for child in list(self.detail_box):
             self.detail_box.remove(child)
 
@@ -2254,10 +2287,13 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
                 prog_bar.add_css_class("dl-bar")
                 prog_bar.set_size_request(200, -1)
                 add_action(prog_bar)
+                self._detail_progress = prog_bar
+                self._detail_progress_game_id = game_id
                 dl_info = Gtk.Label(label="Descargando...")
                 dl_info.set_xalign(0)
                 dl_info.add_css_class("dim-label")
                 add_action(dl_info)
+                self._detail_dl_info = dl_info
 
                 cancel_btn = Gtk.Button(label="Cancelar descarga")
                 cancel_btn.add_css_class("destructive-action")
