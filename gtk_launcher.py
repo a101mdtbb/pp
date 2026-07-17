@@ -429,7 +429,7 @@ button.destructive-action:active { transform: scale(0.97); }
 /* --- Tarjetas de juego modernas --- */
 .game-cell { margin: 0; border-radius: 16px; background: transparent; transition: transform 220ms cubic-bezier(0.2,0.8,0.2,1); }
 .game-cell:hover { transform: translateY(-6px); }
-.cover-box { border: 0; border-radius: 16px; overflow: hidden; transition: all 200ms ease; }
+.cover-box { border: 0; border-radius: 16px; transition: all 200ms ease; }
 .cover-box picture { border-radius: 16px; }
 .cover-skeleton { background: alpha(currentColor, 0.07); border-radius: 16px; }
 .update-banner { background: alpha(@accent_bg_color, 0.16); border-radius: 10px; padding: 8px 14px; margin: 10px 14px 0 14px; border: 1px solid alpha(@accent_bg_color, 0.35); }
@@ -450,7 +450,7 @@ button.destructive-action:active { transform: scale(0.97); }
 
 /* --- Vista de detalle --- */
 .hero { border-radius: 18px; background: linear-gradient(135deg, alpha(@accent_bg_color, 0.20), alpha(currentColor, 0.04)); box-shadow: inset 0 0 0 1px alpha(currentColor, 0.06); }
-.hero-bg { opacity: 0.32; border-radius: 18px; overflow: hidden; }
+.hero-bg { opacity: 0.32; border-radius: 18px; }
 .hero-scrim { border-radius: 18px; background: linear-gradient(to bottom, alpha(black, 0.40), alpha(black, 0.18)); }
 .detail-cover { min-height: 260px; min-width: 175px; border-radius: 14px; box-shadow: 0 10px 28px alpha(black, 0.45); }
 .detail-title { font-size: 26px; font-weight: 800; letter-spacing: -0.3px; }
@@ -1084,7 +1084,7 @@ class PPLauncher(Gtk.Application):
         b_btn.add_css_class("suggested-action")
         b_btn.connect("clicked", self._restart_app)
         self.update_banner.append(b_btn)
-        main_vbox.insert_after(self.update_banner, self.nav_bar)
+        main_vbox.append(self.update_banner)
 
         self.win.present()
         self.load_data()
@@ -1280,7 +1280,8 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             self._update_dl_widget(self.dl_widgets[gid], st)
 
         count = len(self.dl_widgets)
-        self._dl_nav_label.set_text(f"Descargas ({count})" if count else "Descargas")
+        if self._dl_nav_label:
+            self._dl_nav_label.set_text(f"Descargas ({count})" if count else "Descargas")
 
         if on_dl_tab:
             has_widgets = bool(self.dl_widgets)
@@ -1319,7 +1320,8 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
                     active.append((gid, st))
 
         count = len(active)
-        self._dl_nav_label.set_text(f"Descargas ({count})" if count else "Descargas")
+        if self._dl_nav_label:
+            self._dl_nav_label.set_text(f"Descargas ({count})" if count else "Descargas")
 
         if not active:
             empty_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=12)
@@ -1844,7 +1846,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         self.nav_bar.append(btn_dl)
         self.nav_items.append(("descargas", btn_dl))
         self._dl_nav_btn = btn_dl
-        self._dl_nav_label = btn_dl.get_child().get_first_child().get_next_sibling()
+        self._dl_nav_label = btn_dl.get_child().get_first_child()
 
         self.nav_bar.append(Gtk.Separator(orientation=Gtk.Orientation.VERTICAL))
 
