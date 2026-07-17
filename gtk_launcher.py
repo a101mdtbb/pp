@@ -221,7 +221,7 @@ class _DBusTrayIcon:
         self._bus_name = f"org.kde.StatusNotifierItem-{os.getpid()}-1"
 
         self._menu_items = [
-            (1, "Abrir PP Launcher", on_activate),
+            (1, "Abrir PP Launcher", on_menu or on_activate),
             (2, "Ver descargas", on_downloads or on_activate),
             (0, "", None),
             (3, "Salir", on_quit),
@@ -251,7 +251,21 @@ class _DBusTrayIcon:
             menu_node.lookup_interface("com.canonical.dbusmenu"),
             self._menu_method_call, None, None)
 
+        self._menu_conn = conn
+        GLib.timeout_add(200, self._emit_layout_updated)
         GLib.timeout_add(200, self._register_watcher)
+
+    def _emit_layout_updated(self):
+        if not self._menu_conn:
+            return False
+        try:
+            self._menu_conn.emit_signal(
+                self._bus_name, self._menu_path,
+                "com.canonical.dbusmenu", "LayoutUpdated",
+                GLib.Variant("(ui)", (self._menu_rev, 0)))
+        except Exception:
+            pass
+        return False
 
     def _on_name_lost(self, conn, name):
         GLib.timeout_add(1000, self._retry_registration)
@@ -1209,7 +1223,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             except Exception:
                 pass
         try:
-            self._tray = _DBusTrayIcon(self._show_window, self._quit_app, self._show_downloads, on_menu=self._show_tray_menu)
+            self._tray = _DBusTrayIcon(self._show_tray_menu, self._quit_app, self._show_downloads, on_menu=self._show_tray_menu)
         except Exception:
             pass
 
@@ -1219,22 +1233,22 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             self._tray_popup = None
             return
 
-        popup = Gtk.Window(
-            title="PP Launcher Menu",
-            window_type=Gtk.WindowType.POPUP,
-            decorated=False,
-            skip_taskbar_hint=True,
-            skip_pager_hint=True,
-            transient_for=self.win,
-            modal=False,
-        )
+        popup = Gtk.Window(title="PP Launcher", transient_for=self.win, modal=True)
+        popup.set_default_size(260, -1)
+        popup.set_resizable(False)
         popup.add_css_class("tray-popup")
 
-        outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        outer.set_margin_top(6)
-        outer.set_margin_bottom(6)
-        outer.set_margin_start(6)
-        outer.set_margin_end(6)
+        outer = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=4)
+        outer.set_margin_top(12)
+        outer.set_margin_bottom(12)
+        outer.set_margin_start(12)
+        outer.set_margin_end(12)
+
+        lbl = Gtk.Label(label="PP Launcher")
+        lbl.add_css_class("title")
+        lbl.set_xalign(0)
+        lbl.set_markup("<b><big>PP Launcher</big></b>")
+        outer.append(lbl)
 
         btn_open = Gtk.Button(label="Abrir PP Launcher")
         btn_open.set_has_frame(False)
@@ -1260,23 +1274,8 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         outer.append(btn_quit)
 
         popup.set_child(outer)
-        popup.set_default_size(200, -1)
         self._tray_popup = popup
-
-        def show():
-            try:
-                display = popup.get_display()
-                seat = display.get_default_seat()
-                pointer = seat.get_pointer()
-                _, px, py = pointer.get_position()
-                screen_w = display.get_width()
-                popup.move(max(10, screen_w - 220), max(10, py - 140))
-            except Exception:
-                pass
-            popup.present()
-            return False
-
-        GLib.idle_add(show)
+        popup.present()
 
     def _tray_popup_action(self, callback):
         if hasattr(self, '_tray_popup') and self._tray_popup:
