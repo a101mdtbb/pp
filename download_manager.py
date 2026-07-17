@@ -579,20 +579,20 @@ class DownloadManager:
                 return
 
             with self._lock:
-                if self.active_downloads.get(game_id, {}).get("status") == "cancelled":
-                    try:
-                        if os.path.exists(dest):
-                            os.remove(dest)
-                    except Exception:
-                        pass
-                    try:
-                        if os.path.isdir(game_dir) and not os.listdir(game_dir):
-                            os.rmdir(game_dir)
-                    except Exception:
-                        pass
-                    self._save_history(game_id, game_name, "cancelled", 0, "")
-                    self._process_queue()
-                    return
+                cancelled = self.active_downloads.get(game_id, {}).get("status") == "cancelled"
+            if cancelled:
+                try:
+                    if os.path.exists(dest):
+                        os.remove(dest)
+                except Exception:
+                    pass
+                try:
+                    if os.path.isdir(game_dir) and not os.listdir(game_dir):
+                        os.rmdir(game_dir)
+                except Exception:
+                    pass
+                self._save_history(game_id, game_name, "cancelled", 0, "")
+                return
 
             # Validar que el archivo sea un juego real y no una página de error.
             if not _is_valid_download(dest):

@@ -953,11 +953,29 @@ class PPLauncher(Gtk.Application):
         self.ac_popover.set_autohide(True)
         self.ac_popover.add_css_class("ac-popover")
         self.ac_box = Gtk.Box(orientation=Gtk.Orientation.VERTICAL, spacing=0)
-        self.ac_box.set_size_request(280, -1)
+        self.ac_box.set_size_request(320, -1)
         self.ac_popover.set_child(self.ac_box)
-        self.ac_popover.set_parent(self.search_entry)
+        self.ac_popover.set_parent(header)
         self.ac_selected_idx = -1
         self.ac_items_data = []
+        self.ac_row_pool = []
+        self._ac_timer = None
+
+        for _ in range(8):
+            row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
+            row.add_css_class("ac-item")
+            name_lbl = Gtk.Label(label="")
+            name_lbl.set_xalign(0)
+            name_lbl.set_hexpand(True)
+            name_lbl.set_ellipsize(Pango.EllipsizeMode.END)
+            row.append(name_lbl)
+            cat_lbl = Gtk.Label(label="")
+            cat_lbl.add_css_class("ac-item-cat")
+            cat_lbl.set_xalign(1)
+            row.append(cat_lbl)
+            self.ac_box.append(row)
+            row.set_visible(False)
+            self.ac_row_pool.append((row, name_lbl, cat_lbl))
 
         search_key = Gtk.EventControllerKey()
         search_key.connect("key-pressed", self._on_search_key)
@@ -2008,54 +2026,43 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
         self.search_term = entry.get_text().strip().lower()
         self._needs_refresh = True
         self.render_view()
-        self._update_autocomplete()
+        if self._ac_timer:
+            GLib.source_remove(self._ac_timer)
+        self._ac_timer = GLib.timeout_add(180, self._update_autocomplete)
 
     def _update_autocomplete(self):
+        self._ac_timer = None
         term = self.search_entry.get_text().strip().lower()
-        for child in list(self.ac_box):
-            self.ac_box.remove(child)
         self.ac_items_data = []
         self.ac_selected_idx = -1
 
-        if not term or len(term) < 1:
-            self.ac_popover.popdown()
-            return
+        for row, nl, cl in self.ac_row_pool:
+            row.set_visible(False)
 
-        matches = []
+        if not term:
+            self.ac_popover.popdown()
+            return False
+
+        idx = 0
         for item in self.catalog:
+            if idx >= len(self.ac_row_pool):
+                break
             name = item.get("name", "")
             cat = item.get("category", "")
             if term in name.lower() or term in cat.lower():
-                matches.append(item)
-            if len(matches) >= 8:
-                break
+                row, nl, cl = self.ac_row_pool[idx]
+                nl.set_text(name)
+                cl.set_text(cat if cat else "")
+                cl.set_visible(bool(cat))
+                row.set_visible(True)
+                self.ac_items_data.append(item)
+                idx += 1
 
-        if not matches:
+        if not self.ac_items_data:
             self.ac_popover.popdown()
-            return
-
-        for i, item in enumerate(matches):
-            row = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, spacing=6)
-            row.add_css_class("ac-item")
-            row.set_cursor(True)
-            name_lbl = Gtk.Label(label=item.get("name", ""))
-            name_lbl.set_xalign(0)
-            name_lbl.set_ellipsize(Pango.EllipsizeMode.END)
-            row.append(name_lbl)
-            cat = item.get("category", "")
-            if cat:
-                cat_lbl = Gtk.Label(label=cat)
-                cat_lbl.add_css_class("ac-item-cat")
-                cat_lbl.set_xalign(1)
-                row.append(cat_lbl)
-            self.ac_box.append(row)
-            self.ac_items_data.append(item)
-
-            row_event = Gtk.GestureClick()
-            row_event.connect("released", lambda g, n, x, y, it=item: self._on_ac_select(it))
-            row.add_controller(row_event)
-
-        self.ac_popover.popup()
+        else:
+            self.ac_popover.popup()
+        return False
 
     def _on_ac_select(self, item):
         self.ac_popover.popdown()
