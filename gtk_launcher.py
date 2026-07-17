@@ -305,6 +305,7 @@ class _DBusTrayIcon:
         return props.get(prop, GLib.Variant("s", ""))
 
     def _menu_method_call(self, conn, sender, obj, iface, method, params, inv):
+        import sys; print(f"[TRAY-MENU] {method}", file=sys.stderr, flush=True)
         try:
             if method == "GetRevision":
                 inv.return_value(GLib.Variant("(u)", (self._menu_rev,)))
@@ -318,7 +319,8 @@ class _DBusTrayIcon:
                         "visible": GLib.Variant("b", True),
                         "type": GLib.Variant("s", "standard"),
                     }, [])))
-                layout = (0, (0, {}, children))
+                root_props = {"children-display": GLib.Variant("s", "submenu"), "visible": GLib.Variant("b", True)}
+                layout = (0, (0, root_props, children))
                 inv.return_value(GLib.Variant("(u(u(ia{sv}av)))", (self._menu_rev, layout)))
             elif method == "GetGroupProperties":
                 inv.return_value(GLib.Variant("(a(ia{sv}))", ([],)))
