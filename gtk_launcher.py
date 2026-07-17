@@ -1176,23 +1176,28 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             self._refresh_current_view()
 
     def _on_close(self, *args):
-        dialog = Gtk.AlertDialog()
-        dialog.set_message("¿Qué quieres hacer?")
-        dialog.set_detail("Puedes dejar PP Launcher en segundo plano o cerrarlo completamente.")
-        dialog.set_buttons(["Cerrar completamente", "Minimizar al fondo", "Cancelar"])
+        dialog = Gtk.MessageDialog(
+            transient_for=self.win,
+            modal=True,
+            message_type=Gtk.MessageType.QUESTION,
+            buttons=Gtk.ButtonsType.NONE,
+            text="¿Qué quieres hacer?",
+        )
+        dialog.set_secondary_text("Puedes dejar PP Launcher en segundo plano o cerrarlo completamente.")
+        dialog.add_button("Cerrar completamente", 0)
+        dialog.add_button("Minimizar al fondo", 1)
+        dialog.add_button("Cancelar", 2)
 
-        def on_finish(d, result):
-            try:
-                resp = d.choose_finish(result)
-            except GLib.Error:
-                return
+        def on_response(d, resp):
+            d.destroy()
             if resp == 0:
                 self._quit_app()
             elif resp == 1:
                 self.win.set_visible(False)
                 self.hold()
 
-        dialog.choose(self.win, None, on_finish)
+        dialog.connect("response", on_response)
+        dialog.present()
         return True
 
     def _show_window(self):
@@ -1654,7 +1659,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
                 # No hacer downgrade si la versión remota es menor
                 if remote_version:
                     try:
-                        if _version_tuple(remote_version) < _version_tuple(APP_VERSION):
+                        if _version_tuple(remote_version) <= _version_tuple(APP_VERSION):
                             notes.append(f"{fn}: sin cambios (versión remota anterior).")
                             continue
                     except Exception:
