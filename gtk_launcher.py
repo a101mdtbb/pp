@@ -1249,15 +1249,16 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
 
     def _update_dl_panel(self):
         all_status = self.dl_manager.get_all_status()
+        on_dl_tab = self.stack.get_visible_child_name() == "downloads"
 
         to_remove = [gid for gid in list(self.dl_widgets.keys())
                      if gid not in all_status or all_status[gid]["status"] in ("complete", "error", "cancelled")]
         for gid in to_remove:
+            w = self.dl_widgets.pop(gid, None)
             self._dl_game_names.pop(gid, None)
             self._dl_pending_refresh = True
-        if to_remove:
-            for gid in to_remove:
-                self.dl_widgets.pop(gid, None)
+            if on_dl_tab and w:
+                self.dl_page_box.remove(w)
 
         needs_browser = [gid for gid, s in all_status.items() if s["status"] == "needs_browser"]
         for gid in needs_browser:
@@ -1267,12 +1268,31 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             url = all_status[gid].get("url", "")
             GLib.idle_add(self._show_browser_dialog, gid, name, url)
 
-        active = []
-        for gid in self.dl_manager.get_queue_order():
-            if gid in all_status and all_status[gid]["status"] not in ("complete", "error", "cancelled", "needs_browser"):
-                active.append((gid, all_status[gid]))
+        for gid, st in all_status.items():
+            if st["status"] in ("complete", "error", "cancelled", "needs_browser"):
+                continue
+            if gid not in self.dl_widgets:
+                name = self._dl_game_names.get(gid, gid)
+                w = self._make_dl_widget(gid, name)
+                self.dl_widgets[gid] = w
+                if on_dl_tab:
+                    self.dl_page_box.append(w)
+            self._update_dl_widget(self.dl_widgets[gid], st)
 
-        self._rebuild_dl_page(active)
+        count = len(self.dl_widgets)
+        self._dl_nav_label.set_text(f"Descargas ({count})" if count else "Descargas")
+
+        if on_dl_tab:
+            has_widgets = bool(self.dl_widgets)
+            if hasattr(self, 'dl_empty') and self.dl_empty:
+                self.dl_empty.set_visible(not has_widgets)
+                if not has_widgets:
+                    for child in list(self.dl_page_box):
+                        self.dl_page_box.remove(child)
+                    self.dl_page_box.append(self.dl_empty)
+                else:
+                    if self.dl_empty.get_parent() == self.dl_page_box:
+                        self.dl_page_box.remove(self.dl_empty)
 
         if self._dl_pending_refresh and not self.dl_widgets:
             self._dl_pending_refresh = False
@@ -1287,10 +1307,16 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
 
         if active is None:
             all_status = self.dl_manager.get_all_status()
+            queue_order = self.dl_manager.get_queue_order()
             active = []
-            for gid in self.dl_manager.get_queue_order():
+            seen = set()
+            for gid in queue_order:
                 if gid in all_status and all_status[gid]["status"] not in ("complete", "error", "cancelled", "needs_browser"):
                     active.append((gid, all_status[gid]))
+                    seen.add(gid)
+            for gid, st in all_status.items():
+                if gid not in seen and st["status"] not in ("complete", "error", "cancelled", "needs_browser"):
+                    active.append((gid, st))
 
         count = len(active)
         self._dl_nav_label.set_text(f"Descargas ({count})" if count else "Descargas")
