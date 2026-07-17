@@ -1237,7 +1237,7 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
             except Exception:
                 pass
         try:
-            self._tray = _DBusTrayIcon(self._show_tray_menu, self._quit_app, self._show_downloads, on_menu=self._show_tray_menu)
+            self._tray = _DBusTrayIcon(self._show_window, self._quit_app, self._show_downloads)
         except Exception:
             pass
 
