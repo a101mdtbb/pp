@@ -1913,10 +1913,17 @@ button.suggested-action:hover {{ box-shadow: 0 4px 14px alpha(@accent_bg_color, 
     def on_search_changed(self, entry):
         self.search_term = entry.get_text().strip().lower()
         self._needs_refresh = True
-        self.render_view()
+        if getattr(self, "_render_timer", None):
+            GLib.source_remove(self._render_timer)
+        self._render_timer = GLib.timeout_add(100, self._deferred_render)
         if self._ac_timer:
             GLib.source_remove(self._ac_timer)
-        self._ac_timer = GLib.timeout_add(180, self._update_autocomplete)
+        self._ac_timer = GLib.timeout_add(150, self._update_autocomplete)
+
+    def _deferred_render(self):
+        self._render_timer = None
+        self.render_view()
+        return False
 
     def _update_autocomplete(self):
         self._ac_timer = None
