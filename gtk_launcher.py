@@ -51,7 +51,7 @@ SGDB_UA = "PP-Launcher/8.1"
 
 # Versión del programa. Súbela en cada push para que el auto-update no haga
 # downgrade y para versionar los cambios.
-APP_VERSION = "8.1"
+APP_VERSION = "8.2"
 
 
 def _version_tuple(v):
